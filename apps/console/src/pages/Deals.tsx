@@ -139,7 +139,7 @@ export function Deals() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-page font-semibold">Deals</h1>
+        <h1 >Deals</h1>
         <div className="flex rounded-[var(--radius-control)] border border-border">
           {(['kanban', 'table'] as const).map((v) => (
             <button

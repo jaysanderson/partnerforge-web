@@ -83,7 +83,6 @@ export function Journeys(): ReactElement {
           );
         })}
       </div>
-      <div className="font-mono text-caption text-text-secondary">GET /v1/journeys</div>
     </div>
   );
 }

@@ -7,7 +7,7 @@ export function Audit() {
   if (audit.error) {
     return (
       <div className="space-y-2">
-        <h1 className="text-page font-semibold">Audit Log</h1>
+        <h1 >Audit Log</h1>
         <p className="text-small text-danger">
           {audit.error.message} — audit log is admin-only.
         </p>
@@ -17,7 +17,7 @@ export function Audit() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-page font-semibold">Audit Log</h1>
+      <h1 >Audit Log</h1>
       <div className="rounded-[var(--radius-card)] border border-border bg-surface shadow-[var(--shadow-card)]">
         <table className="w-full text-body">
           <thead>

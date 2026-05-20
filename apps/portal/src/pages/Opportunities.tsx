@@ -19,7 +19,7 @@ export function Opportunities() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-page font-semibold">{t('Opportunities')}</h1>
+        <h1 >{t('Opportunities')}</h1>
         <button
           type="button"
           onClick={() => navigate('/forms')}
@@ -98,7 +98,7 @@ export function OpportunityDetail() {
         ← {t('Opportunities')}
       </Link>
       <div className="flex items-center gap-3">
-        <h1 className="text-page font-semibold">{o.customerName}</h1>
+        <h1 >{o.customerName}</h1>
         <StatusBadge status={o.stage} />
       </div>
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">

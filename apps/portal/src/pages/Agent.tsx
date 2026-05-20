@@ -83,7 +83,7 @@ export function Agent() {
     <div className="flex h-full flex-col">
       <div className="mb-3 flex items-center gap-2">
         <Sparkles size={18} className="text-ai-accent" />
-        <h1 className="text-page font-semibold">{t('AI Assistant')}</h1>
+        <h1 >{t('AI Assistant')}</h1>
         <span className="rounded-full bg-ai-surface px-2 py-0.5 text-caption text-ai-accent">
           {t('Powered by Progress Agentic RAG')}
         </span>

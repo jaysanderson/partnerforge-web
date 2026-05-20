@@ -77,9 +77,6 @@ export function SfRunSync(): ReactElement {
           <RefreshCw size={14} className={sync.isPending ? 'animate-spin' : ''} />
           {sync.isPending ? 'Syncing…' : 'Run sync now'}
         </button>
-        <div className="mt-3 font-mono text-caption text-text-secondary">
-          POST /v1/system/sync
-        </div>
       </section>
     </div>
   );

@@ -79,7 +79,7 @@ export function Forms() {
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       <div className="space-y-4 lg:col-span-2">
-        <h1 className="text-page font-semibold">{t('Forms & Requests')}</h1>
+        <h1 >{t('Forms & Requests')}</h1>
 
         <div className="rounded-[var(--radius-card)] border border-ai-accent/30 bg-ai-surface p-4">
           <div className="mb-2 flex items-center gap-2 text-small font-medium text-ai-accent">

@@ -8,6 +8,7 @@ export { Sparkline } from './components/Sparkline.js';
 export { Skeleton } from './components/Skeleton.js';
 export { CountUp } from './components/CountUp.js';
 export { HeroBand } from './components/HeroBand.js';
+export { TopProgress } from './components/TopProgress.js';
 export {
   AppShell,
   type NavItem,

@@ -94,9 +94,6 @@ export function SfConflicts(): ReactElement {
             </tbody>
           </table>
         )}
-        <div className="mt-3 font-mono text-caption text-text-secondary">
-          GET /v1/deals/conflicts · scanned by intel cron every 4h
-        </div>
       </section>
     </div>
   );

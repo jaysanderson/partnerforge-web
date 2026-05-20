@@ -63,7 +63,7 @@ export function Content() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-page font-semibold">Content</h1>
+        <h1 >Content</h1>
         <div className="relative">
           <Sparkles
             size={14}

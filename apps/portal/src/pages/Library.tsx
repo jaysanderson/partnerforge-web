@@ -27,7 +27,7 @@ export function Library() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-page font-semibold">{t('Content Library')}</h1>
+      <h1 >{t('Content Library')}</h1>
       <div className="relative">
         <Search
           size={16}

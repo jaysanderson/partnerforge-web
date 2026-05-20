@@ -99,9 +99,6 @@ export function Training(): ReactElement {
               </tbody>
             </table>
           )}
-          <div className="mt-3 font-mono text-caption text-text-secondary">
-            GET /v1/training/courses
-          </div>
         </section>
       )}
 
@@ -154,9 +151,6 @@ export function Training(): ReactElement {
               </tbody>
             </table>
           )}
-          <div className="mt-3 font-mono text-caption text-text-secondary">
-            GET /v1/training/certifications
-          </div>
         </section>
       )}
     </div>

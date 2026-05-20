@@ -24,7 +24,7 @@ export function AdminConfig() {
   if (fields.error) {
     return (
       <div className="space-y-2">
-        <h1 className="text-page font-semibold">Configuration</h1>
+        <h1 >Configuration</h1>
         <p className="text-small text-danger">{fields.error.message} — admin only.</p>
       </div>
     );
@@ -50,7 +50,7 @@ export function AdminConfig() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-page font-semibold">Configuration</h1>
+        <h1 >Configuration</h1>
         <p className="text-small text-text-secondary">
           Business-admin settings — no engineering required. Changes apply immediately across the
           partner experience.

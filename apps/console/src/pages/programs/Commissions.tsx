@@ -61,9 +61,6 @@ export function CommissionPlans(): ReactElement {
             </tbody>
           </table>
         )}
-        <div className="mt-3 font-mono text-caption text-text-secondary">
-          GET /v1/commissions/plans
-        </div>
       </section>
     </div>
   );
@@ -130,9 +127,6 @@ export function CommissionPayouts(): ReactElement {
             </tbody>
           </table>
         )}
-        <div className="mt-3 font-mono text-caption text-text-secondary">
-          GET /v1/commissions/payouts · POST /v1/commissions/recompute
-        </div>
       </section>
     </div>
   );
@@ -187,9 +181,6 @@ export function CommissionStatements(): ReactElement {
             ))}
           </tbody>
         </table>
-        <div className="mt-3 font-mono text-caption text-text-secondary">
-          GET /v1/commissions/statements
-        </div>
       </section>
     </div>
   );
@@ -212,9 +203,6 @@ export function CommissionDisputes(): ReactElement {
             handled out-of-band — Slack threads or email — and resolved by
             adjusting a payout&apos;s status / amount via the API directly.
           </p>
-          <div className="mt-2 font-mono text-caption text-text-secondary">
-            Planned: GET /v1/commissions/disputes · POST /v1/commissions/disputes
-          </div>
         </div>
       </div>
     </div>

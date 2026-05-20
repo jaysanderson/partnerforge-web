@@ -7,7 +7,7 @@ export function Quotes() {
   const quotes = useApi.sf.quotes();
   return (
     <div className="space-y-4">
-      <h1 className="text-page font-semibold">{t('Quotes & Commercial Documents')}</h1>
+      <h1 >{t('Quotes & Commercial Documents')}</h1>
       <table className="w-full rounded-[var(--radius-card)] border border-border bg-surface text-body">
         <thead>
           <tr className="bg-surface-alt text-left text-caption uppercase text-text-secondary">

@@ -84,7 +84,6 @@ export function Goals(): ReactElement {
             </tbody>
           </table>
         )}
-        <div className="mt-3 font-mono text-caption text-text-secondary">GET /v1/goals</div>
       </section>
     </div>
   );
