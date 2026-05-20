@@ -38,10 +38,14 @@ interface EmptyStateProps {
   body?: ReactNode;
   /** Optional override for the default per-variant icon. */
   icon?: ComponentType<{ size?: number | string }>;
-  /** Primary action — usually only present on zero-data + error. */
+  /**
+   * Primary action — usually only present on zero-data + error.
+   * Pass `onClick` for a button, `href` for a link, or both (button that
+   * also has a fallback URL for right-click).
+   */
   action?: {
     label: string;
-    onClick: () => void;
+    onClick?: () => void;
     /** Render as a link instead of a button. */
     href?: string;
   };
