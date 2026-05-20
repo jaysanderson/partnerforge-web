@@ -197,10 +197,14 @@ export function App() {
         activeKey={activeKey}
         onNavigate={(k) => navigate(k)}
         userCard={
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 rounded-md p-1.5 transition-colors hover:bg-subtle">
             <div
-              className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-progress-green text-text-on-green"
-              style={{ fontWeight: 600, fontSize: 12, fontFamily: 'var(--font-heading)' }}
+              className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-white"
+              style={{
+                background: 'linear-gradient(135deg, var(--color-brand-500), var(--color-brand-700))',
+                fontWeight: 600,
+                fontSize: 11,
+              }}
               aria-hidden
             >
               {user.name
@@ -211,16 +215,14 @@ export function App() {
                 .toUpperCase()}
             </div>
             <div className="min-w-0 flex-1">
-              <div className="truncate text-small font-medium text-sidebar-text">{user.name}</div>
-              <div className="truncate text-[10px] uppercase tracking-wide text-sidebar-muted">
-                {user.role}
-              </div>
+              <div className="truncate text-[13px] font-medium text-ink-1">{user.name}</div>
+              <div className="truncate text-[11px] text-ink-3">{user.role}</div>
             </div>
             <button
               type="button"
               onClick={logout}
               aria-label="Sign out"
-              className="rounded-full p-1 text-sidebar-muted hover:bg-white/10 hover:text-sidebar-text"
+              className="rounded-md p-1 text-ink-3 transition-colors hover:bg-muted hover:text-ink-1"
             >
               <LogOut size={14} />
             </button>

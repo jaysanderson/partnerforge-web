@@ -14,27 +14,22 @@ export interface NavItem {
 
 /** A collapsible submenu inside a section. */
 export interface NavSubmenu {
-  /** Discriminator. */
   type: 'submenu';
   label: string;
   icon: IconType;
   items: NavItem[];
-  /** Start expanded. Defaults to false. */
   defaultOpen?: boolean;
 }
 
 /** A section heading with its children (leaves or submenus). */
 export interface NavSection {
-  /** Section label (uppercase small caps); omit for an un-titled group. */
   label?: string;
   items: (NavItem | NavSubmenu)[];
 }
 
 interface AppShellProps {
   brand: string;
-  /** Small line under the brand, e.g. "Partner Experience Platform". */
   brandSub?: string;
-  /** Either a flat list (legacy) or section-grouped (new). */
   nav: NavItem[] | NavSection[];
   activeKey: string;
   onNavigate: (key: string) => void;
@@ -42,15 +37,13 @@ interface AppShellProps {
   children: ReactNode;
   /**
    * Optional card pinned at the bottom of the sidebar above the Collapse
-   * toggle. Used to show a user avatar / role / tier chip — see
-   * `apps/{console,portal}/src/App.tsx` for the rendered shape.
-   * Hidden when the sidebar is collapsed.
+   * toggle. Used to show user / role / tier chip — wired from
+   * `apps/{console,portal}/src/App.tsx`. Hidden when sidebar collapsed.
    */
   userCard?: ReactNode;
 }
 
 function isSectioned(nav: NavItem[] | NavSection[]): nav is NavSection[] {
-  // Sections expose `items`; NavItems expose `key`.
   return nav.length > 0 && 'items' in nav[0]!;
 }
 
@@ -59,10 +52,10 @@ function isSubmenu(it: NavItem | NavSubmenu): it is NavSubmenu {
 }
 
 /**
- * Internal console / portal layout shell. Fixed Progress-dark sidebar
- * (256px, collapsible to 68px), 56px white top bar, light content area.
- * Content fills available width (enterprise wide monitors) with a sensible
- * reading max so it never sprawls or cramps.
+ * Light sidebar (Linear / Vercel / Attio convention). 240 px wide,
+ * collapsible to 64 px. White surface with 1 px border. Active nav row
+ * gets a soft subtle background + a 2 px brand-coloured left accent.
+ * Icons are monochrome by default and only colour on active.
  */
 export function AppShell({
   brand,
@@ -75,37 +68,45 @@ export function AppShell({
   userCard,
 }: AppShellProps): ReactElement {
   const [collapsed, setCollapsed] = useState(false);
-  const w = collapsed ? 68 : 256;
+  const w = collapsed ? 64 : 240;
 
   return (
-    <div className="flex h-full">
-      {/* Skip-to-content: hidden until focused via Tab. WCAG 2.4.1.
-          Lands the user past the nav into the main content area. */}
+    <div className="flex h-full bg-canvas">
+      {/* Skip-to-content: hidden until focused via Tab. WCAG 2.4.1. */}
       <a
         href="#main"
-        className="sr-only z-50 rounded-[var(--radius-control)] bg-progress-blue px-3 py-2 text-small font-medium text-white focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:outline-none focus:ring-2 focus:ring-progress-blue focus:ring-offset-2"
+        className="sr-only z-50 rounded-md bg-brand-600 px-3 py-2 text-[13px] font-medium text-white focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:outline-none focus:shadow-[var(--shadow-ring)]"
       >
         Skip to main content
       </a>
       <aside
-        className="flex flex-col bg-sidebar-bg text-sidebar-text transition-[width] duration-200"
+        className="flex flex-col border-r border-border bg-surface transition-[width] duration-200"
         style={{ width: w, minWidth: w }}
       >
-        <div className="flex h-14 items-center gap-2.5 border-b border-white/10 px-4">
-          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-progress-green font-heading text-[15px] font-bold text-text-on-green">
+        {/* Brand strip */}
+        <div className="flex h-14 items-center gap-2.5 border-b border-border px-4">
+          <div
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-md font-semibold text-white"
+            style={{
+              background: 'linear-gradient(135deg, var(--color-brand-500), var(--color-brand-700))',
+              fontSize: 13,
+            }}
+            aria-hidden
+          >
             P
           </div>
           {!collapsed && (
-            <div className="leading-tight">
-              <div className="font-heading text-[14px] font-semibold text-white">{brand}</div>
+            <div className="min-w-0 leading-tight">
+              <div className="truncate text-[14px] font-semibold text-ink-1">{brand}</div>
               {brandSub && (
-                <div className="mt-0.5 text-[11px] tracking-wide text-white/60">{brandSub}</div>
+                <div className="mt-0.5 truncate text-[11px] text-ink-3">{brandSub}</div>
               )}
             </div>
           )}
         </div>
 
-        <nav className="flex-1 overflow-y-auto px-3 py-4">
+        {/* Nav */}
+        <nav className="flex-1 overflow-y-auto px-2 py-3">
           {isSectioned(nav) ? (
             nav.map((section, sIdx) => (
               <Section
@@ -117,7 +118,7 @@ export function AppShell({
               />
             ))
           ) : (
-            <div className="space-y-0.5">
+            <div className="space-y-px">
               {nav.map((item) => (
                 <Leaf
                   key={item.key}
@@ -131,26 +132,29 @@ export function AppShell({
           )}
         </nav>
 
+        {/* User card */}
         {userCard && !collapsed && (
-          <div className="border-t border-white/10 bg-sidebar-bg px-3 py-3">{userCard}</div>
+          <div className="border-t border-border bg-surface px-2 py-2">{userCard}</div>
         )}
 
+        {/* Collapse toggle */}
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
           aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className="flex h-10 items-center justify-center border-t border-white/10 text-white/50 hover:bg-white/[0.04] hover:text-white"
+          className="flex h-9 items-center justify-center border-t border-border text-ink-3 transition-colors hover:bg-subtle hover:text-ink-1"
         >
-          {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
+          {collapsed ? <PanelLeftOpen size={15} /> : <PanelLeftClose size={15} />}
         </button>
       </aside>
 
+      {/* Right column: header + main */}
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="relative flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-6">
           {topBar}
         </header>
-        <main id="main" className="flex-1 overflow-auto bg-background" tabIndex={-1}>
+        <main id="main" className="flex-1 overflow-auto bg-canvas" tabIndex={-1}>
           <div className="mx-auto w-full max-w-[1440px] px-6 py-6 lg:px-8 lg:py-8">
             {children}
           </div>
@@ -169,9 +173,9 @@ interface SectionProps {
 
 function Section({ section, activeKey, collapsed, onNavigate }: SectionProps): ReactElement {
   return (
-    <div className="mb-4 space-y-0.5">
+    <div className="mb-3 space-y-px">
       {section.label && !collapsed && (
-        <div className="px-3 pb-1.5 pt-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-white/40">
+        <div className="pf-micro px-3 pb-1 pt-3 text-ink-3">
           {section.label}
         </div>
       )}
@@ -211,9 +215,6 @@ function Leaf({ item, active, collapsed, onNavigate, indented }: LeafProps): Rea
   const Icon = item.icon;
   return (
     <a
-      // Real href so right-click → "Open in new tab" works, plus better
-      // screen-reader semantics than <button>. SPA nav intercepts the
-      // click; cmd/ctrl/middle-click fall through to the browser.
       href={item.key}
       onClick={(e) => {
         if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
@@ -222,23 +223,27 @@ function Leaf({ item, active, collapsed, onNavigate, indented }: LeafProps): Rea
       }}
       title={collapsed ? item.label : undefined}
       aria-current={active ? 'page' : undefined}
-      className={`group relative flex w-full items-center gap-3 rounded-md py-1.5 text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-progress-blue focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg ${
-        indented && !collapsed ? 'pl-9 pr-3' : 'px-3'
+      className={`group relative flex w-full items-center gap-2.5 rounded-md py-1.5 text-[13px] transition-colors focus-visible:outline-none ${
+        indented && !collapsed ? 'pl-8 pr-3' : 'px-2.5'
       } ${
         active
-          ? 'bg-white/[0.08] font-semibold text-white'
-          : 'text-white/70 hover:bg-white/[0.04] hover:text-white'
+          ? 'bg-subtle font-semibold text-ink-1'
+          : 'text-ink-2 hover:bg-subtle hover:text-ink-1'
       } ${collapsed ? 'justify-center' : ''}`}
     >
       {active && (
-        <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r bg-progress-green" />
+        <span
+          aria-hidden
+          className="absolute left-0 top-1/2 h-5 w-[2px] -translate-y-1/2 rounded-r"
+          style={{ background: 'var(--color-brand-600)' }}
+        />
       )}
-      <Icon size={17} />
+      <Icon size={16} />
       {!collapsed && (
         <>
           <span className="truncate flex-1 text-left">{item.label}</span>
           {item.badge != null && item.badge !== '' && (
-            <span className="rounded-full bg-white/10 px-1.5 py-0.5 text-[10px] font-semibold tabular-nums">
+            <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-semibold tabular-nums text-ink-2">
               {item.badge}
             </span>
           )}
@@ -265,20 +270,20 @@ function Submenu({ submenu, activeKey, collapsed, onNavigate }: SubmenuProps): R
         type="button"
         onClick={() => setOpen((o) => !o)}
         title={collapsed ? submenu.label : undefined}
-        className={`flex w-full items-center gap-3 rounded-md px-3 py-1.5 text-[13px] text-white/70 transition-colors hover:bg-white/[0.04] hover:text-white ${
+        className={`flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] text-ink-2 transition-colors hover:bg-subtle hover:text-ink-1 ${
           collapsed ? 'justify-center' : ''
-        } ${childActive ? 'font-semibold text-white' : ''}`}
+        } ${childActive ? 'font-semibold text-ink-1' : ''}`}
       >
-        <Icon size={18} />
+        <Icon size={16} />
         {!collapsed && (
           <>
             <span className="truncate flex-1 text-left">{submenu.label}</span>
-            {open ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
+            {open ? <ChevronDown size={13} /> : <ChevronRight size={13} />}
           </>
         )}
       </button>
       {open && !collapsed && (
-        <div className="mt-0.5 space-y-0.5">
+        <div className="mt-px space-y-px">
           {submenu.items.map((it) => (
             <Leaf
               key={it.key}

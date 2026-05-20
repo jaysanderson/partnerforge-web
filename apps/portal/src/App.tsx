@@ -73,10 +73,14 @@ export function App() {
       activeKey={activeKey}
       onNavigate={(k) => navigate(k)}
       userCard={
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 rounded-md p-1.5 transition-colors hover:bg-subtle">
           <div
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-progress-blue text-white"
-            style={{ fontWeight: 600, fontSize: 12, fontFamily: 'var(--font-heading)' }}
+            className="grid h-8 w-8 shrink-0 place-items-center rounded-full text-white"
+            style={{
+              background: 'linear-gradient(135deg, var(--color-brand-500), var(--color-brand-700))',
+              fontWeight: 600,
+              fontSize: 11,
+            }}
             aria-hidden
           >
             {contact.name
@@ -87,7 +91,7 @@ export function App() {
               .toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
-            <div className="truncate text-small font-medium text-sidebar-text">{contact.name}</div>
+            <div className="truncate text-[13px] font-medium text-ink-1">{contact.name}</div>
             <div className="mt-0.5">
               <TierBadge tier={tier} />
             </div>

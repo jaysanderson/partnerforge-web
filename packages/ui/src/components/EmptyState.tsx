@@ -65,10 +65,10 @@ const DEFAULT_ICON: Record<Variant, ComponentType<{ size?: number | string }>> =
 };
 
 const TONE: Record<Variant, { iconBg: string; iconFg: string }> = {
-  'zero-data': { iconBg: 'bg-surface-alt', iconFg: 'text-text-secondary' },
-  'zero-results': { iconBg: 'bg-ai-surface', iconFg: 'text-progress-blue' },
-  error: { iconBg: 'bg-danger/10', iconFg: 'text-danger' },
-  'coming-soon': { iconBg: 'bg-warning/10', iconFg: 'text-warning' },
+  'zero-data': { iconBg: 'bg-subtle', iconFg: 'text-ink-3' },
+  'zero-results': { iconBg: 'bg-brand-50', iconFg: 'text-brand-600' },
+  error: { iconBg: 'bg-danger-50', iconFg: 'text-danger-600' },
+  'coming-soon': { iconBg: 'bg-warning-50', iconFg: 'text-warning-600' },
 };
 
 export function EmptyState({
@@ -83,9 +83,10 @@ export function EmptyState({
 }: EmptyStateProps): ReactElement {
   const Icon = icon ?? DEFAULT_ICON[variant];
   const tone = TONE[variant];
-  const pad = compact ? 'py-6' : 'py-12';
-  const iconSize = compact ? 18 : 24;
-  const iconBox = compact ? 'h-9 w-9' : 'h-12 w-12';
+  const pad = compact ? 'py-6' : 'py-14';
+  const iconSize = compact ? 20 : 28;
+  // Bigger 80px circle in default; 40px in compact.
+  const iconBox = compact ? 'h-10 w-10' : 'h-20 w-20';
 
   return (
     <div
@@ -110,7 +111,7 @@ export function EmptyState({
             (action.href ? (
               <a
                 href={action.href}
-                className="inline-flex items-center gap-1.5 rounded-[var(--radius-control)] bg-progress-blue px-4 py-2 text-small font-medium text-white"
+                className="inline-flex h-9 items-center gap-1.5 rounded-md bg-brand-600 px-3.5 text-[13px] font-medium text-white shadow-[var(--shadow-xs)] transition-colors hover:bg-brand-700"
               >
                 {variant === 'error' && <RefreshCw size={14} />}
                 {action.label}
@@ -119,7 +120,7 @@ export function EmptyState({
               <button
                 type="button"
                 onClick={action.onClick}
-                className="inline-flex items-center gap-1.5 rounded-[var(--radius-control)] bg-progress-blue px-4 py-2 text-small font-medium text-white"
+                className="inline-flex h-9 items-center gap-1.5 rounded-md bg-brand-600 px-3.5 text-[13px] font-medium text-white shadow-[var(--shadow-xs)] transition-colors hover:bg-brand-700"
               >
                 {variant === 'error' && <RefreshCw size={14} />}
                 {action.label}
@@ -129,7 +130,7 @@ export function EmptyState({
             <button
               type="button"
               onClick={secondaryAction.onClick}
-              className="rounded-[var(--radius-control)] border border-border px-4 py-2 text-small text-text-primary hover:bg-surface-alt"
+              className="inline-flex h-9 items-center rounded-md border border-border-strong bg-surface px-3.5 text-[13px] font-medium text-ink-1 transition-colors hover:bg-subtle"
             >
               {secondaryAction.label}
             </button>
