@@ -17,3 +17,4 @@ export interface SyncOptions {
     log?: Logger;
 }
 export declare function syncAll(db: DbConnection, opts?: SyncOptions): Promise<SyncSummary>;
+//# sourceMappingURL=sync.d.ts.map

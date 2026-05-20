@@ -123,3 +123,4 @@ export declare function permissionOrScope(module: Module, action: Action, ...req
     principal: import("@partnerforge/shared").AuthPrincipal;
     ip: string;
 }, import("@trpc/server").TRPCUnsetMarker, import("@trpc/server").TRPCUnsetMarker, import("@trpc/server").TRPCUnsetMarker, import("@trpc/server").TRPCUnsetMarker, false>;
+//# sourceMappingURL=trpc.d.ts.map

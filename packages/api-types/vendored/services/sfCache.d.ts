@@ -49,3 +49,4 @@ export declare function shouldUseCache(mode: AppMode): boolean;
 export declare function markFresh(): string;
 /** Convenience: number of seconds since the cache row was refreshed. */
 export declare function ageSeconds(lastSyncedFromSf: string | null | undefined): number | null;
+//# sourceMappingURL=sfCache.d.ts.map

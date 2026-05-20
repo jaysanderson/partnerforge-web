@@ -37,3 +37,4 @@ export declare const i18nRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=i18n.d.ts.map

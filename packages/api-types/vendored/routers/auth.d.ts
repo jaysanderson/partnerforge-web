@@ -83,3 +83,4 @@ export declare const authRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=auth.d.ts.map

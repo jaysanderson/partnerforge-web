@@ -50,6 +50,33 @@ export declare const systemRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
     /**
+     * Freshness snapshot of the Salesforce read-through cache. Returns, per
+     * entity, the row counts (total / synced from SF) and the oldest sync
+     * timestamp. The UI uses this to surface "Partners cache: N rows,
+     * oldest M min ago" + the "Refresh from Salesforce" buttons.
+     */
+    cacheStats: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: {
+            partners: {
+                total: number;
+                synced: number;
+                oldestSync: string | null;
+            };
+            deals: {
+                total: number;
+                synced: number;
+                oldestSync: string | null;
+            };
+            partnerContacts: {
+                total: number;
+                synced: number;
+                oldestSync: string | null;
+            };
+        };
+        meta: object;
+    }>;
+    /**
      * Invalidate the Salesforce read-through cache. Clears `lastSyncedFromSf`
      * on the chosen entity's local rows; the next read will treat them as
      * stale and re-fetch from SF (via the adapter).
@@ -68,3 +95,4 @@ export declare const systemRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=system.d.ts.map

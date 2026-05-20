@@ -78,3 +78,4 @@ export declare const approvalsRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=approvals.d.ts.map

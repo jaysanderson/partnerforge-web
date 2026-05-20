@@ -204,3 +204,4 @@ export declare const portalRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=portal.d.ts.map

@@ -37,3 +37,4 @@ export declare const commissionsRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=commissions.d.ts.map

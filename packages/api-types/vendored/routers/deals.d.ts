@@ -207,3 +207,4 @@ export declare const dealsRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=deals.d.ts.map

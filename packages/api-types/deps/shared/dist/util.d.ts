@@ -6,3 +6,4 @@ export declare function addHours(date: Date, hours: number): Date;
 export declare function isExpired(isoTimestamp: string | null | undefined): boolean;
 /** Sleep helper for retry/backoff. */
 export declare function sleep(ms: number): Promise<void>;
+//# sourceMappingURL=util.d.ts.map

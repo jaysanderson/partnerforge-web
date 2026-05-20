@@ -264,3 +264,4 @@ export declare const partnersRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=partners.d.ts.map

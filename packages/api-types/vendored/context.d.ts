@@ -11,3 +11,4 @@ export interface Context {
     ip: string;
 }
 export declare function makeContextFactory(env: Env, log: Logger): ({ req }: CreateFastifyContextOptions) => Context;
+//# sourceMappingURL=context.d.ts.map

@@ -119,3 +119,4 @@ export declare class MockSalesforceAdapter implements SalesforceAdapter {
     updateOpportunity(oppId: string, patch: UpdateOpportunityPatch): Promise<SfOpportunity>;
     createRenewalFromAsset(accountId: string, assetId: string): Promise<SfOpportunity>;
 }
+//# sourceMappingURL=adapter.d.ts.map

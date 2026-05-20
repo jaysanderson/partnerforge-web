@@ -14,3 +14,4 @@ export declare function generatePartnerInsight(db: DbConnection, partnerId: stri
 export declare function generateAllInsights(db: DbConnection, opts?: IntelOptions): Promise<number>;
 export declare function detectConflicts(db: DbConnection, dealId: string): Promise<number>;
 export declare function scanAllConflicts(db: DbConnection, opts?: IntelOptions): Promise<number>;
+//# sourceMappingURL=intel.d.ts.map

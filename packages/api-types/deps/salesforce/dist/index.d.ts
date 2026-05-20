@@ -13,3 +13,4 @@ import { type SalesforceAdapter } from './adapter.js';
  * Never set this in a customer deployment — it silently hides "SF is down".
  */
 export declare function getSalesforce(mode?: AppMode): SalesforceAdapter;
+//# sourceMappingURL=index.d.ts.map

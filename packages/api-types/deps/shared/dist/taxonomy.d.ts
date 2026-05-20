@@ -28,3 +28,4 @@ export declare const OPEN_DEAL_STAGES: ReadonlyArray<DealStage>;
 export declare const TIER_RANK: Record<PartnerTier, number>;
 /** Can a partner of `tier` access content gated at `requiredTier`? */
 export declare function tierAllows(tier: PartnerTier, requiredTier: PartnerTier): boolean;
+//# sourceMappingURL=taxonomy.d.ts.map

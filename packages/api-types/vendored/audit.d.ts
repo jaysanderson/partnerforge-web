@@ -12,3 +12,4 @@ interface AuditInput {
  */
 export declare function writeAudit(ctx: Context, input: AuditInput): void;
 export {};
+//# sourceMappingURL=audit.d.ts.map

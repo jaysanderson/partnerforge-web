@@ -25,3 +25,4 @@ export declare const FORM_DEFS: FormDef[];
 export declare function getFormDef(type: string): FormDef | undefined;
 /** Returns the list of missing required field names (R73/R74). */
 export declare function missingRequired(def: FormDef, values: Record<string, unknown>): string[];
+//# sourceMappingURL=forms.d.ts.map

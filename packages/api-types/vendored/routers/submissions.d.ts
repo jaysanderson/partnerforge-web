@@ -66,3 +66,4 @@ export declare const submissionsRouter: import("@trpc/server").TRPCBuiltRouter<{
     }>;
 }>>;
 export {};
+//# sourceMappingURL=submissions.d.ts.map

@@ -22,3 +22,4 @@ type AppFastify = FastifyInstance<any, any, any, any, ZodTypeProvider>;
 /** Register the REST aliases onto a Fastify instance. */
 export declare function registerRestRoutes(app: AppFastify, env: Env, log: Logger): void;
 export {};
+//# sourceMappingURL=rest.d.ts.map
