@@ -7,3 +7,4 @@ export declare function createConnection(dbPath?: string): import("drizzle-orm/b
 /** Process-wide shared connection. */
 export declare function getDb(): DbConnection;
 export { schema };
+//# sourceMappingURL=client.d.ts.map

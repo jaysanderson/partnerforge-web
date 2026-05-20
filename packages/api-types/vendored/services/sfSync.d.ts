@@ -63,3 +63,4 @@ export declare function refreshPartnerIfStale(db: DbConnection, sf: SalesforceAd
  */
 export declare function refreshContactsForPartnerIfStale(db: DbConnection, sf: SalesforceAdapter, log: Logger, partnerId: string): Promise<void>;
 export {};
+//# sourceMappingURL=sfSync.d.ts.map

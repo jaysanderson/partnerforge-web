@@ -39,7 +39,9 @@ import { Content } from './pages/Content';
 import { Reports } from './pages/Reports';
 import { Approvals } from './pages/Approvals';
 import { AdminConfig } from './pages/AdminConfig';
+import { ApiKeys } from './pages/ApiKeys';
 import { Audit } from './pages/Audit';
+import { Operations } from './pages/Operations';
 import { Placeholder } from './pages/Placeholder';
 
 /**
@@ -402,38 +404,8 @@ export function App() {
               />
             }
           />
-          <Route
-            path="/api-keys"
-            element={
-              <Placeholder
-                title="API & integrations"
-                group="Configure"
-                summary="Mint, list, and revoke service-account API keys (X-Api-Key). The keys MCP, Make/Zapier, and customer-built integrations use."
-                endpoints={[
-                  'POST /trpc/apiKeys.create',
-                  'GET /trpc/apiKeys.list',
-                  'POST /trpc/apiKeys.revoke',
-                ]}
-                icon={KeyRound}
-              />
-            }
-          />
-          <Route
-            path="/ops"
-            element={
-              <Placeholder
-                title="Operations"
-                group="Operations"
-                summary="Manual triggers: ARAG ingest, intel refresh, conflict scan, SF cache invalidation. The same procedures the cron runs on a schedule."
-                endpoints={[
-                  'POST /v1/system/sync',
-                  'POST /v1/system/cache-refresh',
-                  'POST /trpc/system.intelGenerateInsights',
-                ]}
-                icon={Wrench}
-              />
-            }
-          />
+          <Route path="/api-keys" element={<ApiKeys />} />
+          <Route path="/ops" element={<Operations />} />
 
           {/* Fallback */}
           <Route path="*" element={<Dashboard />} />

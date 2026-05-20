@@ -1,4 +1,8 @@
-/** Pre-built reports. All aggregations run over live operational data. */
+/**
+ * Pre-built reports. All aggregations run over live operational data.
+ * Uses `permissionOrScope` so non-browser integrators with `reports:read`
+ * can pull aggregates via the REST surface (e.g. a BI tool, Power Automate).
+ */
 export declare const reportsRouter: import("@trpc/server").TRPCBuiltRouter<{
     ctx: import("../context.js").Context;
     meta: object;
@@ -74,3 +78,4 @@ export declare const reportsRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=reports.d.ts.map

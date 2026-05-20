@@ -53,3 +53,4 @@ import type { AppMode } from '@partnerforge/shared';
 export declare function getSharePoint(mode: AppMode, read: () => SharePointAsset[]): SharePointAdapter;
 /** @deprecated use getSharePoint(mode, read) */
 export declare function makeSharePoint(read: () => SharePointAsset[]): SharePointAdapter;
+//# sourceMappingURL=index.d.ts.map

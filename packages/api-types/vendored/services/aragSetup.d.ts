@@ -15,3 +15,4 @@ export interface AragSetupReport {
     }[];
 }
 export declare function setupLabelsets(): Promise<AragSetupReport>;
+//# sourceMappingURL=aragSetup.d.ts.map

@@ -48,3 +48,4 @@ export declare const assistRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=assist.d.ts.map

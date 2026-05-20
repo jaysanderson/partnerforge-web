@@ -119,3 +119,4 @@ export declare class AragError extends Error {
     readonly status?: number;
     constructor(kind: AragErrorKind, message: string, status?: number);
 }
+//# sourceMappingURL=types.d.ts.map

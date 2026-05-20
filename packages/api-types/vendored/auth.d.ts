@@ -29,3 +29,4 @@ export declare function apiKeyPrefix(plaintext: string): string;
  * `last_used_at` opportunistically (debounced, best-effort).
  */
 export declare function principalFromApiKey(db: DbConnection, headerValue: string | undefined): AuthPrincipal | null;
+//# sourceMappingURL=auth.d.ts.map

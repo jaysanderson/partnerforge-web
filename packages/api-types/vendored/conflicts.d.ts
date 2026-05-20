@@ -5,3 +5,4 @@ import type { Context } from './context.js';
  * blocks deal creation if ARAG is unavailable.
  */
 export declare function detectConflictsForDeal(ctx: Context, dealId: string): Promise<number>;
+//# sourceMappingURL=conflicts.d.ts.map

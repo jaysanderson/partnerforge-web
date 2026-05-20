@@ -171,6 +171,49 @@ export const reportsApi = {
     }),
 };
 
+// ── system (admin orchestration: sync, intel, cache) ───────────────────
+// The intel.* triggers don't have REST routes yet (only the cron + the
+// system.syncRunAll wrap them), so the Operations page hits them via the
+// existing tRPC URLs. Same handlers either way.
+export const systemApi = {
+  cacheStats: () =>
+    useQuery({
+      queryKey: ['system.cacheStats'],
+      queryFn: () => apiGet<Out['system']['cacheStats']>('/system/cache-stats'),
+      // Stats are admin-visible at all times; auto-refetch every 30s so the
+      // freshness panel "ages" without manual reload.
+      refetchInterval: 30_000,
+    }),
+  syncRunAll: () =>
+    useMutation({
+      mutationFn: () => apiPost<Out['system']['syncRunAll']>('/system/sync'),
+    }),
+  cacheRefresh: () =>
+    useMutation({
+      mutationFn: (input: In['system']['cacheRefresh']) =>
+        apiPost<Out['system']['cacheRefresh']>('/system/cache-refresh', input),
+    }),
+};
+
+// ── apiKeys (admin: service-account credentials) ───────────────────────
+export const apiKeysApi = {
+  list: () =>
+    useQuery({
+      queryKey: ['apiKeys.list'],
+      queryFn: () => apiGet<Out['apiKeys']['list']>('/api-keys'),
+    }),
+  create: () =>
+    useMutation({
+      mutationFn: (input: In['apiKeys']['create']) =>
+        apiPost<Out['apiKeys']['create']>('/api-keys', input),
+    }),
+  revoke: () =>
+    useMutation({
+      mutationFn: (input: In['apiKeys']['revoke']) =>
+        apiPost<Out['apiKeys']['revoke']>(`/api-keys/${input.id}/revoke`),
+    }),
+};
+
 // ── adminConfig ─────────────────────────────────────────────────────────
 export const adminConfigApi = {
   mode: () =>
@@ -228,6 +271,8 @@ export const useApi = {
   ai: aiApi,
   reports: reportsApi,
   adminConfig: adminConfigApi,
+  system: systemApi,
+  apiKeys: apiKeysApi,
 };
 
 /**
@@ -256,5 +301,7 @@ export function useApiUtils() {
       oppFieldOverrides: { invalidate: inv(['adminConfig.oppFieldOverrides']) },
       sharepointAssets: { invalidate: inv(['adminConfig.sharepointAssets']) },
     },
+    system: { cacheStats: { invalidate: inv(['system.cacheStats']) } },
+    apiKeys: { list: { invalidate: inv(['apiKeys.list']) } },
   };
 }

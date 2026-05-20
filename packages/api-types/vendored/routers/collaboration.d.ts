@@ -47,3 +47,4 @@ export declare const collaborationRouter: import("@trpc/server").TRPCBuiltRouter
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=collaboration.d.ts.map

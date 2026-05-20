@@ -17,3 +17,4 @@ export declare function isInternalRole(role: string): role is InternalRole;
 /** Does an internal role permit `action` on `module`? */
 export declare function can(role: InternalRole, module: Module, action: Action): boolean;
 export {};
+//# sourceMappingURL=roles.d.ts.map

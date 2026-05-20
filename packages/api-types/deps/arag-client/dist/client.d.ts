@@ -110,3 +110,4 @@ export declare class AragKbClient {
 export declare function aragKbFromEnv(name: KbName): AragKbClient;
 /** Generic reachability probe — uses whichever KB key is configured first. */
 export declare function aragHealthClientFromEnv(): AragClient;
+//# sourceMappingURL=client.d.ts.map

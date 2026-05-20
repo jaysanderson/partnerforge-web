@@ -16,3 +16,4 @@ export declare const PRICEBOOK: SfPriceEntry[];
 export declare const PICKLISTS: SfPicklistMetadata;
 /** Field metadata — drives partner-facing labels + visibility (R28/R29). */
 export declare const OPPORTUNITY_FIELDS: SfFieldMeta[];
+//# sourceMappingURL=mock-data.d.ts.map

@@ -41,3 +41,4 @@ export declare const partnerContactsRouter: import("@trpc/server").TRPCBuiltRout
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=partnerContacts.d.ts.map

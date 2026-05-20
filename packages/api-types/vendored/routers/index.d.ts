@@ -1786,6 +1786,27 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             output: import("../services/aragSetup.js").AragSetupReport;
             meta: object;
         }>;
+        cacheStats: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                partners: {
+                    total: number;
+                    synced: number;
+                    oldestSync: string | null;
+                };
+                deals: {
+                    total: number;
+                    synced: number;
+                    oldestSync: string | null;
+                };
+                partnerContacts: {
+                    total: number;
+                    synced: number;
+                    oldestSync: string | null;
+                };
+            };
+            meta: object;
+        }>;
         cacheRefresh: import("@trpc/server").TRPCMutationProcedure<{
             input: {
                 entity?: "partner" | "all" | "contact" | "opportunity" | undefined;
@@ -1905,3 +1926,4 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
     }>>;
 }>>;
 export type AppRouter = typeof appRouter;
+//# sourceMappingURL=index.d.ts.map

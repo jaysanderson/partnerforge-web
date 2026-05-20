@@ -20,3 +20,4 @@ export declare function resolveMode(ctx: Context): AppMode;
 export declare function sfFor(ctx: Context): SalesforceAdapter;
 /** Mode-aware SharePoint adapter, backed by admin config in demo mode. */
 export declare function sharePointFor(ctx: Context, read: () => SharePointAsset[]): SharePointAdapter;
+//# sourceMappingURL=mode.d.ts.map

@@ -98,3 +98,4 @@ export declare const aiRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=ai.d.ts.map

@@ -89,3 +89,4 @@ export declare const adminConfigRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
 }>>;
+//# sourceMappingURL=adminConfig.d.ts.map
