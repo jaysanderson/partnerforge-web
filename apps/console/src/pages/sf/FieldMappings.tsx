@@ -31,7 +31,7 @@ export function SfFieldMappings(): ReactElement {
         </p>
       </div>
 
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         {rows.length === 0 ? (
           <p className="text-small text-text-secondary">
             No overrides configured — partners see the default field labels +

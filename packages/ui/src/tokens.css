@@ -216,7 +216,7 @@ h4 {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-md);
   padding: 20px;
 }
 @media (min-width: 1024px) {
@@ -224,6 +224,7 @@ h4 {
     padding: 24px;
   }
 }
+
 
 /* AI gradient — reserved for ARAG surfaces. Use as bg via this class. */
 .pf-ai-gradient {
@@ -246,12 +247,24 @@ h4 {
   outline: none;
 }
 
-a {
-  color: var(--color-brand-600);
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
+/* Anchor styling must live inside @layer base so Tailwind utility
+   classes (text-ink-2, text-ink-1, etc.) can override on a per-element
+   basis. Without the layer, this rule cascades AFTER utilities and
+   paints every <a> the brand colour — which is exactly what made the
+   sidebar nav read as "everything-blue". */
+@layer base {
+  a {
+    color: var(--color-brand-600);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  /* But sidebar nav <a>s shouldn't underline on hover — the row
+     background change is the hover signal there. */
+  nav a:hover {
+    text-decoration: none;
+  }
 }
 
 ::selection {
@@ -280,6 +293,9 @@ a:hover {
 /* ── Micro-interaction utilities ───────────────────────────────────── */
 
 .pf-card-hover {
+  /* Visible default elevation — `shadow-sm` was effectively zero on the
+     warm canvas. md gives real material. */
+  box-shadow: var(--shadow-md);
   transition:
     transform var(--duration-base) var(--ease-brand),
     box-shadow var(--duration-base) var(--ease-brand),
@@ -287,7 +303,7 @@ a:hover {
 }
 .pf-card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--shadow-lg);
   border-color: var(--color-border-strong);
 }
 

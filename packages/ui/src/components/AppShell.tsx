@@ -1,7 +1,7 @@
 import { useState, type ComponentType, type ReactElement, type ReactNode } from 'react';
 import { ChevronDown, ChevronRight, PanelLeftClose, PanelLeftOpen } from 'lucide-react';
 
-type IconType = ComponentType<{ size?: number | string }>;
+type IconType = ComponentType<{ size?: number | string; className?: string }>;
 
 /** A flat clickable nav entry. */
 export interface NavItem {
@@ -227,7 +227,7 @@ function Leaf({ item, active, collapsed, onNavigate, indented }: LeafProps): Rea
         indented && !collapsed ? 'pl-8 pr-3' : 'px-2.5'
       } ${
         active
-          ? 'bg-subtle font-semibold text-ink-1'
+          ? 'bg-brand-50 font-semibold text-brand-700'
           : 'text-ink-2 hover:bg-subtle hover:text-ink-1'
       } ${collapsed ? 'justify-center' : ''}`}
     >
@@ -238,7 +238,7 @@ function Leaf({ item, active, collapsed, onNavigate, indented }: LeafProps): Rea
           style={{ background: 'var(--color-brand-600)' }}
         />
       )}
-      <Icon size={16} />
+      <Icon size={16} className={active ? 'text-brand-600' : undefined} />
       {!collapsed && (
         <>
           <span className="truncate flex-1 text-left">{item.label}</span>
@@ -270,11 +270,13 @@ function Submenu({ submenu, activeKey, collapsed, onNavigate }: SubmenuProps): R
         type="button"
         onClick={() => setOpen((o) => !o)}
         title={collapsed ? submenu.label : undefined}
-        className={`flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] text-ink-2 transition-colors hover:bg-subtle hover:text-ink-1 ${
-          collapsed ? 'justify-center' : ''
-        } ${childActive ? 'font-semibold text-ink-1' : ''}`}
+        className={`flex w-full items-center gap-2.5 rounded-md px-2.5 py-1.5 text-[13px] transition-colors ${
+          childActive
+            ? 'font-semibold text-brand-700 hover:bg-brand-50'
+            : 'text-ink-2 hover:bg-subtle hover:text-ink-1'
+        } ${collapsed ? 'justify-center' : ''}`}
       >
-        <Icon size={16} />
+        <Icon size={16} className={childActive ? 'text-brand-600' : undefined} />
         {!collapsed && (
           <>
             <span className="truncate flex-1 text-left">{submenu.label}</span>

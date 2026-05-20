@@ -37,7 +37,7 @@ export function SfConflicts(): ReactElement {
         </p>
       </div>
 
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         {rows.length === 0 ? (
           <div className="flex items-start gap-3 rounded-[var(--radius-card)] bg-success/10 p-4">
             <Sparkles size={18} className="mt-0.5 shrink-0 text-success" />

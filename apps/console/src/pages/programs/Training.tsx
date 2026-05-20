@@ -60,7 +60,7 @@ export function Training(): ReactElement {
       </div>
 
       {tab === 'courses' && (
-        <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+        <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           {(courses.data ?? []).length === 0 ? (
             <EmptyState
               variant="zero-data"
@@ -103,7 +103,7 @@ export function Training(): ReactElement {
       )}
 
       {tab === 'certs' && (
-        <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+        <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           {(certifications.data ?? []).length === 0 ? (
             <EmptyState
               variant="zero-data"

@@ -41,7 +41,7 @@ export function Tiers(): ReactElement {
         {rows.map((r) => (
           <div
             key={r.tier}
-            className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]"
+            className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]"
           >
             <div className="mb-3 flex items-center justify-between">
               <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-caption font-semibold ${TIER_COLOR[r.tier] ?? 'bg-surface-alt'}`}>

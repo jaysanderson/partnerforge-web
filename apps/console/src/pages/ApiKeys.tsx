@@ -149,7 +149,7 @@ export function ApiKeys(): ReactElement {
       )}
 
       {/* Mint form */}
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         <h2 className="mb-3 font-heading text-h3 font-semibold">Mint a new key</h2>
         <form onSubmit={onSubmit} className="space-y-4">
           <label className="block">
@@ -217,7 +217,7 @@ export function ApiKeys(): ReactElement {
       </section>
 
       {/* Existing keys */}
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         <div className="mb-3 flex items-center justify-between">
           <h2 className="font-heading text-h3 font-semibold">Existing keys</h2>
           <span className="text-caption text-text-secondary">

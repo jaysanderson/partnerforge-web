@@ -338,7 +338,7 @@ export function Dashboard() {
           </Link>
         </div>
 
-        <div className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+        <div className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           <div className="mb-2 flex items-center gap-2">
             <TrendingUp size={16} className="text-progress-blue" />
             <h2 className="text-subhead font-semibold">{t('Quick actions')}</h2>

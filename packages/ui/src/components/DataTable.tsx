@@ -215,23 +215,23 @@ export function DataTable<T>({
   const colCount = columns.length + (showBulk ? 1 : 0);
 
   return (
-    <div className="relative rounded-[var(--radius-card)] border border-border bg-surface shadow-[var(--shadow-card)]">
+    <div className="relative rounded-[var(--radius-lg)] border border-border bg-surface shadow-[var(--shadow-md)]">
       {/* Toolbar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-2.5">
+      <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border px-4 py-3">
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative">
             <Search
               size={14}
-              className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-text-secondary"
+              className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-ink-3"
             />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Filter…"
-              className="w-64 rounded-[var(--radius-control)] border border-border bg-surface py-1.5 pl-8 pr-3 text-small outline-none focus:border-border-focus"
+              className="w-64 rounded-md border border-border-strong bg-surface py-1.5 pl-8 pr-3 text-[13px] text-ink-1 outline-none transition-[box-shadow,border-color] focus:border-brand-500 focus:shadow-[var(--shadow-ring)]"
             />
           </div>
-          <span className="text-caption text-text-secondary">
+          <span className="text-[12px] text-ink-3">
             {sorted.length} {sorted.length === 1 ? 'row' : 'rows'}
             {hasAnyFilter && rows.length !== sorted.length && (
               <span> of {rows.length}</span>
@@ -241,7 +241,7 @@ export function DataTable<T>({
             <button
               type="button"
               onClick={clearFacets}
-              className="flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-caption text-text-secondary hover:text-text-primary"
+              className="flex items-center gap-1 rounded-full border border-border px-2 py-0.5 text-[11px] text-ink-3 transition-colors hover:bg-subtle hover:text-ink-1"
             >
               <X size={11} /> Clear filters
             </button>
@@ -250,7 +250,7 @@ export function DataTable<T>({
         <button
           type="button"
           onClick={exportCsv}
-          className="flex items-center gap-1.5 rounded-[var(--radius-control)] border border-border px-3 py-1.5 text-small font-medium text-text-primary hover:bg-surface-alt"
+          className="flex h-9 items-center gap-1.5 rounded-md border border-border-strong bg-surface px-3 text-[13px] font-medium text-ink-1 transition-colors hover:bg-subtle"
         >
           <Download size={14} />
           Export CSV{selected.size > 0 ? ` (${selected.size})` : ''}
@@ -259,14 +259,14 @@ export function DataTable<T>({
 
       {/* Faceted filter chips */}
       {facets.length > 0 && (
-        <div className="space-y-1.5 border-b border-border px-4 py-2.5">
+        <div className="space-y-2 border-b border-border bg-subtle/40 px-4 py-3">
           {facets.map((facet) => {
             const sel = facetSel[facet.key] ?? new Set<string>();
             const values = facetValueLists[facet.key] ?? [];
             if (values.length === 0) return null;
             return (
               <div key={facet.key} className="flex flex-wrap items-center gap-1.5">
-                <span className="w-20 shrink-0 text-caption font-semibold uppercase tracking-wide text-text-secondary">
+                <span className="w-20 shrink-0 pf-micro text-ink-3">
                   {facet.label}
                 </span>
                 {values.map((v) => {
@@ -276,10 +276,10 @@ export function DataTable<T>({
                       key={v}
                       type="button"
                       onClick={() => toggleFacet(facet.key, v)}
-                      className={`rounded-full border px-2.5 py-0.5 text-caption transition-colors ${
+                      className={`rounded-full border px-2.5 py-0.5 text-[12px] font-medium transition-colors ${
                         on
-                          ? 'border-progress-blue bg-progress-blue/10 text-progress-blue'
-                          : 'border-border text-text-secondary hover:border-text-secondary hover:text-text-primary'
+                          ? 'border-brand-600 bg-brand-50 text-brand-700'
+                          : 'border-border bg-surface text-ink-2 hover:border-border-strong hover:text-ink-1'
                       }`}
                     >
                       {v}
@@ -298,7 +298,7 @@ export function DataTable<T>({
           <thead>
             <tr className="text-left">
               {showBulk && (
-                <th className="sticky top-0 z-10 w-9 select-none border-b border-border bg-surface-alt px-3 py-2.5">
+                <th className="sticky top-0 z-10 w-9 select-none border-b border-border bg-subtle px-3 py-3">
                   <input
                     type="checkbox"
                     aria-label="Select all rows on this page"
@@ -307,7 +307,7 @@ export function DataTable<T>({
                       if (el) el.indeterminate = someSelectedOnPage;
                     }}
                     onChange={toggleSelectAll}
-                    className="h-3.5 w-3.5 cursor-pointer accent-progress-blue"
+                    className="h-3.5 w-3.5 cursor-pointer accent-brand-600"
                   />
                 </th>
               )}
@@ -317,9 +317,9 @@ export function DataTable<T>({
                   <th
                     key={c.key}
                     onClick={() => handleSort(c)}
-                    className={`sticky top-0 z-10 select-none border-b border-border bg-surface-alt px-4 py-2.5 text-caption font-semibold uppercase tracking-wide text-text-secondary ${
+                    className={`pf-micro sticky top-0 z-10 select-none border-b border-border bg-subtle px-4 py-3 text-ink-3 ${
                       c.align === 'right' ? 'text-right' : 'text-left'
-                    } ${c.sortable === false ? '' : 'cursor-pointer hover:text-text-primary'}`}
+                    } ${c.sortable === false ? '' : 'cursor-pointer hover:text-ink-1'}`}
                   >
                     <span
                       className={`inline-flex items-center gap-1 ${
@@ -328,7 +328,7 @@ export function DataTable<T>({
                     >
                       {c.header}
                       {active &&
-                        (sortDir === 'asc' ? <ArrowUp size={12} /> : <ArrowDown size={12} />)}
+                        (sortDir === 'asc' ? <ArrowUp size={11} /> : <ArrowDown size={11} />)}
                     </span>
                   </th>
                 );
@@ -342,9 +342,9 @@ export function DataTable<T>({
               return (
                 <tr
                   key={id}
-                  className={`${rowH} pf-row-hover border-b border-border/70 ${
+                  className={`${rowH} pf-row-hover border-b border-border/60 text-[13px] text-ink-1 ${
                     onRowClick ? 'cursor-pointer' : ''
-                  } ${isSelected ? 'bg-progress-blue/[0.04]' : ''}`}
+                  } ${isSelected ? 'bg-brand-50/50' : ''}`}
                 >
                   {showBulk && (
                     <td className="px-3" onClick={(e) => e.stopPropagation()}>
@@ -360,7 +360,7 @@ export function DataTable<T>({
                             return next;
                           })
                         }
-                        className="h-3.5 w-3.5 cursor-pointer accent-progress-blue"
+                        className="h-3.5 w-3.5 cursor-pointer accent-brand-600"
                       />
                     </td>
                   )}
@@ -420,7 +420,7 @@ export function DataTable<T>({
                 action.tone === 'danger'
                   ? 'border border-danger/40 text-danger hover:bg-danger/5'
                   : action.tone === 'primary'
-                    ? 'bg-progress-blue text-white hover:bg-progress-blue/90'
+                    ? 'bg-brand-600 text-white hover:bg-brand-700'
                     : 'border border-border text-text-primary hover:bg-surface-alt';
               return (
                 <button

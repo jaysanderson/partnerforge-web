@@ -61,7 +61,7 @@ export function SfRunSync(): ReactElement {
         </div>
       )}
 
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         <h2 className="mb-2 font-heading text-h3 font-semibold">ARAG ingest</h2>
         <p className="mb-4 text-small text-text-secondary">
           Pushes every partner, deal, and content item into the three

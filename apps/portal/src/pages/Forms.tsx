@@ -136,7 +136,7 @@ export function Forms() {
               e.preventDefault();
               onSubmit(def);
             }}
-            className="space-y-3 rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]"
+            className="space-y-3 pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]"
           >
             <h2 className="text-subhead font-semibold">{t(def.title)}</h2>
             {def.alwaysApprove && (

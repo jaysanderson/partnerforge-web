@@ -55,7 +55,7 @@ export function SfSyncStatus(): ReactElement {
         </div>
       </div>
 
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         <div className="mb-3 flex items-center gap-2">
           <Database size={18} className="text-progress-blue" />
           <h2 className="font-heading text-h3 font-semibold">Cache freshness</h2>
