@@ -64,11 +64,14 @@ const DEFAULT_ICON: Record<Variant, ComponentType<{ size?: number | string }>> =
   'coming-soon': Construction,
 };
 
+/* Icon-circle background is unified `bg-subtle` so the disc is visible
+   against the white card surface (the per-variant `bg-warning-50` etc.
+   were too pale to show). Only the icon FOREGROUND tints per variant. */
 const TONE: Record<Variant, { iconBg: string; iconFg: string }> = {
   'zero-data': { iconBg: 'bg-subtle', iconFg: 'text-ink-3' },
-  'zero-results': { iconBg: 'bg-brand-50', iconFg: 'text-brand-600' },
+  'zero-results': { iconBg: 'bg-subtle', iconFg: 'text-brand-600' },
   error: { iconBg: 'bg-danger-50', iconFg: 'text-danger-600' },
-  'coming-soon': { iconBg: 'bg-warning-50', iconFg: 'text-warning-600' },
+  'coming-soon': { iconBg: 'bg-subtle', iconFg: 'text-warning-600' },
 };
 
 export function EmptyState({
@@ -94,7 +97,7 @@ export function EmptyState({
       className={`flex flex-col items-center justify-center gap-3 px-6 text-center ${pad}`}
     >
       <div
-        className={`grid ${iconBox} place-items-center rounded-full ${tone.iconBg} ${tone.iconFg}`}
+        className={`grid ${iconBox} place-items-center rounded-full ring-1 ring-border ${tone.iconBg} ${tone.iconFg}`}
         aria-hidden
       >
         <Icon size={iconSize} />

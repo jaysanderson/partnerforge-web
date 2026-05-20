@@ -31,7 +31,7 @@ export function Approvals() {
       {(pending.data ?? []).map((s) => (
         <div
           key={s.id}
-          className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]"
+          className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]"
         >
           <div className="flex items-start justify-between">
             <div>

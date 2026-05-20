@@ -34,7 +34,7 @@ export function CommissionPlans(): ReactElement {
         title="Commission plans"
         summary="Tier or product overrides to the default rate. The recompute job uses these when projecting won deals to payouts."
       />
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         {rows.length === 0 ? (
           <p className="text-small text-text-secondary">
             No custom plans yet — every partner uses the default tier rate.
@@ -100,7 +100,7 @@ export function CommissionPayouts(): ReactElement {
           {recompute.isPending ? 'Recomputing…' : 'Recompute from won deals'}
         </button>
       </div>
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         {rows.length === 0 ? (
           <p className="text-small text-text-secondary">No payouts yet.</p>
         ) : (
@@ -156,7 +156,7 @@ export function CommissionStatements(): ReactElement {
         <Stat label="Pending" value={money(totals.pending)} icon={Coins} />
         <Stat label="Paid" value={money(totals.paid)} icon={Coins} />
       </div>
-      <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
         <table className="w-full text-body">
           <thead>
             <tr className="bg-surface-alt text-left text-caption uppercase text-text-secondary">

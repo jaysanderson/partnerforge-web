@@ -1,3 +1,15 @@
+/**
+ * MetricCard — the KPI tile primitive.
+ *
+ * Reviewer-calibrated to Stripe Dashboard / Linear / Ramp standards:
+ * Micro eyebrow label on top, .pf-display headline number with tabular
+ * nums, optional delta chip rendered as bare coloured text (not a
+ * tinted pill), sparkline aligned beside the number (not below) so
+ * the tile reads short + dense.
+ *
+ * Renders "—" instead of "0" when the underlying raw value is exactly
+ * zero AND no `value` override is supplied — avoids zeroes shouting.
+ */
 import type { ReactElement } from 'react';
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
 import { CountUp } from './CountUp.js';
@@ -7,31 +19,15 @@ import { Skeleton } from './Skeleton.js';
 interface MetricCardProps {
   label: string;
   value: string;
-  /** Signed percentage vs prior period, e.g. +12.4 or -3.1. */
   changePct?: number;
-  /** Optional progress toward a target, 0–1. */
   progress?: number;
-  /**
-   * Optional sparkline series — chronological. Renders a small inline trend
-   * line in the bottom-right of the tile. Pass `[]` to render the empty
-   * baseline (keeps card heights consistent in a row).
-   */
   trend?: number[];
-  /** Trend stroke colour. Defaults to muted secondary text. */
   trendColor?: string;
-  /** Optional unobtrusive caption beneath the value (e.g. "vs last 30 d"). */
   hint?: string;
-  /** Render a skeleton placeholder instead of the value/trend. */
   loading?: boolean;
-  /**
-   * Optional raw numeric value used to animate the headline number on
-   * mount via <CountUp>. If omitted, `value` is shown statically (because
-   * we can't parse arbitrary formatted strings safely).
-   */
   rawValue?: number;
-  /** Format the animating intermediate raw value back to a string. */
   formatValue?: (n: number) => string;
-  /** Optional top accent colour bar (4px) — for tier or category tinting. */
+  /** Top accent colour bar (3 px) — used for category tinting. */
   accent?: string;
 }
 
@@ -49,8 +45,9 @@ export function MetricCard({
   accent,
 }: MetricCardProps): ReactElement {
   const up = (changePct ?? 0) >= 0;
+  const showDash = rawValue === 0 && value === '0';
   return (
-    <div className="pf-card-hover relative overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+    <div className="pf-card-hover relative overflow-hidden rounded-[var(--radius-lg)] border border-border bg-surface p-6">
       {accent && (
         <span
           aria-hidden
@@ -58,59 +55,65 @@ export function MetricCard({
           style={{ background: accent }}
         />
       )}
-      <div className="text-caption font-medium uppercase tracking-wide text-text-secondary">
-        {label}
-      </div>
+      <div className="pf-micro">{label}</div>
+
       {loading ? (
         <div className="mt-3 space-y-2">
-          <Skeleton variant="row" className="h-7 w-2/3" />
-          {trend && <Skeleton variant="text" className="h-6 w-24" />}
+          <Skeleton variant="row" className="h-8 w-2/3" />
+          {trend && <Skeleton variant="text" className="h-5 w-24" />}
         </div>
       ) : (
         <>
-          <div className="mt-2.5 flex items-end justify-between gap-3">
-            <span className="font-mono text-[1.875rem] font-semibold leading-none tracking-tight text-text-primary">
-              {rawValue !== undefined && formatValue ? (
+          {/* Number row: Display weight value + sparkline aligned right.
+              This is the densification the reviewer wanted — sparkline
+              beside the number, not below it. */}
+          <div className="mt-2 flex items-end justify-between gap-3">
+            <span
+              className="pf-display text-ink-1"
+              title={showDash ? 'No data in this range' : undefined}
+            >
+              {showDash ? (
+                '—'
+              ) : rawValue !== undefined && formatValue ? (
                 <CountUp value={rawValue} format={formatValue} />
               ) : (
                 value
               )}
             </span>
-            {changePct !== undefined && (
+            {trend && trend.length > 0 && (
               <span
-                className={`flex items-center gap-0.5 rounded-full px-1.5 py-0.5 text-caption font-semibold ${
-                  up ? 'bg-success/10 text-success' : 'bg-danger/10 text-danger'
-                }`}
+                className="shrink-0"
+                style={trendColor ? { color: trendColor } : { color: 'var(--color-brand-500)' }}
               >
-                {up ? <ArrowUpRight size={13} /> : <ArrowDownRight size={13} />}
-                {Math.abs(changePct).toFixed(1)}%
+                <Sparkline data={trend} width={88} height={32} label={`${label} trend`} />
               </span>
             )}
           </div>
-          {trend && (
-            <div className="mt-3 flex items-center justify-between gap-2">
-              {hint ? (
-                <span className="text-caption text-text-secondary">{hint}</span>
-              ) : (
-                <span />
+
+          {/* Delta + hint row — bare coloured text (no pill tint).
+              Linear style. */}
+          {(changePct !== undefined || hint) && (
+            <div className="mt-2 flex items-center gap-1.5 text-[12px]">
+              {changePct !== undefined && (
+                <span
+                  className={`inline-flex items-center gap-0.5 font-medium ${
+                    up ? 'text-success-600' : 'text-danger-600'
+                  }`}
+                >
+                  {up ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />}
+                  {Math.abs(changePct).toFixed(1)}%
+                </span>
               )}
-              <span
-                className={trendColor ? '' : 'text-progress-blue'}
-                style={trendColor ? { color: trendColor } : undefined}
-              >
-                <Sparkline data={trend} width={88} height={26} label={`${label} trend`} />
-              </span>
+              {hint && <span className="text-ink-3">{hint}</span>}
             </div>
-          )}
-          {hint && !trend && (
-            <div className="mt-2 text-caption text-text-secondary">{hint}</div>
           )}
         </>
       )}
+
       {progress !== undefined && !loading && (
-        <div className="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-surface-alt">
+        <div className="mt-4 h-1 w-full overflow-hidden rounded-full bg-subtle">
           <div
-            className="h-full rounded-full bg-progress-green transition-[width] duration-300"
+            className="h-full rounded-full bg-brand-600 transition-[width] duration-300"
             style={{ width: `${Math.min(100, Math.max(0, progress * 100))}%` }}
           />
         </div>
