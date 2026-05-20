@@ -54,7 +54,7 @@ export function SignIn() {
           <button
             type="submit"
             disabled={busy}
-            className="w-full rounded-[var(--radius-control)] bg-progress-red py-2.5 text-body font-medium text-white disabled:opacity-50"
+            className="w-full rounded-[var(--radius-control)] bg-progress-blue py-2.5 text-body font-medium text-white disabled:opacity-50"
           >
             {busy ? t('Signing in…') : t('Send magic link')}
           </button>

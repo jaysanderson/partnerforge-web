@@ -203,7 +203,7 @@ export function ApiKeys(): ReactElement {
           <button
             type="submit"
             disabled={create.isPending || !name.trim()}
-            className="rounded-[var(--radius-control)] bg-progress-red px-4 py-2 text-small font-medium text-white disabled:opacity-50"
+            className="rounded-[var(--radius-control)] bg-progress-blue px-4 py-2 text-small font-medium text-white disabled:opacity-50"
           >
             {create.isPending ? 'Minting…' : 'Mint key'}
           </button>

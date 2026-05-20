@@ -71,6 +71,14 @@ export function AppShell({
 
   return (
     <div className="flex h-full">
+      {/* Skip-to-content: hidden until focused via Tab. WCAG 2.4.1.
+          Lands the user past the nav into the main content area. */}
+      <a
+        href="#main"
+        className="sr-only z-50 rounded-[var(--radius-control)] bg-progress-blue px-3 py-2 text-small font-medium text-white focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:outline-none focus:ring-2 focus:ring-progress-blue focus:ring-offset-2"
+      >
+        Skip to main content
+      </a>
       <aside
         className="flex flex-col bg-sidebar-bg text-sidebar-text transition-[width] duration-200"
         style={{ width: w, minWidth: w }}
@@ -131,7 +139,7 @@ export function AppShell({
         <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-6 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
           {topBar}
         </header>
-        <main className="flex-1 overflow-auto bg-background">
+        <main id="main" className="flex-1 overflow-auto bg-background" tabIndex={-1}>
           <div className="mx-auto w-full max-w-[1440px] px-6 py-6 lg:px-8 lg:py-8">
             {children}
           </div>
@@ -191,12 +199,19 @@ interface LeafProps {
 function Leaf({ item, active, collapsed, onNavigate, indented }: LeafProps): ReactElement {
   const Icon = item.icon;
   return (
-    <button
-      type="button"
-      onClick={() => onNavigate(item.key)}
+    <a
+      // Real href so right-click → "Open in new tab" works, plus better
+      // screen-reader semantics than <button>. SPA nav intercepts the
+      // click; cmd/ctrl/middle-click fall through to the browser.
+      href={item.key}
+      onClick={(e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.button === 1) return;
+        e.preventDefault();
+        onNavigate(item.key);
+      }}
       title={collapsed ? item.label : undefined}
       aria-current={active ? 'page' : undefined}
-      className={`group relative flex w-full items-center gap-3 rounded-[var(--radius-card)] py-2 text-small transition-colors ${
+      className={`group relative flex w-full items-center gap-3 rounded-[var(--radius-card)] py-2 text-small transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-progress-blue focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg ${
         indented && !collapsed ? 'pl-9 pr-3' : 'px-3'
       } ${
         active
@@ -218,7 +233,7 @@ function Leaf({ item, active, collapsed, onNavigate, indented }: LeafProps): Rea
           )}
         </>
       )}
-    </button>
+    </a>
   );
 }
 

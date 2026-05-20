@@ -25,7 +25,7 @@ import {
   Users,
   Wrench,
 } from 'lucide-react';
-import { AppShell, type NavSection } from '@partnerforge/ui';
+import { AppShell, EmptyState, type NavSection } from '@partnerforge/ui';
 import { useAuth } from './auth';
 import { useApi } from './api/hooks';
 import { Login } from './components/Login';
@@ -42,7 +42,6 @@ import { AdminConfig } from './pages/AdminConfig';
 import { ApiKeys } from './pages/ApiKeys';
 import { Audit } from './pages/Audit';
 import { Operations } from './pages/Operations';
-import { Placeholder } from './pages/Placeholder';
 import { SfSyncStatus } from './pages/sf/SyncStatus';
 import { SfRunSync } from './pages/sf/RunSync';
 import { SfFieldMappings } from './pages/sf/FieldMappings';
@@ -244,30 +243,71 @@ export function App() {
           <Route path="/commissions/disputes" element={<CommissionDisputes />} />
           <Route path="/tiers" element={<Tiers />} />
 
-          {/* Still placeholders — Forms builder + Experience builder need
-              real schema work; coming next milestone. */}
+          {/* Forms builder + Experience builder need real schema work; both
+              land in PR_UX5 / a later milestone. Until then, render a proper
+              product-shaped "coming soon" page rather than a backend-leaky
+              Placeholder — no /trpc/... paths visible to staff. */}
           <Route
             path="/forms"
             element={
-              <Placeholder
-                title="Forms builder"
-                group="Configure"
-                summary="Author the forms partners see in the portal (deal reg, MDF requests, support tickets) — fields, validation, routing."
-                endpoints={['GET /trpc/adminConfig.formDefs.* (planned)']}
-                icon={ClipboardList}
-              />
+              <div className="space-y-6">
+                <div>
+                  <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+                    Configure
+                  </div>
+                  <h1 className="font-heading text-h1 font-semibold">Forms builder</h1>
+                  <p className="mt-1 max-w-2xl text-body text-text-secondary">
+                    Author the forms partners see in the portal — deal registration,
+                    MDF requests, support tickets — with fields, validation, and
+                    routing rules.
+                  </p>
+                </div>
+                <div className="rounded-[var(--radius-card)] border border-border bg-surface shadow-[var(--shadow-card)]">
+                  <EmptyState
+                    variant="coming-soon"
+                    icon={ClipboardList}
+                    title="Forms builder lands next milestone"
+                    body="Partners already submit through the live deal-reg, MDF, and support forms in the portal. The builder UI for authoring new form definitions ships in the next release."
+                    action={{
+                      label: 'View live submissions',
+                      onClick: () => navigate('/submissions'),
+                    }}
+                  />
+                </div>
+              </div>
             }
           />
           <Route
             path="/experience"
             element={
-              <Placeholder
-                title="Experience builder"
-                group="Configure"
-                summary="Theme + layout per partner tier — what the portal looks like for Gold vs Silver, which modules are visible."
-                endpoints={['GET /trpc/adminConfig.experience.* (planned)']}
-                icon={Palette}
-              />
+              <div className="space-y-6">
+                <div>
+                  <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
+                    Configure
+                  </div>
+                  <h1 className="font-heading text-h1 font-semibold">Experience builder</h1>
+                  <p className="mt-1 max-w-2xl text-body text-text-secondary">
+                    Theme and layout the portal per partner tier — branding, which
+                    modules show for Gold vs. Silver, what the landing page looks like.
+                  </p>
+                </div>
+                <div className="rounded-[var(--radius-card)] border border-border bg-surface shadow-[var(--shadow-card)]">
+                  <EmptyState
+                    variant="coming-soon"
+                    icon={Palette}
+                    title="Experience builder lands next milestone"
+                    body="Tiers, journeys, and portal-wide settings are already live — you can shape what partners see today via Tiers + Portal settings. The drag-and-drop experience editor ships in the next release."
+                    action={{
+                      label: 'Open Tiers',
+                      onClick: () => navigate('/tiers'),
+                    }}
+                    secondaryAction={{
+                      label: 'Portal settings',
+                      onClick: () => navigate('/portal-settings'),
+                    }}
+                  />
+                </div>
+              </div>
             }
           />
           {/* Salesforce sub-menu — real pages. */}
