@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import {
   Award,
@@ -11,6 +11,7 @@ import {
   Folder,
   GitBranch,
   GraduationCap,
+  HelpCircle,
   Home,
   KeyRound,
   LogOut,
@@ -18,6 +19,7 @@ import {
   Palette,
   Plug,
   ScrollText,
+  Search,
   Settings,
   ShieldCheck,
   Sparkles,
@@ -152,9 +154,24 @@ const ALL_KEYS = allKeys(NAV);
 export function App() {
   const { user, logout } = useAuth();
   const [copilot, setCopilot] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   const modeQ = useApi.adminConfig.mode();
   const location = useLocation();
   const navigate = useNavigate();
+
+  // ⌘J / Ctrl+J opens the ARAG copilot from anywhere. ⌘K is already
+  // wired by CommandPalette. Both bindings are reflected in the help menu.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'j') {
+        e.preventDefault();
+        setCopilot((c) => !c);
+      }
+      if (e.key === 'Escape' && helpOpen) setHelpOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [helpOpen]);
 
   if (!user) return <Login />;
   const mode = modeQ.data?.mode ?? 'demo';
@@ -175,30 +192,101 @@ export function App() {
         onNavigate={(k) => navigate(k)}
         topBar={
           <>
-            <div className="flex items-center gap-2 text-small text-text-secondary">
+            <div className="flex items-center gap-3 text-small">
+              {/* Quieter env chip — informational, not loud. Live = green
+                  dot, Demo = amber dot; uppercase removed so it stops
+                  competing with the brand wordmark. */}
               <span
-                className={`rounded-full px-2 py-0.5 text-caption font-semibold uppercase ${
-                  mode === 'live' ? 'bg-success/10 text-success' : 'bg-warning/10 text-warning'
-                }`}
+                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-alt px-2 py-0.5 text-caption text-text-secondary"
                 title={
                   mode === 'live'
                     ? 'Live mode — real Salesforce / SharePoint connectors'
                     : 'Demo mode — mock Salesforce / SharePoint data'
                 }
               >
-                {mode}
+                <span
+                  className={`h-1.5 w-1.5 rounded-full ${
+                    mode === 'live' ? 'bg-success' : 'bg-warning'
+                  }`}
+                />
+                {mode === 'live' ? 'Live' : 'Demo'}
               </span>
-              <span className="text-caption">⌘K to search · /docs for API</span>
+              {/* Real ⌘K search pill — was a buried text hint before */}
+              <button
+                type="button"
+                onClick={() =>
+                  window.dispatchEvent(new CustomEvent('pf:command-palette:open'))
+                }
+                className="flex w-56 items-center gap-2 rounded-[var(--radius-control)] border border-border bg-surface px-2.5 py-1 text-caption text-text-secondary transition-colors hover:border-text-secondary hover:text-text-primary"
+              >
+                <Search size={13} />
+                <span>Search partners, deals…</span>
+                <kbd className="ml-auto rounded border border-border px-1 font-mono text-[10px]">
+                  ⌘K
+                </kbd>
+              </button>
             </div>
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => setCopilot(true)}
-                className="flex items-center gap-1.5 rounded-[var(--radius-control)] bg-progress-blue px-3 py-1.5 text-small font-medium text-white"
+                title="Ask ARAG (⌘J)"
+                className="flex items-center gap-1.5 rounded-[var(--radius-control)] bg-progress-blue px-3 py-1.5 text-small font-medium text-white hover:bg-progress-blue/90"
               >
                 <Sparkles size={14} />
                 Ask ARAG
+                <kbd className="ml-1 rounded bg-white/15 px-1 font-mono text-[10px]">⌘J</kbd>
               </button>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setHelpOpen((o) => !o)}
+                  aria-label="Help"
+                  aria-haspopup="menu"
+                  aria-expanded={helpOpen}
+                  className="rounded-full p-1.5 text-text-secondary hover:bg-surface-alt hover:text-text-primary"
+                >
+                  <HelpCircle size={16} />
+                </button>
+                {helpOpen && (
+                  <div
+                    role="menu"
+                    onMouseLeave={() => setHelpOpen(false)}
+                    className="absolute right-0 top-full z-40 mt-1 w-64 rounded-[var(--radius-card)] border border-border bg-surface p-2 shadow-[0_8px_24px_rgba(0,0,0,0.12)]"
+                  >
+                    <div className="px-2 py-1 text-caption font-semibold uppercase tracking-wide text-text-secondary">
+                      Keyboard
+                    </div>
+                    <div className="space-y-0.5 px-2 py-1 text-small">
+                      <div className="flex items-center justify-between">
+                        <span>Search</span>
+                        <kbd className="rounded border border-border px-1 font-mono text-[10px]">⌘K</kbd>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span>Ask ARAG</span>
+                        <kbd className="rounded border border-border px-1 font-mono text-[10px]">⌘J</kbd>
+                      </div>
+                    </div>
+                    <div className="my-1 h-px bg-border" />
+                    <a
+                      href="/docs"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block rounded px-2 py-1.5 text-small hover:bg-surface-alt"
+                    >
+                      API documentation
+                    </a>
+                    <a
+                      href="https://github.com/jaysanderson/partner-forge"
+                      target="_blank"
+                      rel="noreferrer"
+                      className="block rounded px-2 py-1.5 text-small hover:bg-surface-alt"
+                    >
+                      What's new (GitHub)
+                    </a>
+                  </div>
+                )}
+              </div>
               <span className="text-small">
                 {user.name}{' '}
                 <span className="text-caption text-text-secondary">({user.role})</span>

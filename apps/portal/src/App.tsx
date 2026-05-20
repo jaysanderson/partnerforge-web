@@ -1,14 +1,15 @@
 import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import {
-  LayoutDashboard,
-  Briefcase,
-  KeyRound,
-  FileText,
-  ClipboardList,
   BookOpen,
-  Sparkles,
+  Briefcase,
+  ClipboardList,
+  FileText,
   GraduationCap,
+  HelpCircle,
+  KeyRound,
+  LayoutDashboard,
   LogOut,
+  Sparkles,
 } from 'lucide-react';
 import { AppShell, type NavItem } from '@partnerforge/ui';
 import { useAuth } from './auth';
@@ -65,21 +66,22 @@ export function App() {
       onNavigate={(k) => navigate(k)}
       topBar={
         <>
-          <div className="flex items-center gap-2 text-small text-text-secondary">
-            {t('Progress Partner Network')}
+          <div className="flex items-center gap-3 text-small text-text-secondary">
+            <span>{t('Progress Partner Network')}</span>
             <span
-              className={`rounded-full px-2 py-0.5 text-caption font-semibold uppercase ${
-                mode === 'live'
-                  ? 'bg-success/10 text-success'
-                  : 'bg-warning/10 text-warning'
-              }`}
+              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-alt px-2 py-0.5 text-caption text-text-secondary"
               title={
                 mode === 'live'
                   ? 'Live mode — real connectors'
                   : 'Demo mode — mock Salesforce/SharePoint data'
               }
             >
-              {mode}
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${
+                  mode === 'live' ? 'bg-success' : 'bg-warning'
+                }`}
+              />
+              {mode === 'live' ? 'Live' : 'Demo'}
             </span>
           </div>
           <div className="flex items-center gap-3">
@@ -98,6 +100,16 @@ export function App() {
                 </option>
               ))}
             </select>
+            <a
+              href="/docs"
+              target="_blank"
+              rel="noreferrer"
+              aria-label={t('Help')}
+              title={t('Help & API docs')}
+              className="rounded-full p-1.5 text-text-secondary hover:bg-surface-alt hover:text-text-primary"
+            >
+              <HelpCircle size={16} />
+            </a>
             <span className="text-small">{contact.name}</span>
             <button
               type="button"
