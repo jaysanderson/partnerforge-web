@@ -6,6 +6,8 @@ export { ToastProvider, useToast } from './components/Toast.js';
 export { EmptyState } from './components/EmptyState.js';
 export { Sparkline } from './components/Sparkline.js';
 export { Skeleton } from './components/Skeleton.js';
+export { CountUp } from './components/CountUp.js';
+export { HeroBand } from './components/HeroBand.js';
 export {
   AppShell,
   type NavItem,

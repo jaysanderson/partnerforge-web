@@ -32,6 +32,7 @@ import {
 } from 'lucide-react';
 import {
   EmptyState,
+  HeroBand,
   MetricCard,
   Skeleton,
   StatusBadge,
@@ -141,61 +142,80 @@ export function Dashboard() {
   const noPartners = !isLoading && stats.totalPartners === 0;
 
   return (
-    <div className="space-y-6">
-      <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-page font-semibold">Dashboard</h1>
-          <p className="text-small text-text-secondary">
-            Progress Partner Network — operational overview
-          </p>
+    <div className="pf-fade-in space-y-6 pb-12">
+      <HeroBand>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <div className="text-caption font-semibold uppercase tracking-[0.14em] text-text-secondary">
+              Overview
+            </div>
+            <h1 className="mt-1 text-[2rem] font-bold tracking-tight">Dashboard</h1>
+            <p className="mt-1 text-small text-text-secondary">
+              Progress Partner Network — operational cockpit
+            </p>
+          </div>
+          <div className="flex items-center gap-2 text-caption text-text-secondary">
+            <span className="rounded-full border border-border bg-surface px-2 py-0.5">
+              Last 30 days
+            </span>
+            <span className="rounded-full bg-surface-alt px-2 py-0.5">
+              {stats.totalPartners} partners · {stats.openCount + stats.wonCount} deals
+            </span>
+          </div>
         </div>
-        <div className="flex items-center gap-2 text-caption text-text-secondary">
-          <span className="rounded-full border border-border px-2 py-0.5">Last 30 days</span>
-          <span className="rounded-full bg-surface-alt px-2 py-0.5">
-            {stats.totalPartners} partners · {stats.openCount + stats.wonCount} deals
-          </span>
-        </div>
-      </header>
+      </HeroBand>
 
       {/* KPI row */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
           label="Partner-Sourced Pipeline"
           value={money(stats.openValue)}
+          rawValue={stats.openValue}
+          formatValue={(n) => money(n)}
           trend={trends.open}
           trendColor={token.progressBlue}
           hint={`${stats.openCount} open deals`}
           loading={isLoading}
+          accent={token.progressBlue}
         />
         <MetricCard
           label="Closed Revenue (Won)"
           value={money(stats.wonValue)}
+          rawValue={stats.wonValue}
+          formatValue={(n) => money(n)}
           trend={trends.won}
           trendColor={token.success}
           hint={`${stats.wonCount} won this period`}
           loading={isLoading}
+          accent={token.success}
         />
         <MetricCard
           label="Active Partners"
           value={String(stats.activePartners)}
+          rawValue={stats.activePartners}
+          formatValue={(n) => Math.round(n).toString()}
           trend={trends.partners}
           trendColor={token.progressGreen}
           hint={`${stats.totalPartners} total`}
           loading={isLoading}
+          accent={token.progressGreen}
         />
         <MetricCard
           label="Avg Engagement"
           value={`${stats.avgEng}/100`}
+          rawValue={stats.avgEng}
+          formatValue={(n) => `${Math.round(n)}/100`}
           trend={trends.eng}
           trendColor={token.warning}
           hint="program-wide"
           loading={isLoading}
+          accent={token.warning}
         />
       </div>
 
       {/* Action band: Pipeline + AI Insights */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)] lg:col-span-2">
+        <section className="pf-card-hover rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)] lg:col-span-2">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <TrendingUp size={16} className="text-progress-blue" />
@@ -253,7 +273,7 @@ export function Dashboard() {
 
       {/* Data band: Top Partners + Active Goals */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+        <section className="pf-card-hover rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Users size={16} className="text-progress-blue" />
@@ -302,7 +322,7 @@ export function Dashboard() {
           )}
         </section>
 
-        <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+        <section className="pf-card-hover rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           <div className="mb-4 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Target size={16} className="text-progress-blue" />
@@ -468,7 +488,7 @@ function AIInsightsCard() {
     );
 
   return (
-    <section className="rounded-[var(--radius-card)] border border-border bg-ai-surface p-5 shadow-[var(--shadow-card)]">
+    <section className="pf-card-hover rounded-[var(--radius-card)] border border-progress-blue/20 bg-gradient-to-br from-ai-surface to-surface p-5 shadow-[var(--shadow-card)]">
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Sparkles size={16} className="text-ai-accent" />

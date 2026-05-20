@@ -342,8 +342,8 @@ export function DataTable<T>({
               return (
                 <tr
                   key={id}
-                  className={`${rowH} border-b border-border/70 transition-colors ${
-                    onRowClick ? 'cursor-pointer hover:bg-info/[0.04]' : ''
+                  className={`${rowH} pf-row-hover border-b border-border/70 ${
+                    onRowClick ? 'cursor-pointer' : ''
                   } ${isSelected ? 'bg-progress-blue/[0.04]' : ''}`}
                 >
                   {showBulk && (

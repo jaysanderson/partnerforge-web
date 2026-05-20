@@ -190,6 +190,36 @@ export function App() {
         nav={NAV}
         activeKey={activeKey}
         onNavigate={(k) => navigate(k)}
+        userCard={
+          <div className="flex items-center gap-2.5">
+            <div
+              className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-progress-green text-text-on-green"
+              style={{ fontWeight: 600, fontSize: 12, fontFamily: 'var(--font-heading)' }}
+              aria-hidden
+            >
+              {user.name
+                .split(' ')
+                .map((p) => p[0])
+                .join('')
+                .slice(0, 2)
+                .toUpperCase()}
+            </div>
+            <div className="min-w-0 flex-1">
+              <div className="truncate text-small font-medium text-sidebar-text">{user.name}</div>
+              <div className="truncate text-[10px] uppercase tracking-wide text-sidebar-muted">
+                {user.role}
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={logout}
+              aria-label="Sign out"
+              className="rounded-full p-1 text-sidebar-muted hover:bg-white/10 hover:text-sidebar-text"
+            >
+              <LogOut size={14} />
+            </button>
+          </div>
+        }
         topBar={
           <>
             <div className="flex items-center gap-3 text-small">

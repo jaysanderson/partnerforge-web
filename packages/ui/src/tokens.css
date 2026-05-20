@@ -109,6 +109,79 @@ h4 {
   margin: 0;
 }
 
+/* H1 specifically gets a touch more weight + tighter tracking. Linear-style
+   hero feel — confident but not loud. */
+h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* ── World-class micro-interactions (PR_UX_D) ──────────────────────────
+   Reusable utilities applied via `className="pf-card-hover"` etc.
+   Honour `prefers-reduced-motion: reduce` so animations don't fire for
+   users who've asked for stillness. */
+
+.pf-card-hover {
+  transition:
+    transform 140ms cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 140ms cubic-bezier(0.4, 0, 0.2, 1),
+    border-color 140ms cubic-bezier(0.4, 0, 0.2, 1);
+}
+.pf-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+  border-color: color-mix(in srgb, var(--color-progress-blue) 30%, var(--color-border));
+}
+
+/* Row hover-lift — for tables. Subtler than card lift. */
+.pf-row-hover {
+  transition: background-color 120ms ease, box-shadow 120ms ease;
+}
+.pf-row-hover:hover {
+  background: color-mix(in srgb, var(--color-progress-blue) 4%, var(--color-surface));
+}
+
+/* Page-level fade-in on route change. Wraps the route container. */
+.pf-fade-in {
+  animation: pf-fade-in 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+@keyframes pf-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Subtle pulse for AI accent — used on the ARAG card avatar dot. */
+.pf-ai-pulse {
+  animation: pf-ai-pulse 2.4s ease-in-out infinite;
+}
+@keyframes pf-ai-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-ai-accent) 40%, transparent);
+  }
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-ai-accent) 0%, transparent);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pf-card-hover,
+  .pf-row-hover,
+  .pf-fade-in,
+  .pf-ai-pulse {
+    transition: none;
+    animation: none;
+  }
+  .pf-card-hover:hover {
+    transform: none;
+  }
+}
+
 /* Mono numerics line up in tables/metrics */
 .font-mono {
   font-variant-numeric: tabular-nums;
