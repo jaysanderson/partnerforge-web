@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - name: Install
+        run: npm ci
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint --if-present
+      - name: Build
+        run: npm run build
+      - name: Upload console dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: console-dist
+          path: apps/console/dist
+          if-no-files-found: error
+          retention-days: 7
+      - name: Upload portal dist
+        uses: actions/upload-artifact@v4
+        with:
+          name: portal-dist
+          path: apps/portal/dist
+          if-no-files-found: error
+          retention-days: 7

@@ -1,0 +1,13 @@
+{
+  "name": "@partnerforge/api",
+  "version": "0.1.0-types-only",
+  "private": true,
+  "type": "module",
+  "description": "Type-only snapshot of the PartnerForge tRPC AppRouter. Refresh via scripts/sync.sh from a sibling checkout of partner-forge.",
+  "types": "./vendored/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./vendored/index.d.ts"
+    }
+  }
+}

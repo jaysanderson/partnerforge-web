@@ -1,0 +1,91 @@
+import { z } from 'zod';
+import type { SharePointAsset } from '@partnerforge/sharepoint';
+import type { Context } from '../context.js';
+/**
+ * Narrow no-code admin configuration (R131–R138). Business admins change
+ * partner-facing field labels/visibility and the brand-asset surface
+ * without engineering; changes apply live (read by sf.fieldMeta / portal).
+ * Backed by the existing key/value `config` table.
+ *
+ * Brand assets live in Progress's SharePoint; the platform surfaces them as
+ * governed links/embeds (R2) — no asset re-hosting.
+ */
+export declare const CONFIG_KEYS: {
+    readonly oppFieldOverrides: "ui.opportunityFieldOverrides";
+    readonly sharepointAssets: "content.sharepointAssets";
+};
+export interface OppFieldOverride {
+    apiName: string;
+    partnerLabel?: string;
+    visibleToPartner?: boolean;
+}
+export type { SharePointAsset };
+export declare function readConfig<T>(ctx: Context, key: string, fallback: T): T;
+export declare const adminConfigRouter: import("@trpc/server").TRPCBuiltRouter<{
+    ctx: Context;
+    meta: object;
+    errorShape: {
+        data: {
+            code: "PARSE_ERROR" | "BAD_REQUEST" | "INTERNAL_SERVER_ERROR" | "NOT_IMPLEMENTED" | "BAD_GATEWAY" | "SERVICE_UNAVAILABLE" | "GATEWAY_TIMEOUT" | "UNAUTHORIZED" | "PAYMENT_REQUIRED" | "FORBIDDEN" | "NOT_FOUND" | "METHOD_NOT_SUPPORTED" | "TIMEOUT" | "CONFLICT" | "PRECONDITION_FAILED" | "PAYLOAD_TOO_LARGE" | "UNSUPPORTED_MEDIA_TYPE" | "UNPROCESSABLE_CONTENT" | "PRECONDITION_REQUIRED" | "TOO_MANY_REQUESTS" | "CLIENT_CLOSED_REQUEST";
+            message: string;
+            details: z.typeToFlattenedError<any, string> | undefined;
+        };
+        message: string;
+        code: import("@trpc/server").TRPC_ERROR_CODE_NUMBER;
+    };
+    transformer: false;
+}, import("@trpc/server").TRPCDecorateCreateRouterOptions<{
+    /** Partner-facing brand assets, served through the SharePoint adapter. */
+    sharepointAssets: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: SharePointAsset[];
+        meta: object;
+    }>;
+    /** Effective runtime mode (public — drives the DEMO/LIVE badge). */
+    mode: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: {
+            mode: import("@partnerforge/shared").AppMode;
+        };
+        meta: object;
+    }>;
+    setMode: import("@trpc/server").TRPCMutationProcedure<{
+        input: {
+            mode: "demo" | "live";
+        };
+        output: {
+            mode: "demo" | "live";
+        };
+        meta: object;
+    }>;
+    oppFieldOverrides: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: OppFieldOverride[];
+        meta: object;
+    }>;
+    setOppFieldOverrides: import("@trpc/server").TRPCMutationProcedure<{
+        input: {
+            apiName: string;
+            partnerLabel?: string | undefined;
+            visibleToPartner?: boolean | undefined;
+        }[];
+        output: {
+            ok: boolean;
+            count: number;
+        };
+        meta: object;
+    }>;
+    setSharepointAssets: import("@trpc/server").TRPCMutationProcedure<{
+        input: {
+            region: string;
+            title: string;
+            productFamily: string;
+            url: string;
+        }[];
+        output: {
+            ok: boolean;
+            count: number;
+        };
+        meta: object;
+    }>;
+}>>;
