@@ -3,6 +3,13 @@ dist/
 build/
 .turbo/
 
+# The api-types package vendors built .d.ts files from partner-forge —
+# those ARE the source for this package and must be committed.
+!packages/api-types/vendored/
+!packages/api-types/vendored/**
+!packages/api-types/deps/*/dist/
+!packages/api-types/deps/*/dist/**
+
 # Env
 .env
 .env.local
