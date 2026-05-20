@@ -37,6 +37,24 @@ function authHeader(): Record<string, string> {
   return t ? { authorization: `Bearer ${t}` } : {};
 }
 
+/** See apps/console/src/api/client.ts for the rationale. Mirror logic so
+ *  partner sessions self-recover from a stale JWT the same way. */
+const CONTACT_KEY = 'pf.portal.contact';
+let sessionClearedOnce = false;
+function clearStaleSessionAndReload(): void {
+  if (sessionClearedOnce) return;
+  sessionClearedOnce = true;
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(CONTACT_KEY);
+  } catch {
+    /* localStorage might be disabled */
+  }
+  if (typeof window !== 'undefined') {
+    setTimeout(() => window.location.reload(), 50);
+  }
+}
+
 async function parseError(res: Response): Promise<ApiError> {
   let code = 'INTERNAL_SERVER_ERROR';
   let message = `${res.status} ${res.statusText}`;
@@ -46,6 +64,9 @@ async function parseError(res: Response): Promise<ApiError> {
     if (body.message) message = body.message;
   } catch {
     /* not JSON */
+  }
+  if (res.status === 401 && getToken()) {
+    clearStaleSessionAndReload();
   }
   return new ApiError(res.status, code, message);
 }
