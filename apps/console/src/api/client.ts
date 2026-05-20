@@ -44,6 +44,35 @@ function authHeader(): Record<string, string> {
   return t ? { authorization: `Bearer ${t}` } : {};
 }
 
+/**
+ * When the server rejects our JWT (401), the session in localStorage is
+ * stale — token expired, or signed under a JWT_SECRET that's since rotated.
+ * Clear both keys and reload so the user lands on <Login /> rather than
+ * sitting on a hollow dashboard with every query silently failing and the
+ * mutation toast as the only visible error.
+ *
+ * Re-entrancy guard: many queries 401 in parallel. Only the first triggers
+ * the reload; the rest land on the login page after the reload anyway.
+ */
+const USER_KEY = 'pf.console.user';
+let sessionClearedOnce = false;
+function clearStaleSessionAndReload(): void {
+  if (sessionClearedOnce) return;
+  sessionClearedOnce = true;
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+    localStorage.removeItem(USER_KEY);
+  } catch {
+    /* localStorage might be disabled */
+  }
+  // Use a soft delay so any in-flight promise that's about to surface the
+  // 401 error sees the reload kick in first (avoids a flicker of an error
+  // toast as the page reloads).
+  if (typeof window !== 'undefined') {
+    setTimeout(() => window.location.reload(), 50);
+  }
+}
+
 async function parseError(res: Response): Promise<ApiError> {
   let code = 'INTERNAL_SERVER_ERROR';
   let message = `${res.status} ${res.statusText}`;
@@ -53,6 +82,11 @@ async function parseError(res: Response): Promise<ApiError> {
     if (body.message) message = body.message;
   } catch {
     /* not JSON */
+  }
+  // 401 + a token in localStorage means the token is stale. Clear + reload.
+  // 401 + no token means we're already signed out — let the error propagate.
+  if (res.status === 401 && getToken()) {
+    clearStaleSessionAndReload();
   }
   return new ApiError(res.status, code, message);
 }
