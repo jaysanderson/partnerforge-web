@@ -195,6 +195,76 @@ export const systemApi = {
     }),
 };
 
+// ── commissions / mdf / goals / tiers / journeys / training (Programs) ─
+export const commissionsApi = {
+  plans: () =>
+    useQuery({
+      queryKey: ['commissions.plans'],
+      queryFn: () => apiGet<Out['commissions']['plans']>('/commissions/plans'),
+    }),
+  payouts: () =>
+    useQuery({
+      queryKey: ['commissions.payouts'],
+      queryFn: () => apiGet<Out['commissions']['payouts']>('/commissions/payouts'),
+    }),
+  statements: () =>
+    useQuery({
+      queryKey: ['commissions.statements'],
+      queryFn: () => apiGet<Out['commissions']['statements']>('/commissions/statements'),
+    }),
+  recompute: () =>
+    useMutation({
+      mutationFn: () =>
+        apiPost<Out['commissions']['recompute']>('/commissions/recompute'),
+    }),
+};
+
+export const mdfApi = {
+  list: () =>
+    useQuery({
+      queryKey: ['mdf.list'],
+      queryFn: () => apiGet<Out['mdf']['list']>('/mdf'),
+    }),
+};
+
+export const goalsApi = {
+  list: () =>
+    useQuery({
+      queryKey: ['goals.list'],
+      queryFn: () => apiGet<Out['goals']['list']>('/goals'),
+    }),
+};
+
+export const tiersApi = {
+  list: () =>
+    useQuery({
+      queryKey: ['tiers.list'],
+      queryFn: () => apiGet<Out['tiers']['list']>('/tiers'),
+    }),
+};
+
+export const journeysApi = {
+  list: () =>
+    useQuery({
+      queryKey: ['journeys.list'],
+      queryFn: () => apiGet<Out['journeys']['list']>('/journeys'),
+    }),
+};
+
+export const trainingApi = {
+  courses: () =>
+    useQuery({
+      queryKey: ['training.courses'],
+      queryFn: () => apiGet<Out['training']['courses']>('/training/courses'),
+    }),
+  certifications: () =>
+    useQuery({
+      queryKey: ['training.certifications'],
+      queryFn: () =>
+        apiGet<Out['training']['certifications']>('/training/certifications'),
+    }),
+};
+
 // ── apiKeys (admin: service-account credentials) ───────────────────────
 export const apiKeysApi = {
   list: () =>
@@ -273,6 +343,12 @@ export const useApi = {
   adminConfig: adminConfigApi,
   system: systemApi,
   apiKeys: apiKeysApi,
+  commissions: commissionsApi,
+  mdf: mdfApi,
+  goals: goalsApi,
+  tiers: tiersApi,
+  journeys: journeysApi,
+  training: trainingApi,
 };
 
 /**
