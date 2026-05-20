@@ -1,4 +1,9 @@
 import { z } from 'zod';
+export interface TranscriptParagraph {
+    text: string;
+    startSeconds: number | null;
+    endSeconds: number | null;
+}
 /**
  * Partner-portal API. Every procedure is row-level scoped to the caller's
  * own partner — a partner token never returns another partner's data,
@@ -142,7 +147,96 @@ export declare const portalRouter: import("@trpc/server").TRPCBuiltRouter<{
             title: string;
             type: string;
             description: string | null;
+            mediaType: "link" | "video" | "document";
+            durationSeconds: number | null;
+            thumbnailUrl: string | null;
+            fileUrl: string | null;
+            transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
         }[];
+        meta: object;
+    }>;
+    videoGet: import("@trpc/server").TRPCQueryProcedure<{
+        input: {
+            id: string;
+        };
+        output: {
+            row: {
+                status: import("@partnerforge/shared").ContentStatus;
+                type: string;
+                id: string;
+                createdBy: string | null;
+                createdAt: string;
+                description: string | null;
+                updatedAt: string;
+                deletedAt: string | null;
+                title: string;
+                fileUrl: string | null;
+                thumbnailUrl: string | null;
+                aragResourceId: string | null;
+                aragKbName: "enablement" | "video";
+                mediaType: "link" | "video" | "document";
+                durationSeconds: number | null;
+                transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
+                labels: import("@partnerforge/shared").LabelAssignment[];
+                tierAccess: string[];
+            };
+            aragResource: Record<string, unknown> | null;
+        };
+        meta: object;
+    }>;
+    videoTranscript: import("@trpc/server").TRPCQueryProcedure<{
+        input: {
+            id: string;
+        };
+        output: {
+            paragraphs: TranscriptParagraph[];
+        };
+        meta: object;
+    }>;
+    /** "Up Next" rail — /find against video KB excluding the current video. */
+    videoUpNext: import("@trpc/server").TRPCQueryProcedure<{
+        input: {
+            id: string;
+            limit?: number | undefined;
+        };
+        output: {
+            hits: {
+                localId: string | null;
+                title: string;
+                description: string | undefined;
+                thumbnailUrl: string | null;
+                durationSeconds: number | null;
+                score: number;
+            }[];
+        };
+        meta: object;
+    }>;
+    /** Scoped chat — /ask filtered to a single video resource. */
+    videoAsk: import("@trpc/server").TRPCMutationProcedure<{
+        input: {
+            id: string;
+            query: string;
+            context?: {
+                text: string;
+                author: "USER" | "ARAG";
+            }[] | undefined;
+        };
+        output: {
+            ok: false;
+            answer: string;
+            citations: never[];
+            error?: undefined;
+        } | {
+            answer: string;
+            citations: import("@partnerforge/arag-client").AragCitation[];
+            ok: true;
+            error?: undefined;
+        } | {
+            ok: false;
+            answer: string;
+            citations: never[];
+            error: string;
+        };
         meta: object;
     }>;
     /** Semantic content search via ARAG /find (Enablement KB). */

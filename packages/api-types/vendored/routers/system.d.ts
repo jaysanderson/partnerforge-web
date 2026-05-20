@@ -50,6 +50,22 @@ export declare const systemRouter: import("@trpc/server").TRPCBuiltRouter<{
         meta: object;
     }>;
     /**
+     * Provision the TubeRAG video KB — installs the 4 video labelsets
+     * (topic / lang / channel / safety) and the 8 Data Augmentation
+     * agents from the TubeRAG recipe. Idempotent. Surfaced via the
+     * Console Operations page so staff can re-fire after a KB rebuild.
+     */
+    aragSetupVideoKb: import("@trpc/server").TRPCMutationProcedure<{
+        input: void;
+        output: {
+            uuid: string;
+            title: string;
+            labelsets: number;
+            daTasks: number;
+        };
+        meta: object;
+    }>;
+    /**
      * Freshness snapshot of the Salesforce read-through cache. Returns, per
      * entity, the row counts (total / synced from SF) and the oldest sync
      * timestamp. The UI uses this to surface "Partners cache: N rows,

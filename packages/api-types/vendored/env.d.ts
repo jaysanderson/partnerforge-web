@@ -21,6 +21,8 @@ declare const schema: z.ZodObject<{
     ARAG_DEAL_KB_KEY: z.ZodDefault<z.ZodString>;
     ARAG_ENABLEMENT_KB_ID: z.ZodDefault<z.ZodString>;
     ARAG_ENABLEMENT_KB_KEY: z.ZodDefault<z.ZodString>;
+    ARAG_VIDEO_KB_ID: z.ZodDefault<z.ZodString>;
+    ARAG_VIDEO_KB_KEY: z.ZodDefault<z.ZodString>;
     PARTNERFORGE_LLM_MODEL: z.ZodDefault<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     NODE_ENV: "development" | "production" | "test";
@@ -44,6 +46,8 @@ declare const schema: z.ZodObject<{
     ARAG_DEAL_KB_KEY: string;
     ARAG_ENABLEMENT_KB_ID: string;
     ARAG_ENABLEMENT_KB_KEY: string;
+    ARAG_VIDEO_KB_ID: string;
+    ARAG_VIDEO_KB_KEY: string;
     PARTNERFORGE_LLM_MODEL: string;
 }, {
     JWT_SECRET: string;
@@ -67,6 +71,8 @@ declare const schema: z.ZodObject<{
     ARAG_DEAL_KB_KEY?: string | undefined;
     ARAG_ENABLEMENT_KB_ID?: string | undefined;
     ARAG_ENABLEMENT_KB_KEY?: string | undefined;
+    ARAG_VIDEO_KB_ID?: string | undefined;
+    ARAG_VIDEO_KB_KEY?: string | undefined;
     PARTNERFORGE_LLM_MODEL?: string | undefined;
 }>;
 export type Env = z.infer<typeof schema> & {
