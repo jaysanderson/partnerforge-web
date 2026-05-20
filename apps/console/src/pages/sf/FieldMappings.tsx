@@ -74,9 +74,6 @@ export function SfFieldMappings(): ReactElement {
           >
             Edit in Portal settings <ExternalLink size={12} />
           </Link>
-          <div className="font-mono text-caption text-text-secondary">
-            GET /v1/admin-config/opp-field-overrides
-          </div>
         </div>
       </section>
     </div>

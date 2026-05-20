@@ -27,7 +27,8 @@ import {
   Users,
   Wrench,
 } from 'lucide-react';
-import { AppShell, EmptyState, type NavSection } from '@partnerforge/ui';
+import { useIsFetching } from '@tanstack/react-query';
+import { AppShell, EmptyState, TopProgress, type NavSection } from '@partnerforge/ui';
 import { useAuth } from './auth';
 import { useApi } from './api/hooks';
 import { Login } from './components/Login';
@@ -173,6 +174,10 @@ export function App() {
     return () => window.removeEventListener('keydown', onKey);
   }, [helpOpen]);
 
+  // Track any pending react-query fetch (>0 → show the top progress bar).
+  // Hook must run before the conditional Login return; React rules-of-hooks.
+  const isFetching = useIsFetching();
+
   if (!user) return <Login />;
   const mode = modeQ.data?.mode ?? 'demo';
 
@@ -184,6 +189,7 @@ export function App() {
 
   return (
     <>
+      <TopProgress loading={isFetching > 0} />
       <AppShell
         brand="PartnerForge"
         brandSub="Internal Console"
@@ -223,35 +229,38 @@ export function App() {
         topBar={
           <>
             <div className="flex items-center gap-3 text-small">
-              {/* Quieter env chip — informational, not loud. Live = green
-                  dot, Demo = amber dot; uppercase removed so it stops
-                  competing with the brand wordmark. */}
+              {/* Semantic env chip — amber for Demo (real semantic colour,
+                  not a grey dot), neutral for Live. Reviewer flagged the
+                  old grey-with-dot as missing semantic meaning. */}
               <span
-                className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-alt px-2 py-0.5 text-caption text-text-secondary"
+                className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-caption font-semibold uppercase tracking-wide ${
+                  mode === 'live'
+                    ? 'bg-success/15 text-success'
+                    : 'bg-warning/15 text-warning'
+                }`}
                 title={
                   mode === 'live'
                     ? 'Live mode — real Salesforce / SharePoint connectors'
                     : 'Demo mode — mock Salesforce / SharePoint data'
                 }
               >
-                <span
-                  className={`h-1.5 w-1.5 rounded-full ${
-                    mode === 'live' ? 'bg-success' : 'bg-warning'
-                  }`}
-                />
                 {mode === 'live' ? 'Live' : 'Demo'}
               </span>
-              {/* Real ⌘K search pill — was a buried text hint before */}
+            </div>
+            {/* Centered ⌘K search pill — was left-aligned, now claims the
+                centre of the chrome the way Linear / Stripe / Notion do.
+                Constrained to ~480px so it doesn't sprawl on wide monitors. */}
+            <div className="pointer-events-none absolute inset-x-0 mx-auto flex w-full max-w-[480px] justify-center px-6">
               <button
                 type="button"
                 onClick={() =>
                   window.dispatchEvent(new CustomEvent('pf:command-palette:open'))
                 }
-                className="flex w-56 items-center gap-2 rounded-[var(--radius-control)] border border-border bg-surface px-2.5 py-1 text-caption text-text-secondary transition-colors hover:border-text-secondary hover:text-text-primary"
+                className="pointer-events-auto flex w-full items-center gap-2 rounded-md border border-border bg-surface px-3 py-1.5 text-small text-text-secondary transition-colors hover:border-text-secondary hover:text-text-primary"
               >
-                <Search size={13} />
-                <span>Search partners, deals…</span>
-                <kbd className="ml-auto rounded border border-border px-1 font-mono text-[10px]">
+                <Search size={14} />
+                <span className="flex-1 text-left">Search partners, deals, content…</span>
+                <kbd className="rounded border border-border px-1 font-mono text-[10px]">
                   ⌘K
                 </kbd>
               </button>

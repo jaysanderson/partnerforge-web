@@ -58,7 +58,6 @@ export function Tiers(): ReactElement {
           </div>
         ))}
       </div>
-      <div className="font-mono text-caption text-text-secondary">GET /v1/tiers</div>
     </div>
   );
 }

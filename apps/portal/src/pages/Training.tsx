@@ -6,7 +6,7 @@ export function Training() {
   const courses = useApi.portal.courses();
   return (
     <div className="space-y-4">
-      <h1 className="text-page font-semibold">{t('Training & Certification')}</h1>
+      <h1 >{t('Training & Certification')}</h1>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {(courses.data ?? []).map((c) => (
           <div

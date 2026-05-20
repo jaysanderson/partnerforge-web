@@ -12,7 +12,7 @@ export function Approvals() {
   if (pending.error) {
     return (
       <div className="space-y-2">
-        <h1 className="text-page font-semibold">Submission Centre</h1>
+        <h1 >Submission Centre</h1>
         <p className="text-small text-danger">{pending.error.message}</p>
       </div>
     );
@@ -21,7 +21,7 @@ export function Approvals() {
   return (
     <div className="space-y-4">
       <div>
-        <h1 className="text-page font-semibold">Submission Centre</h1>
+        <h1 >Submission Centre</h1>
         <p className="text-small text-text-secondary">
           Partner submissions routed for review — duplicate, channel-conflict, and
           account-creation governance.

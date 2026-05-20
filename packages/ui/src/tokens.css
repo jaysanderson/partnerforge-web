@@ -61,12 +61,14 @@
   --text-page: 1.5rem; /* 24 */
   --text-hero: 2rem; /* 32 */
 
-  /* Measured rounding — not pill shapes everywhere */
-  --radius-control: 4px;
-  --radius-card: 6px;
+  /* Measured rounding — modern SaaS feel without going pill-shaped */
+  --radius-control: 6px;
+  --radius-card: 10px;
 
-  /* Minimal elevation */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08);
+  /* Elevation — three steps */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.12);
 
   /* Functional motion only */
   --duration-modal: 150ms;
@@ -109,11 +111,50 @@ h4 {
   margin: 0;
 }
 
-/* H1 specifically gets a touch more weight + tighter tracking. Linear-style
-   hero feel — confident but not loud. */
+/* Type ramp — one unified scale across both apps. H1 = 24px page title,
+   H2 = 18px section, body = 14px, small = 13px, caption = 12px. */
 h1 {
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-weight: 600;
+  font-size: 1.5rem; /* 24 — was a competing 32 on some pages */
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+h2 {
+  font-weight: 600;
+  font-size: 1.0625rem; /* 17 */
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+}
+h3 {
+  font-weight: 600;
+  font-size: 0.9375rem; /* 15 */
+  line-height: 1.35;
+}
+
+/* Eyebrow label above page titles — 11px uppercase tracking-wider slate-500.
+   Use via `<div className="pf-eyebrow">CONFIGURE</div>`. */
+.pf-eyebrow {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--color-text-secondary);
+}
+
+/* Shared surface card primitive. Everywhere we have a "card" now uses this
+   so radius / border / padding / shadow are consistent. The reviewer was
+   right that we had 3-4 visual rhythms — this collapses them to one. */
+.pf-card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px;
+}
+@media (min-width: 1024px) {
+  .pf-card {
+    padding: 24px;
+  }
 }
 
 /* ── World-class micro-interactions (PR_UX_D) ──────────────────────────
@@ -169,16 +210,46 @@ h1 {
   }
 }
 
+/* Top navigation progress bar — 2px bar that slides across the top of the
+   viewport while a route is loading. Subtle but adds the "modern app"
+   signal. Driven by react-router's `useNavigation()` (or the equivalent
+   "is something pending" hook) in TopProgress.tsx. */
+.pf-nav-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-progress-blue) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: pf-nav-progress 1.4s linear infinite;
+  pointer-events: none;
+}
+@keyframes pf-nav-progress {
+  from { background-position: 100% 0; }
+  to   { background-position: -100% 0; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .pf-card-hover,
   .pf-row-hover,
   .pf-fade-in,
-  .pf-ai-pulse {
+  .pf-ai-pulse,
+  .pf-nav-progress {
     transition: none;
     animation: none;
   }
   .pf-card-hover:hover {
     transform: none;
+  }
+  .pf-nav-progress {
+    background: var(--color-progress-blue);
   }
 }
 

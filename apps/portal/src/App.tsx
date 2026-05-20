@@ -11,7 +11,8 @@ import {
   LogOut,
   Sparkles,
 } from 'lucide-react';
-import { AppShell, TierBadge, type NavItem } from '@partnerforge/ui';
+import { useIsFetching } from '@tanstack/react-query';
+import { AppShell, TierBadge, TopProgress, type NavItem } from '@partnerforge/ui';
 import type { PartnerTier } from '@partnerforge/shared';
 import { useAuth } from './auth';
 import { useI18n, LOCALES } from './i18n';
@@ -43,6 +44,7 @@ export function App() {
   const modeQ = useApi.adminConfig.mode();
   const location = useLocation();
   const navigate = useNavigate();
+  const isFetching = useIsFetching();
 
   if (!contact) return <SignIn />;
 
@@ -62,7 +64,9 @@ export function App() {
   const tier = (account.data?.tier as PartnerTier | undefined) ?? 'Registered';
 
   return (
-    <AppShell
+    <>
+      <TopProgress loading={isFetching > 0} />
+      <AppShell
       brand="Partner Portal"
       brandSub="Progress Partner Network"
       nav={NAV}
@@ -93,20 +97,19 @@ export function App() {
       topBar={
         <>
           <div className="flex items-center gap-3 text-small text-text-secondary">
-            <span>{t('Progress Partner Network')}</span>
+            <span className="font-medium text-text-primary">{t('Progress Partner Network')}</span>
             <span
-              className="inline-flex items-center gap-1.5 rounded-full border border-border bg-surface-alt px-2 py-0.5 text-caption text-text-secondary"
+              className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-caption font-semibold uppercase tracking-wide ${
+                mode === 'live'
+                  ? 'bg-success/15 text-success'
+                  : 'bg-warning/15 text-warning'
+              }`}
               title={
                 mode === 'live'
                   ? 'Live mode — real connectors'
                   : 'Demo mode — mock Salesforce/SharePoint data'
               }
             >
-              <span
-                className={`h-1.5 w-1.5 rounded-full ${
-                  mode === 'live' ? 'bg-success' : 'bg-warning'
-                }`}
-              />
               {mode === 'live' ? 'Live' : 'Demo'}
             </span>
           </div>
@@ -167,5 +170,6 @@ export function App() {
         <Route path="*" element={<Dashboard />} />
       </Routes>
     </AppShell>
+    </>
   );
 }

@@ -107,7 +107,7 @@ export function Dashboard() {
         <div className="text-caption font-semibold uppercase tracking-[0.14em] text-text-secondary">
           {t('Today')}
         </div>
-        <h1 className="mt-1 text-[2rem] font-bold tracking-tight">
+        <h1 className="mt-1">
           {t('Welcome back')}, {contact?.name ?? t('Partner')}
         </h1>
         <div className="mt-2 flex flex-wrap items-center gap-2 text-small text-text-secondary">

@@ -112,9 +112,6 @@ export function SfSyncStatus(): ReactElement {
           <RefreshCw size={14} className={refresh.isPending ? 'animate-spin' : ''} />
           Refresh all from Salesforce
         </button>
-        <div className="mt-2 font-mono text-caption text-text-secondary">
-          GET /v1/system/cache-stats · POST /v1/system/cache-refresh
-        </div>
       </section>
     </div>
   );

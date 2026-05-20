@@ -23,7 +23,7 @@ export function Assets() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-page font-semibold">{t('Assets & Renewals')}</h1>
+      <h1 >{t('Assets & Renewals')}</h1>
       <p className="text-small text-text-secondary">
         {t(
           'Licenses assigned to your account. Renewal-eligible records can be converted to a renewal opportunity — the link to the original license is preserved.',

@@ -118,7 +118,6 @@ export function Mdf(): ReactElement {
         })}
       </div>
 
-      <div className="font-mono text-caption text-text-secondary">GET /v1/mdf</div>
     </div>
   );
 }

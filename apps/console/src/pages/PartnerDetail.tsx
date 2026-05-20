@@ -31,7 +31,7 @@ export function PartnerDetail() {
           ← Partners
         </Link>
         <div className="mt-1 flex items-center gap-3">
-          <h1 className="text-page font-semibold">{p.name}</h1>
+          <h1 >{p.name}</h1>
           <TierBadge tier={p.tier as PartnerTier} />
           <StatusBadge status={p.status} />
           <span className="text-small text-text-secondary">

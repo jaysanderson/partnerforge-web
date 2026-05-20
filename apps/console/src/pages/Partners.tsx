@@ -76,7 +76,7 @@ export function Partners() {
   return (
     <div className="space-y-4">
       <div className="flex items-center justify-between">
-        <h1 className="text-page font-semibold">Partners</h1>
+        <h1 >Partners</h1>
         <div className="relative">
           <Sparkles
             size={14}

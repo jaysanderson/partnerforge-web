@@ -149,7 +149,7 @@ export function Dashboard() {
             <div className="text-caption font-semibold uppercase tracking-[0.14em] text-text-secondary">
               Overview
             </div>
-            <h1 className="mt-1 text-[2rem] font-bold tracking-tight">Dashboard</h1>
+            <h1 className="mt-1">Dashboard</h1>
             <p className="mt-1 text-small text-text-secondary">
               Progress Partner Network — operational cockpit
             </p>

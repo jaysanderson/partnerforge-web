@@ -91,15 +91,15 @@ export function AppShell({
         className="flex flex-col bg-sidebar-bg text-sidebar-text transition-[width] duration-200"
         style={{ width: w, minWidth: w }}
       >
-        <div className="flex h-14 items-center gap-2.5 px-4">
-          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-[var(--radius-card)] bg-progress-green font-heading text-[15px] font-bold text-text-on-green">
+        <div className="flex h-14 items-center gap-2.5 border-b border-white/10 px-4">
+          <div className="grid h-8 w-8 shrink-0 place-items-center rounded-md bg-progress-green font-heading text-[15px] font-bold text-text-on-green">
             P
           </div>
           {!collapsed && (
             <div className="leading-tight">
-              <div className="font-heading text-[15px] font-semibold">{brand}</div>
+              <div className="font-heading text-[14px] font-semibold text-white">{brand}</div>
               {brandSub && (
-                <div className="text-[11px] tracking-wide text-sidebar-muted">{brandSub}</div>
+                <div className="mt-0.5 text-[11px] tracking-wide text-white/60">{brandSub}</div>
               )}
             </div>
           )}
@@ -132,23 +132,22 @@ export function AppShell({
         </nav>
 
         {userCard && !collapsed && (
-          <div className="border-t border-white/10 px-3 py-3">{userCard}</div>
+          <div className="border-t border-white/10 bg-sidebar-bg px-3 py-3">{userCard}</div>
         )}
 
         <button
           type="button"
           onClick={() => setCollapsed((c) => !c)}
-          className={`flex items-center gap-2 border-t border-white/10 px-4 py-3 text-small text-sidebar-muted hover:text-sidebar-text ${
-            collapsed ? 'justify-center' : ''
-          }`}
+          aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+          className="flex h-10 items-center justify-center border-t border-white/10 text-white/50 hover:bg-white/[0.04] hover:text-white"
         >
-          {collapsed ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}
-          {!collapsed && <span>Collapse</span>}
+          {collapsed ? <PanelLeftOpen size={16} /> : <PanelLeftClose size={16} />}
         </button>
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-6 shadow-[0_1px_2px_rgba(0,0,0,0.03)]">
+        <header className="relative flex h-14 shrink-0 items-center justify-between border-b border-border bg-surface px-6">
           {topBar}
         </header>
         <main id="main" className="flex-1 overflow-auto bg-background" tabIndex={-1}>
@@ -172,7 +171,7 @@ function Section({ section, activeKey, collapsed, onNavigate }: SectionProps): R
   return (
     <div className="mb-4 space-y-0.5">
       {section.label && !collapsed && (
-        <div className="px-3 pb-1.5 pt-1 text-[10px] font-semibold uppercase tracking-wider text-sidebar-muted/70">
+        <div className="px-3 pb-1.5 pt-2 text-[10px] font-semibold uppercase tracking-[0.1em] text-white/40">
           {section.label}
         </div>
       )}
@@ -223,18 +222,18 @@ function Leaf({ item, active, collapsed, onNavigate, indented }: LeafProps): Rea
       }}
       title={collapsed ? item.label : undefined}
       aria-current={active ? 'page' : undefined}
-      className={`group relative flex w-full items-center gap-3 rounded-[var(--radius-card)] py-2 text-small transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-progress-blue focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg ${
+      className={`group relative flex w-full items-center gap-3 rounded-md py-1.5 text-[13px] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-progress-blue focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar-bg ${
         indented && !collapsed ? 'pl-9 pr-3' : 'px-3'
       } ${
         active
-          ? 'bg-white/10 font-semibold text-sidebar-text'
-          : 'text-sidebar-muted hover:bg-white/5 hover:text-sidebar-text'
+          ? 'bg-white/[0.08] font-semibold text-white'
+          : 'text-white/70 hover:bg-white/[0.04] hover:text-white'
       } ${collapsed ? 'justify-center' : ''}`}
     >
       {active && (
         <span className="absolute left-0 top-1/2 h-5 w-[3px] -translate-y-1/2 rounded-r bg-progress-green" />
       )}
-      <Icon size={18} />
+      <Icon size={17} />
       {!collapsed && (
         <>
           <span className="truncate flex-1 text-left">{item.label}</span>
@@ -266,9 +265,9 @@ function Submenu({ submenu, activeKey, collapsed, onNavigate }: SubmenuProps): R
         type="button"
         onClick={() => setOpen((o) => !o)}
         title={collapsed ? submenu.label : undefined}
-        className={`flex w-full items-center gap-3 rounded-[var(--radius-card)] px-3 py-2 text-small text-sidebar-muted transition-colors hover:bg-white/5 hover:text-sidebar-text ${
+        className={`flex w-full items-center gap-3 rounded-md px-3 py-1.5 text-[13px] text-white/70 transition-colors hover:bg-white/[0.04] hover:text-white ${
           collapsed ? 'justify-center' : ''
-        } ${childActive ? 'font-semibold text-sidebar-text' : ''}`}
+        } ${childActive ? 'font-semibold text-white' : ''}`}
       >
         <Icon size={18} />
         {!collapsed && (
