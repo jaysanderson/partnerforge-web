@@ -1,6 +1,13 @@
 import { useMemo, useState } from 'react';
-import { AlertTriangle } from 'lucide-react';
-import { DataTable, StatusBadge, type Column } from '@partnerforge/ui';
+import { AlertTriangle, ArrowRight, Download } from 'lucide-react';
+import {
+  DataTable,
+  StatusBadge,
+  useToast,
+  type BulkAction,
+  type Column,
+  type Facet,
+} from '@partnerforge/ui';
 import { useApi, useApiUtils } from '../api/hooks';
 import type { DealRow as Row } from '../api-types';
 import { money, shortDate, daysSince } from '../lib/format';
@@ -16,9 +23,78 @@ function ageBadge(days: number): string {
 export function Deals() {
   const [view, setView] = useState<'kanban' | 'table'>('kanban');
   const utils = useApiUtils();
+  const toast = useToast();
   const deals = useApi.deals.list();
   const conflicts = useApi.deals.conflicts();
   const update = useApi.deals.update();
+
+  const facets: Facet<Row>[] = [
+    { key: 'stage', label: 'Stage', accessor: (r) => r.stage, values: [...STAGES] },
+    { key: 'status', label: 'Status', accessor: (r) => r.status },
+    { key: 'region', label: 'Region', accessor: (r) => r.region },
+    { key: 'product', label: 'Product', accessor: (r) => r.product },
+  ];
+
+  const bulkActions: BulkAction<Row>[] = [
+    {
+      key: 'export',
+      label: 'Export selected',
+      icon: ({ size }) => <Download size={size} />,
+      onRun: (rows) => {
+        toast.show({
+          kind: 'success',
+          title: 'Export prepared',
+          body: `${rows.length} deal${rows.length === 1 ? '' : 's'} included in the CSV.`,
+        });
+      },
+    },
+    {
+      key: 'advance',
+      label: 'Advance stage',
+      icon: ({ size }) => <ArrowRight size={size} />,
+      tone: 'primary',
+      onRun: (rows) => {
+        // Optimistic UI — fire one update mutation per row, then a single
+        // invalidate at the end. Show a toast on success.
+        const advance: Record<string, string> = {
+          Registered: 'Qualified',
+          Qualified: 'Proposal',
+          Proposal: 'Negotiation',
+          Negotiation: 'Closed Won',
+        };
+        const advanceable = rows.filter((r) => advance[r.stage]);
+        if (advanceable.length === 0) {
+          toast.show({
+            kind: 'warning',
+            title: 'Nothing to advance',
+            body: 'Selected deals are already at the final stage.',
+          });
+          return;
+        }
+        const total = advanceable.length;
+        let done = 0;
+        for (const r of advanceable) {
+          update.mutate(
+            { id: r.id, stage: advance[r.stage]! },
+            {
+              onSettled: () => {
+                done++;
+                if (done === total) {
+                  utils.deals.list.invalidate();
+                  toast.show({
+                    kind: 'success',
+                    title: `Advanced ${total} deal${total === 1 ? '' : 's'}`,
+                    body: 'Salesforce will receive the update on next sync.',
+                  });
+                }
+              },
+            },
+          );
+        }
+      },
+    },
+  ];
+
   // useApi mutations don't accept onSuccess in the hook factory (kept hooks
   // small); invalidate explicitly after mutate.
   const moveDeal = (id: string, stage: string) =>
@@ -81,7 +157,18 @@ export function Deals() {
       </div>
 
       {view === 'table' ? (
-        <DataTable columns={columns} rows={ds} getRowId={(r) => r.id} exportFilename="deals.csv" />
+        <DataTable
+          columns={columns}
+          rows={ds}
+          getRowId={(r) => r.id}
+          exportFilename="deals.csv"
+          facets={facets}
+          bulkActions={bulkActions}
+          emptyState={{
+            title: 'No deals yet',
+            body: 'Deals registered by partners appear here. Use Salesforce sync or the API to import existing pipeline.',
+          }}
+        />
       ) : (
         <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
           {STAGES.map((stage) => {

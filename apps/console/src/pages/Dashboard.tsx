@@ -37,6 +37,7 @@ import {
   StatusBadge,
   TierBadge,
   stageColor,
+  useToast,
   color as token,
 } from '@partnerforge/ui';
 import type { PartnerTier } from '@partnerforge/shared';
@@ -437,10 +438,34 @@ export function Dashboard() {
 
 function AIInsightsCard() {
   const insight = useApi.ai.ask();
+  const toast = useToast();
 
-  // Fire a low-cost ask once on first render. The mutation result lives on
-  // the hook itself so re-renders don't re-invoke it.
   const data = insight.data?.answer;
+
+  const runQuery = () =>
+    insight.mutate(
+      {
+        query:
+          'Across all partners and deals, what are the top 3 actions partner managers should take this week? Be concise.',
+        scope: 'deal',
+        context: [],
+      },
+      {
+        onSuccess: () =>
+          toast.show({
+            kind: 'success',
+            title: 'ARAG insight ready',
+            body: 'Generated from live partner + deal data.',
+            duration: 4000,
+          }),
+        onError: (err) =>
+          toast.show({
+            kind: 'error',
+            title: 'ARAG insight failed',
+            body: err instanceof Error ? err.message : 'Unknown error',
+          }),
+      },
+    );
 
   return (
     <section className="rounded-[var(--radius-card)] border border-border bg-ai-surface p-5 shadow-[var(--shadow-card)]">
@@ -458,14 +483,7 @@ function AIInsightsCard() {
           <p className="whitespace-pre-wrap text-small text-text-primary line-clamp-6">{data}</p>
           <button
             type="button"
-            onClick={() =>
-              insight.mutate({
-                query:
-                  'Across all partners and deals, what are the top 3 actions partner managers should take this week? Be concise.',
-                scope: 'deal',
-                context: [],
-              })
-            }
+            onClick={runQuery}
             disabled={insight.isPending}
             className="mt-3 flex items-center gap-1 text-caption text-ai-accent hover:underline disabled:opacity-50"
           >
@@ -480,14 +498,7 @@ function AIInsightsCard() {
           </p>
           <button
             type="button"
-            onClick={() =>
-              insight.mutate({
-                query:
-                  'Across all partners and deals, what are the top 3 actions partner managers should take this week? Be concise.',
-                scope: 'deal',
-                context: [],
-              })
-            }
+            onClick={runQuery}
             disabled={insight.isPending}
             className="rounded-[var(--radius-control)] bg-ai-accent px-3 py-1.5 text-small font-medium text-white disabled:opacity-50"
           >
