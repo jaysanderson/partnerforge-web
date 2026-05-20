@@ -40,6 +40,13 @@ interface AppShellProps {
   onNavigate: (key: string) => void;
   topBar?: ReactNode;
   children: ReactNode;
+  /**
+   * Optional card pinned at the bottom of the sidebar above the Collapse
+   * toggle. Used to show a user avatar / role / tier chip — see
+   * `apps/{console,portal}/src/App.tsx` for the rendered shape.
+   * Hidden when the sidebar is collapsed.
+   */
+  userCard?: ReactNode;
 }
 
 function isSectioned(nav: NavItem[] | NavSection[]): nav is NavSection[] {
@@ -65,6 +72,7 @@ export function AppShell({
   onNavigate,
   topBar,
   children,
+  userCard,
 }: AppShellProps): ReactElement {
   const [collapsed, setCollapsed] = useState(false);
   const w = collapsed ? 68 : 256;
@@ -122,6 +130,10 @@ export function AppShell({
             </div>
           )}
         </nav>
+
+        {userCard && !collapsed && (
+          <div className="border-t border-white/10 px-3 py-3">{userCard}</div>
+        )}
 
         <button
           type="button"

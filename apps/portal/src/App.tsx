@@ -11,7 +11,8 @@ import {
   LogOut,
   Sparkles,
 } from 'lucide-react';
-import { AppShell, type NavItem } from '@partnerforge/ui';
+import { AppShell, TierBadge, type NavItem } from '@partnerforge/ui';
+import type { PartnerTier } from '@partnerforge/shared';
 import { useAuth } from './auth';
 import { useI18n, LOCALES } from './i18n';
 import { useApi } from './api/hooks';
@@ -57,6 +58,9 @@ export function App() {
       .reverse()
       .find((n) => location.pathname.startsWith(n.key) && n.key !== '/')?.key ?? '/';
 
+  const account = useApi.sf.account();
+  const tier = (account.data?.tier as PartnerTier | undefined) ?? 'Registered';
+
   return (
     <AppShell
       brand="Partner Portal"
@@ -64,6 +68,28 @@ export function App() {
       nav={NAV}
       activeKey={activeKey}
       onNavigate={(k) => navigate(k)}
+      userCard={
+        <div className="flex items-center gap-2.5">
+          <div
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-progress-blue text-white"
+            style={{ fontWeight: 600, fontSize: 12, fontFamily: 'var(--font-heading)' }}
+            aria-hidden
+          >
+            {contact.name
+              .split(' ')
+              .map((p) => p[0])
+              .join('')
+              .slice(0, 2)
+              .toUpperCase()}
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="truncate text-small font-medium text-sidebar-text">{contact.name}</div>
+            <div className="mt-0.5">
+              <TierBadge tier={tier} />
+            </div>
+          </div>
+        </div>
+      }
       topBar={
         <>
           <div className="flex items-center gap-3 text-small text-text-secondary">

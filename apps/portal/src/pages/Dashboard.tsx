@@ -8,7 +8,7 @@
  * Slice limits raised — partners with real activity get to see what's
  * actually there rather than artificially-truncated lists of 3–5.
  */
-import { useMemo } from 'react';
+import { useMemo, type ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import {
   AlertCircle,
@@ -16,12 +16,15 @@ import {
   BookOpen,
   Briefcase,
   CalendarClock,
+  CheckCircle2,
+  GraduationCap,
   KeyRound,
   Sparkles,
   TrendingUp,
 } from 'lucide-react';
 import {
   EmptyState,
+  HeroBand,
   MetricCard,
   Skeleton,
   StatusBadge,
@@ -96,22 +99,23 @@ export function Dashboard() {
   const target = Math.max(pipeline + won.reduce((s, o) => s + o.amount, 0), 100_000);
   const progress = Math.min(1, pipeline / target);
 
+  const tier = (acc?.tier as PartnerTier | undefined) ?? null;
+
   return (
-    <div className="space-y-6">
-      {/* Heading */}
-      <header>
-        <div className="text-caption font-semibold uppercase tracking-wider text-text-secondary">
+    <div className="pf-fade-in space-y-6 pb-12">
+      <HeroBand tier={tier}>
+        <div className="text-caption font-semibold uppercase tracking-[0.14em] text-text-secondary">
           {t('Today')}
         </div>
-        <h1 className="text-page font-semibold">
+        <h1 className="mt-1 text-[2rem] font-bold tracking-tight">
           {t('Welcome back')}, {contact?.name ?? t('Partner')}
         </h1>
-        <div className="mt-1 flex flex-wrap items-center gap-2 text-small text-text-secondary">
+        <div className="mt-2 flex flex-wrap items-center gap-2 text-small text-text-secondary">
           {isAccountLoading ? (
             <Skeleton variant="text" className="h-4 w-48" />
           ) : (
             <>
-              {acc && <TierBadge tier={(acc.tier as PartnerTier) ?? 'Registered'} />}
+              {acc && <TierBadge tier={tier ?? 'Registered'} />}
               <span className="font-medium text-text-primary">{acc?.name}</span>
               {acc && (
                 <span className="text-caption">
@@ -121,22 +125,27 @@ export function Dashboard() {
             </>
           )}
         </div>
-      </header>
+      </HeroBand>
 
       {/* KPI row */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         <MetricCard
           label={t('Open Pipeline')}
           value={money(pipeline)}
+          rawValue={pipeline}
+          formatValue={(n) => money(n)}
           progress={progress}
           trend={shapedTrend(pipeline)}
           trendColor={token.progressBlue}
           hint={t('vs your target')}
           loading={isPipelineLoading}
+          accent={tier === 'Gold' ? token.warning : tier === 'Platinum' ? token.progressBlue : undefined}
         />
         <MetricCard
           label={t('Open Opportunities')}
           value={String(open.length)}
+          rawValue={open.length}
+          formatValue={(n) => Math.round(n).toString()}
           trend={shapedTrend(open.length, 8)}
           trendColor={token.progressGreen}
           hint={`${won.length} ${t('won')} ${t('to date')}`}
@@ -145,6 +154,8 @@ export function Dashboard() {
         <MetricCard
           label={t('Renewals Available')}
           value={String(renewable.length)}
+          rawValue={renewable.length}
+          formatValue={(n) => Math.round(n).toString()}
           trend={shapedTrend(renewable.length, 8)}
           trendColor={token.warning}
           hint={t('eligible to renew')}
@@ -155,7 +166,7 @@ export function Dashboard() {
       {/* Action cards */}
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
         {/* Renewals — primary action with urgency colouring */}
-        <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+        <section className="pf-card-hover rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <KeyRound size={16} className="text-warning" />
@@ -210,7 +221,7 @@ export function Dashboard() {
         </section>
 
         {/* Recent Opportunities */}
-        <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+        <section className="pf-card-hover rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Briefcase size={16} className="text-progress-blue" />
@@ -257,7 +268,7 @@ export function Dashboard() {
         </section>
 
         {/* Recommended Content */}
-        <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+        <section className="pf-card-hover rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           <div className="mb-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <BookOpen size={16} className="text-progress-blue" />
@@ -302,24 +313,28 @@ export function Dashboard() {
 
       {/* AI tease + quick actions */}
       <section className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-        <div className="rounded-[var(--radius-card)] border border-border bg-ai-surface p-5 shadow-[var(--shadow-card)] lg:col-span-2">
+        <div className="pf-card-hover relative overflow-hidden rounded-[var(--radius-card)] border border-progress-blue/20 bg-gradient-to-br from-ai-surface to-surface p-5 shadow-[var(--shadow-card)] lg:col-span-2">
           <div className="mb-2 flex items-center gap-2">
-            <Sparkles size={16} className="text-ai-accent" />
+            <span className="pf-ai-pulse grid h-7 w-7 place-items-center rounded-full bg-ai-accent text-white">
+              <Sparkles size={14} />
+            </span>
             <h2 className="text-subhead font-semibold">{t('Ask ARAG')}</h2>
-            <span className="rounded-full bg-ai-accent/10 px-2 py-0.5 text-caption text-ai-accent">
+            <span className="rounded-full bg-ai-accent/10 px-2 py-0.5 text-caption font-semibold uppercase tracking-wide text-ai-accent">
               AI
             </span>
           </div>
-          <p className="text-small text-text-secondary">
+          <p className="max-w-prose text-small text-text-secondary">
             {t(
               'Search the partner content library in plain English. "Compare ARAG vs Caitlyn for a healthcare prospect" — get cited answers from your tier-specific kit.',
             )}
           </p>
           <Link
             to="/assistant"
-            className="mt-3 inline-flex items-center gap-1 rounded-[var(--radius-control)] bg-ai-accent px-3 py-1.5 text-small font-medium text-white"
+            aria-label={t('Open AI Assistant')}
+            className="mt-4 inline-flex items-center gap-2 rounded-[var(--radius-control)] bg-ai-accent px-4 py-2 text-small font-semibold text-white shadow-[0_2px_8px_rgba(13,110,253,0.25)] transition-shadow hover:shadow-[0_4px_12px_rgba(13,110,253,0.35)]"
           >
-            {t('Open AI Assistant')} <ArrowRight size={12} />
+            <span>{t('Open AI Assistant') || 'Open AI Assistant'}</span>
+            <ArrowRight size={14} aria-hidden />
           </Link>
         </div>
 
@@ -369,6 +384,10 @@ export function Dashboard() {
         </div>
       </section>
 
+      {/* Continue learning — uses the existing portal.courses() hook so the
+          dashboard has weight at the bottom instead of trailing into white. */}
+      <TrainingWidget />
+
       {/* If everything is empty, show an onboarding nudge */}
       {!isPipelineLoading &&
         !isAssetsLoading &&
@@ -395,5 +414,61 @@ export function Dashboard() {
           </section>
         )}
     </div>
+  );
+}
+
+/** Bottom-of-page training strip — three courses with a Continue CTA each.
+ *  Uses the existing `useApi.portal.courses()` endpoint. When we wire real
+ *  per-contact progress data, the "Start" labels swap to "Continue" + %. */
+function TrainingWidget(): ReactElement | null {
+  const { t } = useI18n();
+  const courses = useApi.portal.courses();
+  if (courses.isLoading) {
+    return (
+      <section className="pf-card-hover rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+        <Skeleton variant="row" count={3} />
+      </section>
+    );
+  }
+  const list = courses.data ?? [];
+  if (list.length === 0) return null;
+  return (
+    <section className="pf-card-hover rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      <div className="mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <GraduationCap size={16} className="text-progress-blue" />
+          <h2 className="text-subhead font-semibold">{t('Continue learning')}</h2>
+        </div>
+        <Link
+          to="/training"
+          className="flex items-center gap-1 text-caption text-progress-blue hover:underline"
+        >
+          {t('All courses')} <ArrowRight size={12} />
+        </Link>
+      </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        {list.slice(0, 3).map((c) => (
+          <Link
+            key={c.id}
+            to="/training"
+            className="pf-card-hover group block rounded-[var(--radius-card)] border border-border bg-background p-4"
+          >
+            <div className="mb-2 flex items-center gap-2 text-caption text-text-secondary">
+              <CheckCircle2 size={12} className="text-progress-green" />
+              <span>{c.estimatedMinutes ? `${c.estimatedMinutes} ${t('min')}` : t('Self-paced')}</span>
+            </div>
+            <div className="font-medium leading-snug text-text-primary group-hover:text-progress-blue">
+              {c.title}
+            </div>
+            {c.description && (
+              <p className="mt-1 line-clamp-2 text-caption text-text-secondary">{c.description}</p>
+            )}
+            <div className="mt-3 flex items-center gap-1 text-caption font-medium text-progress-blue">
+              {t('Start')} <ArrowRight size={11} />
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }

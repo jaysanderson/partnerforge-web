@@ -1,5 +1,6 @@
 import type { ReactElement } from 'react';
 import { ArrowDownRight, ArrowUpRight } from 'lucide-react';
+import { CountUp } from './CountUp.js';
 import { Sparkline } from './Sparkline.js';
 import { Skeleton } from './Skeleton.js';
 
@@ -22,6 +23,16 @@ interface MetricCardProps {
   hint?: string;
   /** Render a skeleton placeholder instead of the value/trend. */
   loading?: boolean;
+  /**
+   * Optional raw numeric value used to animate the headline number on
+   * mount via <CountUp>. If omitted, `value` is shown statically (because
+   * we can't parse arbitrary formatted strings safely).
+   */
+  rawValue?: number;
+  /** Format the animating intermediate raw value back to a string. */
+  formatValue?: (n: number) => string;
+  /** Optional top accent colour bar (4px) — for tier or category tinting. */
+  accent?: string;
 }
 
 export function MetricCard({
@@ -33,10 +44,20 @@ export function MetricCard({
   trendColor,
   hint,
   loading,
+  rawValue,
+  formatValue,
+  accent,
 }: MetricCardProps): ReactElement {
   const up = (changePct ?? 0) >= 0;
   return (
-    <div className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)] transition-shadow hover:shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+    <div className="pf-card-hover relative overflow-hidden rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
+      {accent && (
+        <span
+          aria-hidden
+          className="absolute inset-x-0 top-0 h-[3px]"
+          style={{ background: accent }}
+        />
+      )}
       <div className="text-caption font-medium uppercase tracking-wide text-text-secondary">
         {label}
       </div>
@@ -48,8 +69,12 @@ export function MetricCard({
       ) : (
         <>
           <div className="mt-2.5 flex items-end justify-between gap-3">
-            <span className="font-mono text-[1.75rem] font-semibold leading-none text-text-primary">
-              {value}
+            <span className="font-mono text-[1.875rem] font-semibold leading-none tracking-tight text-text-primary">
+              {rawValue !== undefined && formatValue ? (
+                <CountUp value={rawValue} format={formatValue} />
+              ) : (
+                value
+              )}
             </span>
             {changePct !== undefined && (
               <span

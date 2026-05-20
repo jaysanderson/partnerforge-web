@@ -72,11 +72,22 @@ export function Sparkline({
     return [x, y] as const;
   });
 
-  const path = points
-    .map(([x, y], i) => `${i === 0 ? 'M' : 'L'} ${x.toFixed(1)} ${y.toFixed(1)}`)
-    .join(' ');
+  // Build a smoothed path using cubic Bezier control points between each
+  // pair of points. Looks much less "jagged" than straight-line segments
+  // without needing a real interpolation lib.
+  let path = `M ${points[0]![0].toFixed(2)} ${points[0]![1].toFixed(2)}`;
+  for (let i = 0; i < points.length - 1; i++) {
+    const [x0, y0] = points[i]!;
+    const [x1, y1] = points[i + 1]!;
+    // Use a horizontal control vector — gives a gentle s-curve.
+    const cx1 = x0 + (x1 - x0) / 2;
+    const cy1 = y0;
+    const cx2 = x0 + (x1 - x0) / 2;
+    const cy2 = y1;
+    path += ` C ${cx1.toFixed(2)} ${cy1.toFixed(2)}, ${cx2.toFixed(2)} ${cy2.toFixed(2)}, ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+  }
   // Close back along the baseline for the filled area.
-  const area = `${path} L ${(width).toFixed(1)} ${height} L 0 ${height} Z`;
+  const area = `${path} L ${width.toFixed(2)} ${height} L 0 ${height} Z`;
 
   return (
     <svg
@@ -85,12 +96,35 @@ export function Sparkline({
       viewBox={`0 0 ${width} ${height}`}
       aria-label={label}
       role="img"
+      style={{ overflow: 'visible' }}
     >
-      {filled && <path d={area} fill={stroke} fillOpacity={0.12} />}
-      <path d={path} fill="none" stroke={stroke} strokeWidth={1.5} strokeLinecap="round" />
+      {filled && <path d={area} fill={stroke} fillOpacity={0.14} />}
+      <path
+        d={path}
+        fill="none"
+        stroke={stroke}
+        strokeWidth={2}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        style={{ filter: `drop-shadow(0 1px 1.5px ${stroke}40)` }}
+      />
       {/* Endpoint dot — makes the most recent value pop. */}
       {points.length > 0 && (
-        <circle cx={points[points.length - 1]![0]} cy={points[points.length - 1]![1]} r={2} fill={stroke} />
+        <>
+          <circle
+            cx={points[points.length - 1]![0]}
+            cy={points[points.length - 1]![1]}
+            r={3.5}
+            fill={stroke}
+            fillOpacity={0.2}
+          />
+          <circle
+            cx={points[points.length - 1]![0]}
+            cy={points[points.length - 1]![1]}
+            r={2}
+            fill={stroke}
+          />
+        </>
       )}
     </svg>
   );
