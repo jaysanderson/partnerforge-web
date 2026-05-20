@@ -12,6 +12,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 @import 'tailwindcss';
 
+/* Tailwind 4 auto-scans the consuming app's source tree but not the UI
+   package — so classes that appear ONLY inside `packages/ui/src/**` (e.g.
+   `text-ink-2` on a sidebar Leaf, `bg-brand-50` on the active nav row)
+   never get generated. `@source` paths resolve relative to this CSS
+   file, which lives in `packages/ui/src/`. Without this directive, every
+   utility used uniquely in AppShell / DataTable / EmptyState / etc.
+   silently falls back to "no style". */
+@source "./components/**/*.{ts,tsx}";
+
 @theme {
   /* ── Surfaces (warm neutrals — no pure white) ──────────────────────── */
   --color-canvas: #fafaf9;   /* page background — warm off-white */
