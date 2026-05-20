@@ -1656,6 +1656,83 @@ export declare const contentItems: import("drizzle-orm/sqlite-core").SQLiteTable
         }, {}, {
             length: number | undefined;
         }>;
+        aragKbName: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "arag_kb_name";
+            tableName: "content_items";
+            dataType: "string";
+            columnType: "SQLiteText";
+            data: "enablement" | "video";
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: number | undefined;
+            $type: "enablement" | "video";
+        }>;
+        mediaType: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "media_type";
+            tableName: "content_items";
+            dataType: "string";
+            columnType: "SQLiteText";
+            data: "link" | "video" | "document";
+            driverParam: string;
+            notNull: true;
+            hasDefault: true;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: number | undefined;
+            $type: "link" | "video" | "document";
+        }>;
+        durationSeconds: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "duration_seconds";
+            tableName: "content_items";
+            dataType: "number";
+            columnType: "SQLiteInteger";
+            data: number;
+            driverParam: number;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {}>;
+        transcriptStatus: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "transcript_status";
+            tableName: "content_items";
+            dataType: "string";
+            columnType: "SQLiteText";
+            data: "pending" | "processing" | "ready" | "failed";
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: number | undefined;
+            $type: "pending" | "processing" | "ready" | "failed";
+        }>;
         labels: import("drizzle-orm/sqlite-core").SQLiteColumn<{
             name: "labels";
             tableName: "content_items";

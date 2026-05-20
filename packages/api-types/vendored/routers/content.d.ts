@@ -31,6 +31,10 @@ export declare const contentRouter: import("@trpc/server").TRPCBuiltRouter<{
             fileUrl: string | null;
             thumbnailUrl: string | null;
             aragResourceId: string | null;
+            aragKbName: "enablement" | "video";
+            mediaType: "link" | "video" | "document";
+            durationSeconds: number | null;
+            transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
             labels: import("@partnerforge/shared").LabelAssignment[];
             tierAccess: string[];
         }[];
@@ -53,6 +57,10 @@ export declare const contentRouter: import("@trpc/server").TRPCBuiltRouter<{
             fileUrl: string | null;
             thumbnailUrl: string | null;
             aragResourceId: string | null;
+            aragKbName: "enablement" | "video";
+            mediaType: "link" | "video" | "document";
+            durationSeconds: number | null;
+            transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
             labels: import("@partnerforge/shared").LabelAssignment[];
             tierAccess: string[];
         };
@@ -114,6 +122,10 @@ export declare const contentRouter: import("@trpc/server").TRPCBuiltRouter<{
             fileUrl: string | null;
             thumbnailUrl: string | null;
             aragResourceId: string | null;
+            aragKbName: "enablement" | "video";
+            mediaType: "link" | "video" | "document";
+            durationSeconds: number | null;
+            transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
             labels: import("@partnerforge/shared").LabelAssignment[];
             tierAccess: string[];
         } | undefined;

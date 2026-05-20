@@ -34,6 +34,47 @@ export interface AragUpsertResult {
     resourceId?: string;
     created: boolean;
 }
+export interface AragVideoResourceInput {
+    slug: string;
+    title: string;
+    /** 1-2 sentence creator-supplied summary. */
+    summary?: string;
+    /** Optional shooting / creator notes — improves retrieval. */
+    creatorNotes?: string;
+    /** Free-form metadata embedded into the resource `origin` field. */
+    origin?: {
+        url?: string;
+        metadata?: Record<string, string | number | boolean | null>;
+    };
+    /** Stage labelsets to apply (topic / lang / channel / safety). */
+    classifications?: AragClassification[];
+}
+export interface AragCreatedResource {
+    resourceId: string;
+    slug: string;
+}
+/** A single ASK / LABELER / LLAMA_GUARD / SYNTHETIC_QUESTIONS / LLM_GRAPH
+ *  task. Posted to `POST /configuration/task/start` for a KB. */
+export interface AragDaTaskParams {
+    taskName: 'ASK' | 'LABELER' | 'LLM_GRAPH' | 'SYNTHETIC_QUESTIONS' | 'LLAMA_GUARD' | 'PROMPT_GUARD';
+    /** Re-process scope. `NEW` = future ingests only; `ALL` = reprocess. */
+    apply: 'NEW' | 'EXISTING' | 'ALL';
+    parameters: Record<string, unknown>;
+}
+/** TUS upload options. The file body is a Node Buffer (the API server
+ *  receives the browser upload via fastify-multipart then streams it on). */
+export interface AragTusUploadOpts {
+    resourceId: string;
+    /** Field id on the resource — for TubeRAG videos this is always `'video'`. */
+    fieldId: string;
+    filename: string;
+    contentType: string;
+    body: Buffer | Uint8Array;
+    /** Bytes per PATCH. Default 5 MiB. */
+    chunkSize?: number;
+    /** Optional progress hook — 0 → 1. */
+    onProgress?: (pct: number) => void;
+}
 export interface AragCitation {
     resourceId: string;
     title: string;

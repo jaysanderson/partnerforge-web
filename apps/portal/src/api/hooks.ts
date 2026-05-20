@@ -60,6 +60,35 @@ const portalApi = {
         apiGet<Out['portal']['searchContent']>('/portal/search', input),
       enabled: !!input.query,
     }),
+  // ── Video Library (TubeRAG) ──────────────────────────────────────────
+  videoGet: (input: In['portal']['videoGet']) =>
+    useQuery({
+      queryKey: ['portal.videoGet', input.id],
+      queryFn: () => apiGet<Out['portal']['videoGet']>(`/portal/videos/${input.id}`),
+      enabled: !!input.id,
+    }),
+  videoTranscript: (input: In['portal']['videoTranscript']) =>
+    useQuery({
+      queryKey: ['portal.videoTranscript', input.id],
+      queryFn: () =>
+        apiGet<Out['portal']['videoTranscript']>(`/portal/videos/${input.id}/transcript`),
+      enabled: !!input.id,
+    }),
+  videoUpNext: (input: In['portal']['videoUpNext']) =>
+    useQuery({
+      queryKey: ['portal.videoUpNext', input.id],
+      queryFn: () =>
+        apiGet<Out['portal']['videoUpNext']>(`/portal/videos/${input.id}/up-next`),
+      enabled: !!input.id,
+    }),
+  videoAsk: () =>
+    useMutation({
+      mutationFn: (input: In['portal']['videoAsk']) =>
+        apiPost<Out['portal']['videoAsk']>(`/portal/videos/${input.id}/ask`, {
+          query: input.query,
+          context: input.context,
+        }),
+    }),
 };
 
 // ── sf (partner-scoped views of Salesforce) ────────────────────────────

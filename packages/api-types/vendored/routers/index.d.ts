@@ -612,6 +612,10 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 fileUrl: string | null;
                 thumbnailUrl: string | null;
                 aragResourceId: string | null;
+                aragKbName: "enablement" | "video";
+                mediaType: "link" | "video" | "document";
+                durationSeconds: number | null;
+                transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
                 labels: import("@partnerforge/shared").LabelAssignment[];
                 tierAccess: string[];
             }[];
@@ -634,6 +638,10 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 fileUrl: string | null;
                 thumbnailUrl: string | null;
                 aragResourceId: string | null;
+                aragKbName: "enablement" | "video";
+                mediaType: "link" | "video" | "document";
+                durationSeconds: number | null;
+                transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
                 labels: import("@partnerforge/shared").LabelAssignment[];
                 tierAccess: string[];
             };
@@ -695,6 +703,10 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 fileUrl: string | null;
                 thumbnailUrl: string | null;
                 aragResourceId: string | null;
+                aragKbName: "enablement" | "video";
+                mediaType: "link" | "video" | "document";
+                durationSeconds: number | null;
+                transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
                 labels: import("@partnerforge/shared").LabelAssignment[];
                 tierAccess: string[];
             } | undefined;
@@ -1069,7 +1081,94 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 title: string;
                 type: string;
                 description: string | null;
+                mediaType: "link" | "video" | "document";
+                durationSeconds: number | null;
+                thumbnailUrl: string | null;
+                fileUrl: string | null;
+                transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
             }[];
+            meta: object;
+        }>;
+        videoGet: import("@trpc/server").TRPCQueryProcedure<{
+            input: {
+                id: string;
+            };
+            output: {
+                row: {
+                    status: import("@partnerforge/shared").ContentStatus;
+                    type: string;
+                    id: string;
+                    createdBy: string | null;
+                    createdAt: string;
+                    description: string | null;
+                    updatedAt: string;
+                    deletedAt: string | null;
+                    title: string;
+                    fileUrl: string | null;
+                    thumbnailUrl: string | null;
+                    aragResourceId: string | null;
+                    aragKbName: "enablement" | "video";
+                    mediaType: "link" | "video" | "document";
+                    durationSeconds: number | null;
+                    transcriptStatus: "pending" | "processing" | "ready" | "failed" | null;
+                    labels: import("@partnerforge/shared").LabelAssignment[];
+                    tierAccess: string[];
+                };
+                aragResource: Record<string, unknown> | null;
+            };
+            meta: object;
+        }>;
+        videoTranscript: import("@trpc/server").TRPCQueryProcedure<{
+            input: {
+                id: string;
+            };
+            output: {
+                paragraphs: import("./portal.js").TranscriptParagraph[];
+            };
+            meta: object;
+        }>;
+        videoUpNext: import("@trpc/server").TRPCQueryProcedure<{
+            input: {
+                id: string;
+                limit?: number | undefined;
+            };
+            output: {
+                hits: {
+                    localId: string | null;
+                    title: string;
+                    description: string | undefined;
+                    thumbnailUrl: string | null;
+                    durationSeconds: number | null;
+                    score: number;
+                }[];
+            };
+            meta: object;
+        }>;
+        videoAsk: import("@trpc/server").TRPCMutationProcedure<{
+            input: {
+                id: string;
+                query: string;
+                context?: {
+                    text: string;
+                    author: "USER" | "ARAG";
+                }[] | undefined;
+            };
+            output: {
+                ok: false;
+                answer: string;
+                citations: never[];
+                error?: undefined;
+            } | {
+                answer: string;
+                citations: import("@partnerforge/arag-client").AragCitation[];
+                ok: true;
+                error?: undefined;
+            } | {
+                ok: false;
+                answer: string;
+                citations: never[];
+                error: string;
+            };
             meta: object;
         }>;
         searchContent: import("@trpc/server").TRPCQueryProcedure<{
@@ -1814,6 +1913,16 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             output: import("../services/aragSetup.js").AragSetupReport;
             meta: object;
         }>;
+        aragSetupVideoKb: import("@trpc/server").TRPCMutationProcedure<{
+            input: void;
+            output: {
+                uuid: string;
+                title: string;
+                labelsets: number;
+                daTasks: number;
+            };
+            meta: object;
+        }>;
         cacheStats: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
@@ -2121,7 +2230,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
         list: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
-                stage: "onboarding" | "active" | "churned" | "at_risk";
+                stage: "onboarding" | "active" | "at_risk" | "churned";
                 count: number;
                 partners: {
                     id: string;

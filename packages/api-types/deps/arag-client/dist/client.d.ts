@@ -55,6 +55,53 @@ export declare class AragClient {
      */
     upsertResource(kbId: string, r: AragResourceInput): Promise<AragUpsertResult>;
     deleteResourceBySlug(kbId: string, slug: string): Promise<void>;
+    /**
+     * Create a new resource and return its ARAG-assigned uuid. Used for
+     * video uploads where we need the id to issue subsequent TUS calls.
+     */
+    createResource(kbId: string, input: import('./types.js').AragVideoResourceInput): Promise<import('./types.js').AragCreatedResource>;
+    /**
+     * GET /resource/{id}?show=... — used by the Watch page to read the file
+     * url, the transcript text, the DA-agent-generated chapters / titles /
+     * descriptions, and the processing status (PROCESSED | PENDING | ERROR).
+     *
+     * `show` defaults to the recipe's required fields. Returns the raw ARAG
+     * response shape — caller picks what it needs.
+     */
+    getResource(kbId: string, resourceId: string, opts?: {
+        show?: string[];
+    }): Promise<Record<string, unknown>>;
+    /**
+     * TUS chunked upload of a single file field on an existing resource.
+     *
+     *   POST  /kb/{kbId}/resource/{id}/file/{fieldId}/tusupload   → returns Location header
+     *   PATCH {location}                                          → one PATCH per chunk
+     *
+     * Yields progress to `onProgress` (0 → 1). 5 MiB default chunk.
+     * Body is `Buffer | Uint8Array` because the API server proxies the
+     * browser upload bytes (we don't expose the service-account key client-
+     * side).
+     */
+    tusUploadFile(kbId: string, opts: import('./types.js').AragTusUploadOpts): Promise<{
+        uploadUrl: string;
+    }>;
+    /**
+     * Provision a Data Augmentation task on a KB. Used at video-KB setup to
+     * install the 8 TubeRAG agents. Idempotent — server returns 200 OK on
+     * re-create when the task name already exists.
+     */
+    setupDaTask(kbId: string, spec: import('./types.js').AragDaTaskParams): Promise<{
+        ok: boolean;
+    }>;
+    /** Read installed DA tasks on a KB (used to skip re-install). */
+    listDaTasks(kbId: string): Promise<{
+        tasks: Array<{
+            id: string;
+            name: string;
+            status: string;
+            task_name: string;
+        }>;
+    }>;
     listLabelsets(kbId: string): Promise<AragLabelsetsResponse>;
     /** Idempotent upsert of one labelset (POST /labelset/{id}). */
     putLabelset(kbId: string, labelsetId: string, def: AragLabelsetDef): Promise<void>;
@@ -67,7 +114,7 @@ export declare class AragClient {
     health(): Promise<AragHealth>;
 }
 /** The three Knowledge Boxes. Each has its own scoped API key. */
-export type KbName = 'partner' | 'deal' | 'enablement';
+export type KbName = 'partner' | 'deal' | 'enablement' | 'video';
 /**
  * A client bound to one Knowledge Box (its own id + its own scoped key), so
  * callers never pass a kbId — and a Partner-KB key can never reach the Deal
@@ -91,6 +138,24 @@ export declare class AragKbClient {
     find(req: AragFindRequest): Promise<AragFindResponse>;
     upsertResource(r: AragResourceInput): Promise<AragUpsertResult>;
     deleteResourceBySlug(slug: string): Promise<void>;
+    createResource(input: import('./types.js').AragVideoResourceInput): Promise<import('./types.js').AragCreatedResource>;
+    getResource(resourceId: string, opts?: {
+        show?: string[];
+    }): Promise<Record<string, unknown>>;
+    tusUploadFile(opts: import('./types.js').AragTusUploadOpts): Promise<{
+        uploadUrl: string;
+    }>;
+    setupDaTask(spec: import('./types.js').AragDaTaskParams): Promise<{
+        ok: boolean;
+    }>;
+    listDaTasks(): Promise<{
+        tasks: Array<{
+            id: string;
+            name: string;
+            status: string;
+            task_name: string;
+        }>;
+    }>;
     listLabelsets(): Promise<AragLabelsetsResponse>;
     putLabelset(labelsetId: string, def: AragLabelsetDef): Promise<void>;
     deleteLabelset(labelsetId: string): Promise<void>;

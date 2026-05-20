@@ -15,7 +15,7 @@ export declare const journeysRouter: import("@trpc/server").TRPCBuiltRouter<{
     list: import("@trpc/server").TRPCQueryProcedure<{
         input: void;
         output: {
-            stage: "onboarding" | "active" | "churned" | "at_risk";
+            stage: "onboarding" | "active" | "at_risk" | "churned";
             count: number;
             partners: {
                 id: string;

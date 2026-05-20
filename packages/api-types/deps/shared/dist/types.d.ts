@@ -10,7 +10,7 @@ export interface ApiError {
  * real connectors, which fail loudly if not configured (no mock fallback).
  */
 export type AppMode = 'demo' | 'live';
-export type PartnerStatus = 'active' | 'inactive' | 'onboarding' | 'churned';
+export type PartnerStatus = 'active' | 'inactive' | 'onboarding' | 'at_risk' | 'churned';
 export type DealStatus = 'open' | 'won' | 'lost';
 export type ContentStatus = 'draft' | 'published';
 export type TaskStatus = 'open' | 'in_progress' | 'done' | 'cancelled';

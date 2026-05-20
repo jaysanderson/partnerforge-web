@@ -11,6 +11,7 @@ export { HeroBand } from './components/HeroBand.js';
 export { TopProgress } from './components/TopProgress.js';
 export { Button, type ButtonProps } from './components/Button.js';
 export { Input, type InputProps } from './components/Input.js';
+export { VideoCard, type VideoCardProps } from './components/VideoCard.js';
 export {
   AppShell,
   type NavItem,

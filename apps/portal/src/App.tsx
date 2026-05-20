@@ -24,6 +24,7 @@ import { Forms } from './pages/Forms';
 import { Assets } from './pages/Assets';
 import { Quotes } from './pages/Quotes';
 import { Library } from './pages/Library';
+import { Watch } from './pages/Watch';
 import { Agent } from './pages/Agent';
 import { Training } from './pages/Training';
 
@@ -164,6 +165,7 @@ export function App() {
         <Route path="/assets" element={<Assets />} />
         <Route path="/quotes" element={<Quotes />} />
         <Route path="/library" element={<Library />} />
+        <Route path="/library/video/:id" element={<Watch />} />
         <Route path="/assistant" element={<Agent />} />
         {/* Friendly redirects for the AI surface — non-developers guess these
             URLs; bouncing them to /assistant beats a 404. UX audit catch. */}
