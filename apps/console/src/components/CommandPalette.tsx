@@ -16,8 +16,15 @@ export function CommandPalette() {
       }
       if (e.key === 'Escape') setOpen(false);
     };
+    // Header pill in App.tsx dispatches this so opening the palette
+    // doesn't require a keyboard.
+    const onOpen = () => setOpen(true);
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener('pf:command-palette:open', onOpen);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      window.removeEventListener('pf:command-palette:open', onOpen);
+    };
   }, []);
 
   // Both queries fire on mount (no `enabled` flag like tRPC's). They're tiny
