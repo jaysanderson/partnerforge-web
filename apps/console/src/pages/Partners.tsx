@@ -1,7 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles } from 'lucide-react';
-import { DataTable, StatusBadge, TierBadge, type Column } from '@partnerforge/ui';
+import { Download, Sparkles } from 'lucide-react';
+import {
+  DataTable,
+  StatusBadge,
+  TierBadge,
+  useToast,
+  type BulkAction,
+  type Column,
+  type Facet,
+} from '@partnerforge/ui';
 import type { PartnerTier } from '@partnerforge/shared';
 import { useApi } from '../api/hooks';
 import type { PartnerRow as Row } from '../api-types';
@@ -11,6 +19,7 @@ export function Partners() {
   const navigate = useNavigate();
   const partners = useApi.partners.list();
   const deals = useApi.deals.list();
+  const { facets, bulkActions } = useFacetsAndBulk();
   const [semantic, setSemantic] = useState('');
   // Gate semantic search behind a 2-char threshold (was: trpc useQuery enabled flag).
   const search = useApi.ai.search({
@@ -87,7 +96,41 @@ export function Partners() {
         getRowId={(r) => r.id}
         onRowClick={(r) => navigate(`/partners/${r.id}`)}
         exportFilename="partners.csv"
+        facets={facets}
+        bulkActions={bulkActions}
+        emptyState={{
+          title: 'No partners yet',
+          body: 'Invite partners by syncing from Salesforce or registering manually via the API.',
+        }}
       />
     </div>
   );
+}
+
+// ── facets + bulk actions are defined at module scope so they're stable
+// across renders (otherwise DataTable's faceted-filter memo thrashes). ──
+
+function useFacetsAndBulk(): { facets: Facet<Row>[]; bulkActions: BulkAction<Row>[] } {
+  const toast = useToast();
+  const facets: Facet<Row>[] = [
+    { key: 'tier', label: 'Tier', accessor: (r) => r.tier },
+    { key: 'type', label: 'Type', accessor: (r) => r.type },
+    { key: 'region', label: 'Region', accessor: (r) => r.region },
+    { key: 'status', label: 'Status', accessor: (r) => r.status },
+  ];
+  const bulkActions: BulkAction<Row>[] = [
+    {
+      key: 'export',
+      label: 'Export selected',
+      icon: ({ size }) => <Download size={size} />,
+      onRun: (rows) => {
+        toast.show({
+          kind: 'success',
+          title: 'Export prepared',
+          body: `${rows.length} partner${rows.length === 1 ? '' : 's'} included in the CSV.`,
+        });
+      },
+    },
+  ];
+  return { facets, bulkActions };
 }

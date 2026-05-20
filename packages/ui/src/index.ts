@@ -1,7 +1,8 @@
 export { StatusBadge } from './components/StatusBadge.js';
 export { TierBadge } from './components/TierBadge.js';
 export { MetricCard } from './components/MetricCard.js';
-export { DataTable, type Column } from './components/DataTable.js';
+export { DataTable, type Column, type Facet, type BulkAction } from './components/DataTable.js';
+export { ToastProvider, useToast } from './components/Toast.js';
 export { EmptyState } from './components/EmptyState.js';
 export { Sparkline } from './components/Sparkline.js';
 export { Skeleton } from './components/Skeleton.js';
