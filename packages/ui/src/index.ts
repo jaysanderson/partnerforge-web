@@ -9,6 +9,8 @@ export { Skeleton } from './components/Skeleton.js';
 export { CountUp } from './components/CountUp.js';
 export { HeroBand } from './components/HeroBand.js';
 export { TopProgress } from './components/TopProgress.js';
+export { Button, type ButtonProps } from './components/Button.js';
+export { Input, type InputProps } from './components/Input.js';
 export {
   AppShell,
   type NavItem,

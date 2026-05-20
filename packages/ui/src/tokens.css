@@ -1,78 +1,121 @@
 /**
- * PartnerForge design tokens — Progress brand.
+ * PartnerForge design tokens — world-class SaaS calibration.
  *
- * Light, professional, data-dense. Measured 4–6px rounding, minimal
- * elevation, functional motion only. This is the design language extracted
- * from progress.com — not a generated-tool aesthetic.
+ * Linear / Vercel / Attio / Stripe / Ramp / Mercury are the references.
+ * Restrained palette, layered neutrals (no pure white on white), brand
+ * used SPARINGLY on primary CTAs + active nav, semantic ramps per status,
+ * Inter Variable display + UI font, generous 8-point spacing, 5-step
+ * shadow ramp with focus ring, motion at the brand easing curve.
  *
  * Apps import this once: `import '@partnerforge/ui/tokens.css'`.
  */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap');
 @import 'tailwindcss';
 
 @theme {
-  /* Brand */
+  /* ── Surfaces (warm neutrals — no pure white) ──────────────────────── */
+  --color-canvas: #fafaf9;   /* page background — warm off-white */
+  --color-surface: #ffffff;   /* card surface */
+  --color-subtle: #f4f4f5;    /* table header, hover, chip bg */
+  --color-muted: #e4e4e7;     /* divider, deep hover */
+  --color-border: #e5e7eb;
+  --color-border-strong: #d4d4d8;
+
+  /* ── Ink ramp (no pure black) ──────────────────────────────────────── */
+  --color-ink-1: #18181b;
+  --color-ink-2: #52525b;
+  --color-ink-3: #a1a1aa;
+  --color-ink-4: #d4d4d8;
+
+  /* ── Brand — used sparingly ───────────────────────────────────────── */
+  --color-brand-50: #eff6ff;
+  --color-brand-100: #dbeafe;
+  --color-brand-500: #3b82f6;
+  --color-brand-600: #2563eb;   /* primary CTA only */
+  --color-brand-700: #1d4ed8;   /* primary CTA hover */
+
+  /* ── Semantic ramps ────────────────────────────────────────────────── */
+  --color-success-50: #ecfdf5;
+  --color-success-600: #059669;
+  --color-warning-50: #fffbeb;
+  --color-warning-600: #d97706;
+  --color-danger-50: #fef2f2;
+  --color-danger-600: #dc2626;
+  --color-info-50: #eff6ff;
+  --color-info-600: #2563eb;
+
+  /* ── AI accent — reserved for ARAG surfaces ───────────────────────── */
+  --color-ai-from: #8b5cf6;    /* violet-500 */
+  --color-ai-to: #3b82f6;      /* blue-500 */
+
+  /* ── Legacy aliases (keep old utility names working until full sweep) */
   --color-progress-green: #5ce500;
   --color-progress-dark: #1b1f3b;
-  --color-progress-blue: #0d6efd;
+  --color-progress-blue: #2563eb;     /* aligned to new brand-600 */
   --color-progress-red: #e5214e;
-
-  /* Surfaces */
-  --color-background: #f5f5f7;
-  --color-surface: #ffffff;
-  --color-surface-alt: #edf0f4;
-  --color-border: #d1d5db;
-  --color-border-focus: #0d6efd;
-
-  /* Text */
-  --color-text-primary: #1e293b;
-  --color-text-secondary: #64748b;
+  --color-background: var(--color-canvas);
+  --color-surface-alt: var(--color-subtle);
+  --color-border-focus: var(--color-brand-500);
+  --color-text-primary: var(--color-ink-1);
+  --color-text-secondary: var(--color-ink-2);
   --color-text-on-dark: #ffffff;
   --color-text-on-green: #1b1f3b;
+  --color-success: var(--color-success-600);
+  --color-warning: var(--color-warning-600);
+  --color-danger: var(--color-danger-600);
+  --color-info: var(--color-info-600);
+  --color-ai-accent: var(--color-brand-500);
+  --color-ai-surface: var(--color-brand-50);
 
-  /* Status */
-  --color-success: #16a34a;
-  --color-warning: #d97706;
-  --color-danger: #dc2626;
-  --color-info: #0d6efd;
+  /* Sidebar — now LIGHT, Linear/Vercel/Attio convention */
+  --color-sidebar-bg: var(--color-surface);
+  --color-sidebar-text: var(--color-ink-2);
+  --color-sidebar-muted: var(--color-ink-3);
+  --color-sidebar-active: var(--color-brand-600);
 
-  /* AI / ARAG */
-  --color-ai-accent: #0d6efd;
-  --color-ai-surface: #eff6ff;
-
-  /* Sidebar */
-  --color-sidebar-bg: #1b1f3b;
-  --color-sidebar-text: #ffffff;
-  --color-sidebar-muted: #94a3b8;
-  --color-sidebar-active: #5ce500;
-
-  /* Typography */
+  /* ── Type stack ────────────────────────────────────────────────────── */
   --font-sans:
     'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --font-heading:
-    'Poppins', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-heading: var(--font-sans);
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
 
-  --text-caption: 0.75rem; /* 12 */
-  --text-small: 0.8125rem; /* 13 */
-  --text-body: 0.875rem; /* 14 */
-  --text-subhead: 1rem; /* 16 */
-  --text-section: 1.25rem; /* 20 */
-  --text-page: 1.5rem; /* 24 */
-  --text-hero: 2rem; /* 32 */
+  /* Type scale (px in comment) */
+  --text-micro: 0.6875rem;    /* 11 */
+  --text-caption: 0.75rem;    /* 12 */
+  --text-small: 0.8125rem;    /* 13 */
+  --text-body: 0.875rem;      /* 14 */
+  --text-subhead: 1rem;       /* 16 — H3 */
+  --text-h2: 1.25rem;         /* 20 — H2 */
+  --text-section: 1.25rem;    /* alias */
+  --text-page: 1.75rem;       /* 28 — H1 */
+  --text-display: 2.25rem;    /* 36 — hero KPI numbers */
+  --text-hero: 2.25rem;       /* alias */
 
-  /* Measured rounding — modern SaaS feel without going pill-shaped */
-  --radius-control: 6px;
-  --radius-card: 10px;
+  /* ── Radii — 4 stops ───────────────────────────────────────────────── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-control: var(--radius-md);   /* legacy alias */
+  --radius-card: var(--radius-lg);      /* legacy alias */
 
-  /* Elevation — three steps */
-  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-card-hover: 0 4px 12px rgba(0, 0, 0, 0.08);
-  --shadow-pop: 0 8px 24px rgba(0, 0, 0, 0.12);
+  /* ── Shadows — 5 stops + focus ring ───────────────────────────────── */
+  --shadow-xs: 0 1px 2px rgb(0 0 0 / 0.04);
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.04), 0 1px 3px rgb(0 0 0 / 0.06);
+  --shadow-md: 0 4px 8px rgb(0 0 0 / 0.04), 0 2px 4px rgb(0 0 0 / 0.06);
+  --shadow-lg: 0 12px 24px rgb(0 0 0 / 0.06), 0 4px 8px rgb(0 0 0 / 0.04);
+  --shadow-ring: 0 0 0 3px rgb(59 130 246 / 0.35);
+  --shadow-card: var(--shadow-sm);              /* legacy alias */
+  --shadow-card-hover: var(--shadow-md);
+  --shadow-pop: var(--shadow-lg);
 
-  /* Functional motion only */
-  --duration-modal: 150ms;
-  --duration-sidebar: 200ms;
+  /* ── Motion ────────────────────────────────────────────────────────── */
+  --ease-brand: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 180ms;
+  --duration-slow: 280ms;
+  --duration-modal: 180ms;        /* legacy alias */
+  --duration-sidebar: 180ms;
 }
 
 :root {
@@ -87,68 +130,93 @@ body,
 
 body {
   margin: 0;
-  background: var(--color-background);
-  color: var(--color-text-primary);
+  /* warm off-white canvas — paints over any z-0 leak */
+  background: var(--color-canvas);
+  color: var(--color-ink-1);
   font-family: var(--font-sans);
   font-size: var(--text-body);
-  line-height: 1.4;
+  line-height: 1.45;
+  font-feature-settings: 'cv02', 'cv03', 'cv11';
   -webkit-font-smoothing: antialiased;
-}
-
-body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: var(--font-heading);
+/* ── Type ramp ─────────────────────────────────────────────────────────
+   Every page H1 / H2 / H3 inherits these. Single scale, no competing
+   styles across pages. */
+h1, .pf-h1 {
+  font-family: var(--font-sans);
   font-weight: 600;
-  line-height: 1.2;
+  font-size: var(--text-page);    /* 28 */
+  line-height: 2.25rem;
+  letter-spacing: -0.015em;
+  margin: 0;
+  color: var(--color-ink-1);
+}
+h2, .pf-h2 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-h2);       /* 20 */
+  line-height: 1.75rem;
   letter-spacing: -0.01em;
   margin: 0;
+  color: var(--color-ink-1);
+}
+h3, .pf-h3 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: var(--text-subhead);  /* 16 */
+  line-height: 1.5rem;
+  letter-spacing: -0.005em;
+  margin: 0;
+  color: var(--color-ink-1);
+}
+h4 {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  margin: 0;
+  color: var(--color-ink-1);
 }
 
-/* Type ramp — one unified scale across both apps. H1 = 24px page title,
-   H2 = 18px section, body = 14px, small = 13px, caption = 12px. */
-h1 {
+/* Hero KPI numbers — tabular Display weight */
+.pf-display {
+  font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 1.5rem; /* 24 — was a competing 32 on some pages */
-  line-height: 1.15;
-  letter-spacing: -0.015em;
+  font-size: var(--text-display);  /* 36 */
+  line-height: 2.75rem;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--color-ink-1);
 }
-h2 {
-  font-weight: 600;
-  font-size: 1.0625rem; /* 17 */
-  line-height: 1.3;
+
+/* Micro eyebrow — small-caps tracking, e.g. "OVERVIEW" / "PROGRAMS" */
+.pf-micro, .pf-eyebrow {
+  font-size: var(--text-micro);    /* 11 */
+  line-height: 1rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-ink-3);
+}
+
+/* Tabular nums on .font-mono — used for currency / counts */
+.font-mono {
+  font-variant-numeric: tabular-nums;
   letter-spacing: -0.005em;
 }
-h3 {
-  font-weight: 600;
-  font-size: 0.9375rem; /* 15 */
-  line-height: 1.35;
-}
 
-/* Eyebrow label above page titles — 11px uppercase tracking-wider slate-500.
-   Use via `<div className="pf-eyebrow">CONFIGURE</div>`. */
-.pf-eyebrow {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--color-text-secondary);
-}
-
-/* Shared surface card primitive. Everywhere we have a "card" now uses this
-   so radius / border / padding / shadow are consistent. The reviewer was
-   right that we had 3-4 visual rhythms — this collapses them to one. */
+/* ── Card primitive ────────────────────────────────────────────────────
+   Single rhythm — 14px radius, 24px padding (20 on mobile), shadow-sm.
+   Use `.pf-card` directly OR copy these values inline; one source of
+   truth either way. */
 .pf-card {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  box-shadow: var(--shadow-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
   padding: 20px;
 }
 @media (min-width: 1024px) {
@@ -157,34 +225,83 @@ h3 {
   }
 }
 
-/* ── World-class micro-interactions (PR_UX_D) ──────────────────────────
-   Reusable utilities applied via `className="pf-card-hover"` etc.
-   Honour `prefers-reduced-motion: reduce` so animations don't fire for
-   users who've asked for stillness. */
+/* AI gradient — reserved for ARAG surfaces. Use as bg via this class. */
+.pf-ai-gradient {
+  background: linear-gradient(135deg, var(--color-ai-from), var(--color-ai-to));
+}
+.pf-ai-text {
+  background: linear-gradient(135deg, var(--color-ai-from), var(--color-ai-to));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* ── Accessible focus rings (keyboard only) ────────────────────────── */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-ring);
+  border-radius: var(--radius-sm);
+}
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+a {
+  color: var(--color-brand-600);
+  text-decoration: none;
+}
+a:hover {
+  text-decoration: underline;
+}
+
+::selection {
+  background: color-mix(in srgb, var(--color-brand-500) 30%, transparent);
+  color: var(--color-ink-1);
+}
+
+/* Subtle enterprise scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-ink-4) transparent;
+}
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+*::-webkit-scrollbar-thumb {
+  background: var(--color-ink-4);
+  border-radius: 6px;
+  border: 2px solid var(--color-canvas);
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--color-ink-3);
+}
+
+/* ── Micro-interaction utilities ───────────────────────────────────── */
 
 .pf-card-hover {
   transition:
-    transform 140ms cubic-bezier(0.4, 0, 0.2, 1),
-    box-shadow 140ms cubic-bezier(0.4, 0, 0.2, 1),
-    border-color 140ms cubic-bezier(0.4, 0, 0.2, 1);
+    transform var(--duration-base) var(--ease-brand),
+    box-shadow var(--duration-base) var(--ease-brand),
+    border-color var(--duration-base) var(--ease-brand);
 }
 .pf-card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
-  border-color: color-mix(in srgb, var(--color-progress-blue) 30%, var(--color-border));
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border-strong);
 }
 
-/* Row hover-lift — for tables. Subtler than card lift. */
+/* Row hover — for table rows. Subtler than card lift. */
 .pf-row-hover {
-  transition: background-color 120ms ease, box-shadow 120ms ease;
+  transition: background-color var(--duration-fast) var(--ease-brand);
 }
 .pf-row-hover:hover {
-  background: color-mix(in srgb, var(--color-progress-blue) 4%, var(--color-surface));
+  background: var(--color-subtle);
 }
 
-/* Page-level fade-in on route change. Wraps the route container. */
+/* Page-level fade-in on route mount. */
 .pf-fade-in {
-  animation: pf-fade-in 220ms cubic-bezier(0.4, 0, 0.2, 1) both;
+  animation: pf-fade-in var(--duration-slow) var(--ease-brand) both;
 }
 @keyframes pf-fade-in {
   from {
@@ -197,23 +314,20 @@ h3 {
   }
 }
 
-/* Subtle pulse for AI accent — used on the ARAG card avatar dot. */
+/* AI accent pulse — used on the ARAG avatar dot. */
 .pf-ai-pulse {
   animation: pf-ai-pulse 2.4s ease-in-out infinite;
 }
 @keyframes pf-ai-pulse {
   0%, 100% {
-    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-ai-accent) 40%, transparent);
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-ai-to) 40%, transparent);
   }
   50% {
-    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-ai-accent) 0%, transparent);
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-ai-to) 0%, transparent);
   }
 }
 
-/* Top navigation progress bar — 2px bar that slides across the top of the
-   viewport while a route is loading. Subtle but adds the "modern app"
-   signal. Driven by react-router's `useNavigation()` (or the equivalent
-   "is something pending" hook) in TopProgress.tsx. */
+/* Top navigation progress bar (driven by useIsFetching). */
 .pf-nav-progress {
   position: fixed;
   top: 0;
@@ -224,7 +338,7 @@ h3 {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    var(--color-progress-blue) 50%,
+    var(--color-brand-500) 50%,
     transparent 100%
   );
   background-size: 200% 100%;
@@ -232,8 +346,12 @@ h3 {
   pointer-events: none;
 }
 @keyframes pf-nav-progress {
-  from { background-position: 100% 0; }
-  to   { background-position: -100% 0; }
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -249,52 +367,6 @@ h3 {
     transform: none;
   }
   .pf-nav-progress {
-    background: var(--color-progress-blue);
+    background: var(--color-brand-500);
   }
-}
-
-/* Mono numerics line up in tables/metrics */
-.font-mono {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
-}
-
-/* Accessible, on-brand focus ring (keyboard only) */
-:focus-visible {
-  outline: 2px solid var(--color-progress-blue);
-  outline-offset: 1px;
-}
-*:focus:not(:focus-visible) {
-  outline: none;
-}
-
-a {
-  color: var(--color-progress-blue);
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
-::selection {
-  background: color-mix(in srgb, var(--color-progress-green) 35%, transparent);
-  color: var(--color-progress-dark);
-}
-
-/* Subtle enterprise scrollbars */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #cbd2dc transparent;
-}
-*::-webkit-scrollbar {
-  width: 10px;
-  height: 10px;
-}
-*::-webkit-scrollbar-thumb {
-  background: #cbd2dc;
-  border-radius: 6px;
-  border: 2px solid var(--color-background);
-}
-*::-webkit-scrollbar-thumb:hover {
-  background: #aab3c0;
 }
