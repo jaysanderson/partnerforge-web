@@ -44,15 +44,15 @@ export function Dashboard() {
         <p className="text-small text-text-secondary">Progress Partner Network — operational overview</p>
       </div>
 
+      {/* KPI tiles. No delta chips: PartnerForge doesn't track period-over-
+          period yet (timeframe + sparklines land in PR_UX6). Rendering a
+          fake `+8.4 %` chip on a real $-value was an immediate trust
+          regression for the UX audit; leave the headline figure honest. */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <MetricCard label="Partner-Sourced Pipeline" value={money(stats.openValue)} changePct={8.4} />
-        <MetricCard label="Closed Revenue (Won)" value={money(stats.wonValue)} progress={0.62} />
-        <MetricCard label="Active Partners" value={String(stats.activePartners)} changePct={2.1} />
-        <MetricCard
-          label="Avg Engagement"
-          value={`${stats.avgEng}/100`}
-          changePct={stats.avgEng >= 50 ? 1.2 : -3.4}
-        />
+        <MetricCard label="Partner-Sourced Pipeline" value={money(stats.openValue)} />
+        <MetricCard label="Closed Revenue (Won)" value={money(stats.wonValue)} />
+        <MetricCard label="Active Partners" value={String(stats.activePartners)} />
+        <MetricCard label="Avg Engagement" value={`${stats.avgEng}/100`} />
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">

@@ -179,7 +179,7 @@ export function Forms() {
             <button
               type="submit"
               disabled={submit.isPending}
-              className="rounded-[var(--radius-control)] bg-progress-red px-4 py-2 text-small font-medium text-white disabled:opacity-50"
+              className="rounded-[var(--radius-control)] bg-progress-blue px-4 py-2 text-small font-medium text-white disabled:opacity-50"
             >
               {submit.isPending ? t('Submitting…') : t('Submit')}
             </button>

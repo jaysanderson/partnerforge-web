@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
-import { StatusBadge } from '@partnerforge/ui';
+import { Briefcase } from 'lucide-react';
+import { EmptyState, StatusBadge } from '@partnerforge/ui';
 import { useI18n } from '../i18n';
 import { useApi, useApiUtils } from '../api/hooks';
 import { money, shortDate } from '../lib';
@@ -22,7 +23,7 @@ export function Opportunities() {
         <button
           type="button"
           onClick={() => navigate('/forms')}
-          className="rounded-[var(--radius-control)] bg-progress-red px-4 py-2 text-small font-medium text-white"
+          className="rounded-[var(--radius-control)] bg-progress-blue px-4 py-2 text-small font-medium text-white"
         >
           {t('Register a Deal')}
         </button>
@@ -61,8 +62,20 @@ export function Opportunities() {
           ))}
           {(opps.data ?? []).length === 0 && (
             <tr>
-              <td colSpan={6} className="px-4 py-8 text-center text-small text-text-secondary">
-                {t('No opportunities.')}
+              <td colSpan={6} className="px-4 py-2">
+                <EmptyState
+                  variant="zero-data"
+                  icon={Briefcase}
+                  title={t('No opportunities yet')}
+                  body={t(
+                    'Register your first deal to start tracking pipeline with your Progress team.',
+                  )}
+                  action={{
+                    label: t('Register a Deal'),
+                    onClick: () => navigate('/forms'),
+                  }}
+                  compact
+                />
               </td>
             </tr>
           )}

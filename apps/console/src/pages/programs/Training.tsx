@@ -6,6 +6,7 @@
  */
 import { useState, type ReactElement } from 'react';
 import { GraduationCap, Award } from 'lucide-react';
+import { EmptyState } from '@partnerforge/ui';
 import { useApi } from '../../api/hooks';
 
 const shortDate = (iso: string | null | undefined) =>
@@ -61,7 +62,13 @@ export function Training(): ReactElement {
       {tab === 'courses' && (
         <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           {(courses.data ?? []).length === 0 ? (
-            <p className="text-small text-text-secondary">No courses yet.</p>
+            <EmptyState
+              variant="zero-data"
+              icon={GraduationCap}
+              title="No courses published yet"
+              body="Once the training team publishes courses, partners will see them in the portal's Training tab. Drafts and published courses both appear here."
+              compact
+            />
           ) : (
             <table className="w-full text-body">
               <thead>
@@ -101,7 +108,13 @@ export function Training(): ReactElement {
       {tab === 'certs' && (
         <section className="rounded-[var(--radius-card)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
           {(certifications.data ?? []).length === 0 ? (
-            <p className="text-small text-text-secondary">No certifications yet.</p>
+            <EmptyState
+              variant="zero-data"
+              icon={Award}
+              title="No certifications earned yet"
+              body="As partner contacts complete courses, their certificates show up here with completion date, score, and status."
+              compact
+            />
           ) : (
             <table className="w-full text-body">
               <thead>

@@ -1,4 +1,4 @@
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard,
   Briefcase,
@@ -120,6 +120,11 @@ export function App() {
         <Route path="/quotes" element={<Quotes />} />
         <Route path="/library" element={<Library />} />
         <Route path="/assistant" element={<Agent />} />
+        {/* Friendly redirects for the AI surface — non-developers guess these
+            URLs; bouncing them to /assistant beats a 404. UX audit catch. */}
+        <Route path="/ai" element={<Navigate to="/assistant" replace />} />
+        <Route path="/ai/ask" element={<Navigate to="/assistant" replace />} />
+        <Route path="/copilot" element={<Navigate to="/assistant" replace />} />
         <Route path="/training" element={<Training />} />
         <Route path="*" element={<Dashboard />} />
       </Routes>
