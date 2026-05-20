@@ -43,6 +43,21 @@ import { ApiKeys } from './pages/ApiKeys';
 import { Audit } from './pages/Audit';
 import { Operations } from './pages/Operations';
 import { Placeholder } from './pages/Placeholder';
+import { SfSyncStatus } from './pages/sf/SyncStatus';
+import { SfRunSync } from './pages/sf/RunSync';
+import { SfFieldMappings } from './pages/sf/FieldMappings';
+import { SfConflicts } from './pages/sf/Conflicts';
+import {
+  CommissionPlans,
+  CommissionPayouts,
+  CommissionStatements,
+  CommissionDisputes,
+} from './pages/programs/Commissions';
+import { Tiers } from './pages/programs/Tiers';
+import { Journeys } from './pages/programs/Journeys';
+import { Mdf } from './pages/programs/Mdf';
+import { Goals } from './pages/programs/Goals';
+import { Training } from './pages/programs/Training';
 
 /**
  * Console nav, grouped by what staff actually do day-to-day.
@@ -218,117 +233,19 @@ export function App() {
           <Route path="/reports" element={<Reports />} />
           <Route path="/audit" element={<Audit />} />
 
-          {/* Placeholder pages — backends exist (or partially); the screens
-              are the next implementation pass. Each shows the API endpoints
-              it'll call so "the UI is just a call to the API" stays true. */}
-          <Route
-            path="/journeys"
-            element={
-              <Placeholder
-                title="Journeys"
-                group="Programs"
-                summary="Partner lifecycle stages (Applied → Approved → Trained → Certified → Producing) and reusable multi-step playbooks staff run with partners."
-                endpoints={['GET /v1/partners (stage filter)', 'POST /v1/tasks']}
-                icon={GitBranch}
-              />
-            }
-          />
-          <Route
-            path="/training"
-            element={
-              <Placeholder
-                title="Courses & Certificates"
-                group="Programs"
-                summary="Author training courses and award certifications. Partners consume these in the portal Training tab."
-                endpoints={['GET /trpc/portal.training (today)', 'POST /trpc/courses.* (planned)']}
-                icon={GraduationCap}
-              />
-            }
-          />
-          <Route
-            path="/goals"
-            element={
-              <Placeholder
-                title="Goals"
-                group="Programs"
-                summary="Per-tier and per-partner performance targets. Track quarterly attainment against pipeline and revenue."
-                endpoints={['GET /trpc/goals.* (planned)']}
-                icon={Target}
-              />
-            }
-          />
-          <Route
-            path="/mdf"
-            element={
-              <Placeholder
-                title="Market Development Funds"
-                group="Programs"
-                summary="Allocate co-marketing budget per partner / campaign, track spend and ROI."
-                endpoints={['GET /trpc/campaigns.* (planned)']}
-                icon={Megaphone}
-              />
-            }
-          />
-          <Route
-            path="/commissions/plans"
-            element={
-              <Placeholder
-                title="Commission plans"
-                group="Programs → Commissions"
-                summary="Define commission structure: tier-based %, product overrides, accelerators."
-                endpoints={['GET /trpc/commissions.plans.*']}
-                icon={DollarSign}
-              />
-            }
-          />
-          <Route
-            path="/commissions/payouts"
-            element={
-              <Placeholder
-                title="Payouts"
-                group="Programs → Commissions"
-                summary="Payout ledger by partner / period. Trigger pay runs."
-                endpoints={['GET /trpc/commissions.payouts.*']}
-                icon={DollarSign}
-              />
-            }
-          />
-          <Route
-            path="/commissions/statements"
-            element={
-              <Placeholder
-                title="Per-partner statements"
-                group="Programs → Commissions"
-                summary="Open statements showing earned-to-date, pending, paid for each partner."
-                endpoints={['GET /trpc/commissions.statements.*']}
-                icon={DollarSign}
-              />
-            }
-          />
-          <Route
-            path="/commissions/disputes"
-            element={
-              <Placeholder
-                title="Disputes & adjustments"
-                group="Programs → Commissions"
-                summary="Partner-raised disputes plus staff adjustments, with full audit trail."
-                endpoints={['GET /trpc/commissions.disputes.*']}
-                icon={ShieldCheck}
-              />
-            }
-          />
-          <Route
-            path="/tiers"
-            element={
-              <Placeholder
-                title="Tiers"
-                group="Configure"
-                summary="Define partner tiers (Registered, Silver, Gold, Platinum, Strategic) — entry rules, benefits, eligible products."
-                endpoints={['GET /trpc/adminConfig.tierDefs.* (planned)']}
-                icon={Award}
-              />
-            }
-          />
+          {/* Programs — real pages backed by the readers added in PR11. */}
+          <Route path="/journeys" element={<Journeys />} />
+          <Route path="/training" element={<Training />} />
+          <Route path="/goals" element={<Goals />} />
+          <Route path="/mdf" element={<Mdf />} />
+          <Route path="/commissions/plans" element={<CommissionPlans />} />
+          <Route path="/commissions/payouts" element={<CommissionPayouts />} />
+          <Route path="/commissions/statements" element={<CommissionStatements />} />
+          <Route path="/commissions/disputes" element={<CommissionDisputes />} />
+          <Route path="/tiers" element={<Tiers />} />
+
+          {/* Still placeholders — Forms builder + Experience builder need
+              real schema work; coming next milestone. */}
           <Route
             path="/forms"
             element={
@@ -353,57 +270,11 @@ export function App() {
               />
             }
           />
-          <Route
-            path="/sf/sync"
-            element={
-              <Placeholder
-                title="Salesforce sync status"
-                group="Configure → Salesforce"
-                summary="Recent SF cache refreshes, hit rate, last successful API call timestamp per entity."
-                endpoints={[
-                  'GET /trpc/system.cacheStats (planned)',
-                  'POST /v1/system/cache-refresh',
-                ]}
-                icon={ClipboardList}
-              />
-            }
-          />
-          <Route
-            path="/sf/run"
-            element={
-              <Placeholder
-                title="Run sync"
-                group="Configure → Salesforce"
-                summary="Manually trigger a full ARAG sync after a big SF data change."
-                endpoints={['POST /v1/system/sync']}
-                icon={Wrench}
-              />
-            }
-          />
-          <Route
-            path="/sf/mappings"
-            element={
-              <Placeholder
-                title="Field mappings"
-                group="Configure → Salesforce"
-                summary="Which Opportunity / Account fields are visible to partners; per-field labels and edit rights."
-                endpoints={['GET /trpc/adminConfig.oppFieldOverrides (today)']}
-                icon={FileText}
-              />
-            }
-          />
-          <Route
-            path="/sf/conflicts"
-            element={
-              <Placeholder
-                title="Conflict queue"
-                group="Configure → Salesforce"
-                summary="Deals flagged as potential channel conflicts. Resolve or dismiss."
-                endpoints={['GET /trpc/deals.conflicts (today)']}
-                icon={ShieldCheck}
-              />
-            }
-          />
+          {/* Salesforce sub-menu — real pages. */}
+          <Route path="/sf/sync" element={<SfSyncStatus />} />
+          <Route path="/sf/run" element={<SfRunSync />} />
+          <Route path="/sf/mappings" element={<SfFieldMappings />} />
+          <Route path="/sf/conflicts" element={<SfConflicts />} />
           <Route path="/api-keys" element={<ApiKeys />} />
           <Route path="/ops" element={<Operations />} />
 

@@ -1218,6 +1218,20 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
         };
         transformer: false;
     }, import("@trpc/server").TRPCDecorateCreateRouterOptions<{
+        plans: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                status: string;
+                id: string;
+                name: string;
+                createdAt: string;
+                product: string | null;
+                updatedAt: string;
+                tier: string | null;
+                rules: unknown[];
+            }[];
+            meta: object;
+        }>;
         payouts: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
@@ -1231,6 +1245,20 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 amount: number;
                 planId: string | null;
                 period: string;
+            }[];
+            meta: object;
+        }>;
+        statements: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                partnerId: string;
+                partner: string;
+                tier: string;
+                earnedToDate: number;
+                pending: number;
+                paid: number;
+                currency: string;
+                payoutCount: number;
             }[];
             meta: object;
         }>;
@@ -1921,6 +1949,188 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 priority: import("@partnerforge/shared").TaskPriority;
                 dueDate: string | null;
             } | undefined;
+            meta: object;
+        }>;
+    }>>;
+    mdf: import("@trpc/server").TRPCBuiltRouter<{
+        ctx: import("../context.js").Context;
+        meta: object;
+        errorShape: {
+            data: {
+                code: "PARSE_ERROR" | "BAD_REQUEST" | "INTERNAL_SERVER_ERROR" | "NOT_IMPLEMENTED" | "BAD_GATEWAY" | "SERVICE_UNAVAILABLE" | "GATEWAY_TIMEOUT" | "UNAUTHORIZED" | "PAYMENT_REQUIRED" | "FORBIDDEN" | "NOT_FOUND" | "METHOD_NOT_SUPPORTED" | "TIMEOUT" | "CONFLICT" | "PRECONDITION_FAILED" | "PAYLOAD_TOO_LARGE" | "UNSUPPORTED_MEDIA_TYPE" | "UNPROCESSABLE_CONTENT" | "PRECONDITION_REQUIRED" | "TOO_MANY_REQUESTS" | "CLIENT_CLOSED_REQUEST";
+                message: string;
+                details: import("zod").typeToFlattenedError<any, string> | undefined;
+            };
+            message: string;
+            code: import("@trpc/server").TRPC_ERROR_CODE_NUMBER;
+        };
+        transformer: false;
+    }, import("@trpc/server").TRPCDecorateCreateRouterOptions<{
+        list: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                allocations: {
+                    partnerName: string;
+                    partnerId: string;
+                    id: string;
+                    campaignId: string;
+                    mdfAllocated: number;
+                    mdfSpent: number;
+                    roiValue: number;
+                }[];
+                totalAllocated: number;
+                totalSpent: number;
+                totalRoi: number;
+                status: string;
+                type: string;
+                id: string;
+                name: string;
+                createdAt: string;
+                currency: string;
+                updatedAt: string;
+                budget: number;
+                startDate: string | null;
+                endDate: string | null;
+            }[];
+            meta: object;
+        }>;
+    }>>;
+    goals: import("@trpc/server").TRPCBuiltRouter<{
+        ctx: import("../context.js").Context;
+        meta: object;
+        errorShape: {
+            data: {
+                code: "PARSE_ERROR" | "BAD_REQUEST" | "INTERNAL_SERVER_ERROR" | "NOT_IMPLEMENTED" | "BAD_GATEWAY" | "SERVICE_UNAVAILABLE" | "GATEWAY_TIMEOUT" | "UNAUTHORIZED" | "PAYMENT_REQUIRED" | "FORBIDDEN" | "NOT_FOUND" | "METHOD_NOT_SUPPORTED" | "TIMEOUT" | "CONFLICT" | "PRECONDITION_FAILED" | "PAYLOAD_TOO_LARGE" | "UNSUPPORTED_MEDIA_TYPE" | "UNPROCESSABLE_CONTENT" | "PRECONDITION_REQUIRED" | "TOO_MANY_REQUESTS" | "CLIENT_CLOSED_REQUEST";
+                message: string;
+                details: import("zod").typeToFlattenedError<any, string> | undefined;
+            };
+            message: string;
+            code: import("@trpc/server").TRPC_ERROR_CODE_NUMBER;
+        };
+        transformer: false;
+    }, import("@trpc/server").TRPCDecorateCreateRouterOptions<{
+        list: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                partnerName: string;
+                tier: string | null;
+                progressPct: number;
+                partnerId: string;
+                id: string;
+                createdAt: string;
+                updatedAt: string;
+                metric: string;
+                targetValue: number;
+                currentValue: number;
+                periodStart: string;
+                periodEnd: string;
+            }[];
+            meta: object;
+        }>;
+    }>>;
+    training: import("@trpc/server").TRPCBuiltRouter<{
+        ctx: import("../context.js").Context;
+        meta: object;
+        errorShape: {
+            data: {
+                code: "PARSE_ERROR" | "BAD_REQUEST" | "INTERNAL_SERVER_ERROR" | "NOT_IMPLEMENTED" | "BAD_GATEWAY" | "SERVICE_UNAVAILABLE" | "GATEWAY_TIMEOUT" | "UNAUTHORIZED" | "PAYMENT_REQUIRED" | "FORBIDDEN" | "NOT_FOUND" | "METHOD_NOT_SUPPORTED" | "TIMEOUT" | "CONFLICT" | "PRECONDITION_FAILED" | "PAYLOAD_TOO_LARGE" | "UNSUPPORTED_MEDIA_TYPE" | "UNPROCESSABLE_CONTENT" | "PRECONDITION_REQUIRED" | "TOO_MANY_REQUESTS" | "CLIENT_CLOSED_REQUEST";
+                message: string;
+                details: import("zod").typeToFlattenedError<any, string> | undefined;
+            };
+            message: string;
+            code: import("@trpc/server").TRPC_ERROR_CODE_NUMBER;
+        };
+        transformer: false;
+    }, import("@trpc/server").TRPCDecorateCreateRouterOptions<{
+        courses: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                status: import("@partnerforge/shared").ContentStatus;
+                id: string;
+                createdAt: string;
+                description: string | null;
+                updatedAt: string;
+                deletedAt: string | null;
+                title: string;
+                thumbnailUrl: string | null;
+                aragResourceId: string | null;
+                modules: unknown[];
+                estimatedMinutes: number | null;
+            }[];
+            meta: object;
+        }>;
+        certifications: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                contactName: string | null;
+                partnerName: string | null;
+                partnerId: string | null;
+                courseTitle: string | null;
+                status: import("@partnerforge/shared").CertificationStatus;
+                id: string;
+                createdAt: string;
+                partnerContactId: string;
+                courseId: string;
+                score: number | null;
+                completedAt: string | null;
+                expiresAt: string | null;
+                certificateUrl: string | null;
+            }[];
+            meta: object;
+        }>;
+    }>>;
+    tiers: import("@trpc/server").TRPCBuiltRouter<{
+        ctx: import("../context.js").Context;
+        meta: object;
+        errorShape: {
+            data: {
+                code: "PARSE_ERROR" | "BAD_REQUEST" | "INTERNAL_SERVER_ERROR" | "NOT_IMPLEMENTED" | "BAD_GATEWAY" | "SERVICE_UNAVAILABLE" | "GATEWAY_TIMEOUT" | "UNAUTHORIZED" | "PAYMENT_REQUIRED" | "FORBIDDEN" | "NOT_FOUND" | "METHOD_NOT_SUPPORTED" | "TIMEOUT" | "CONFLICT" | "PRECONDITION_FAILED" | "PAYLOAD_TOO_LARGE" | "UNSUPPORTED_MEDIA_TYPE" | "UNPROCESSABLE_CONTENT" | "PRECONDITION_REQUIRED" | "TOO_MANY_REQUESTS" | "CLIENT_CLOSED_REQUEST";
+                message: string;
+                details: import("zod").typeToFlattenedError<any, string> | undefined;
+            };
+            message: string;
+            code: import("@trpc/server").TRPC_ERROR_CODE_NUMBER;
+        };
+        transformer: false;
+    }, import("@trpc/server").TRPCDecorateCreateRouterOptions<{
+        list: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                tier: "Registered" | "Silver" | "Gold" | "Platinum" | "Strategic";
+                partnerCount: number;
+                avgEngagement: number;
+                openPipeline: number;
+            }[];
+            meta: object;
+        }>;
+    }>>;
+    journeys: import("@trpc/server").TRPCBuiltRouter<{
+        ctx: import("../context.js").Context;
+        meta: object;
+        errorShape: {
+            data: {
+                code: "PARSE_ERROR" | "BAD_REQUEST" | "INTERNAL_SERVER_ERROR" | "NOT_IMPLEMENTED" | "BAD_GATEWAY" | "SERVICE_UNAVAILABLE" | "GATEWAY_TIMEOUT" | "UNAUTHORIZED" | "PAYMENT_REQUIRED" | "FORBIDDEN" | "NOT_FOUND" | "METHOD_NOT_SUPPORTED" | "TIMEOUT" | "CONFLICT" | "PRECONDITION_FAILED" | "PAYLOAD_TOO_LARGE" | "UNSUPPORTED_MEDIA_TYPE" | "UNPROCESSABLE_CONTENT" | "PRECONDITION_REQUIRED" | "TOO_MANY_REQUESTS" | "CLIENT_CLOSED_REQUEST";
+                message: string;
+                details: import("zod").typeToFlattenedError<any, string> | undefined;
+            };
+            message: string;
+            code: import("@trpc/server").TRPC_ERROR_CODE_NUMBER;
+        };
+        transformer: false;
+    }, import("@trpc/server").TRPCDecorateCreateRouterOptions<{
+        list: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                stage: "onboarding" | "active" | "churned" | "at_risk";
+                count: number;
+                partners: {
+                    id: string;
+                    name: string;
+                    tier: string;
+                    engagementScore: number;
+                    churnRiskScore: number;
+                }[];
+            }[];
             meta: object;
         }>;
     }>>;

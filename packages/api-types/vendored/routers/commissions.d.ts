@@ -12,6 +12,21 @@ export declare const commissionsRouter: import("@trpc/server").TRPCBuiltRouter<{
     };
     transformer: false;
 }, import("@trpc/server").TRPCDecorateCreateRouterOptions<{
+    /** Configurable commission plans (tier / product overrides). */
+    plans: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: {
+            status: string;
+            id: string;
+            name: string;
+            createdAt: string;
+            product: string | null;
+            updatedAt: string;
+            tier: string | null;
+            rules: unknown[];
+        }[];
+        meta: object;
+    }>;
     payouts: import("@trpc/server").TRPCQueryProcedure<{
         input: void;
         output: {
@@ -25,6 +40,24 @@ export declare const commissionsRouter: import("@trpc/server").TRPCBuiltRouter<{
             amount: number;
             planId: string | null;
             period: string;
+        }[];
+        meta: object;
+    }>;
+    /**
+     * Open statements — per-partner aggregate of earned-to-date / pending /
+     * paid. Computed from the payouts ledger so a recompute reflects here too.
+     */
+    statements: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: {
+            partnerId: string;
+            partner: string;
+            tier: string;
+            earnedToDate: number;
+            pending: number;
+            paid: number;
+            currency: string;
+            payoutCount: number;
         }[];
         meta: object;
     }>;
