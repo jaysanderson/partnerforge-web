@@ -17,6 +17,9 @@ export declare const CONFIG_KEYS: {
     readonly integration: "sf.integration";
     /** Server-only: OAuth tokens. NEVER returned to the browser. */
     readonly oauth: "sf.oauth";
+    /** Connected App creds (clientId/clientSecret/loginUrl). Secret never
+     *  returned to the browser. */
+    readonly connectedApp: "sf.connectedApp";
 };
 export interface OppFieldOverride {
     apiName: string;
@@ -185,6 +188,30 @@ export declare const adminConfigRouter: import("@trpc/server").TRPCBuiltRouter<{
     salesforceIntegration: import("@trpc/server").TRPCQueryProcedure<{
         input: void;
         output: SfIntegration;
+        meta: object;
+    }>;
+    /** Connected App status (redacted — never returns the secret). */
+    salesforceConnectedApp: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: {
+            configured: boolean;
+            source: "env" | "app" | "none";
+            loginUrl: string;
+            clientIdLast4: string;
+        };
+        meta: object;
+    }>;
+    /** Save the Connected App creds (entered in-app). Lets you connect a real
+     *  org without redeploying or shelling in secrets. */
+    setSalesforceConnectedApp: import("@trpc/server").TRPCMutationProcedure<{
+        input: {
+            clientId: string;
+            clientSecret: string;
+            loginUrl?: string | undefined;
+        };
+        output: {
+            configured: boolean;
+        };
         meta: object;
     }>;
     /** Step 1a — begin OAuth. Returns the Salesforce authorize URL (real) or a

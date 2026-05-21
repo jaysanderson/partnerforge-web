@@ -45,5 +45,21 @@ export interface SfOAuthProvider {
         refreshToken: string;
     }): Promise<SfOAuthTokens>;
 }
-export declare function getSalesforceOAuth(): SfOAuthProvider;
+/** Connected App credentials — entered in-app or via env. */
+export interface SfConnectedAppCreds {
+    clientId: string;
+    clientSecret: string;
+    /**
+     * The org's My Domain / login host (e.g. `https://acme.my.salesforce.com`
+     * or `https://test.salesforce.com`). Modern Connected Apps authorize
+     * against My Domain; falls back to login/test.salesforce.com when blank.
+     */
+    loginUrl?: string;
+}
+/**
+ * Resolve the OAuth provider. Pass in-app Connected App creds (preferred),
+ * else fall back to env. With valid creds → real Salesforce OAuth; otherwise
+ * the simulated demo provider.
+ */
+export declare function getSalesforceOAuth(creds?: SfConnectedAppCreds | null): SfOAuthProvider;
 //# sourceMappingURL=oauth.d.ts.map
