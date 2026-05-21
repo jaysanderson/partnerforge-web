@@ -181,8 +181,9 @@ function ConnectedSummary({ cfg }: { cfg: NonNullable<Integration> }): ReactElem
 /* ── Wizard ──────────────────────────────────────────────────────────── */
 
 function Wizard({ cfg }: { cfg: NonNullable<Integration> }): ReactElement {
-  // OAuth done (connected) → resume at Objects (step 1); else start at Connect.
-  const [step, setStep] = useState(cfg.status === 'connected' ? 1 : 0);
+  // Always start at Connect so the connection step is visible and gives clear
+  // feedback (✓ Connected) — even when returning from OAuth.
+  const [step, setStep] = useState(0);
 
   return (
     <div className="space-y-6">
@@ -196,7 +197,7 @@ function Wizard({ cfg }: { cfg: NonNullable<Integration> }): ReactElement {
 
       <Stepper step={step} />
 
-      {step === 0 && <StepConnect cfg={cfg} />}
+      {step === 0 && <StepConnect cfg={cfg} onNext={() => setStep(1)} />}
       {step === 1 && <StepObjects cfg={cfg} onNext={() => setStep(2)} onBack={() => setStep(0)} />}
       {step === 2 && <StepFieldMap cfg={cfg} onNext={() => setStep(3)} onBack={() => setStep(1)} />}
       {step === 3 && <StepSyncSettings cfg={cfg} onNext={() => setStep(4)} onBack={() => setStep(2)} />}
@@ -271,8 +272,15 @@ function StepNav({
 }
 
 /* Step 1 — Connect (OAuth) */
-function StepConnect({ cfg }: { cfg: NonNullable<Integration> }): ReactElement {
+function StepConnect({
+  cfg,
+  onNext,
+}: {
+  cfg: NonNullable<Integration>;
+  onNext: () => void;
+}): ReactElement {
   const toast = useToast();
+  const navigate = useNavigate();
   const start = useApi.adminConfig.salesforceOAuthStart();
   const connected = cfg.status === 'connected';
 
@@ -282,8 +290,13 @@ function StepConnect({ cfg }: { cfg: NonNullable<Integration> }): ReactElement {
       { environment, redirectUri },
       {
         onSuccess: (res) => {
-          // Redirect to Salesforce (real) or the simulated in-app callback.
-          window.location.href = res.authorizeUrl;
+          if (res.simulated) {
+            // Show a believable Salesforce consent screen before "connecting".
+            navigate(`/sf/oauth/authorize?environment=${environment}`);
+          } else {
+            // Real Connected App → hand off to Salesforce.
+            window.location.href = res.authorizeUrl;
+          }
         },
         onError: (e: Error) => toast.show({ kind: 'error', title: 'Could not start OAuth', body: e.message }),
       },
@@ -292,14 +305,24 @@ function StepConnect({ cfg }: { cfg: NonNullable<Integration> }): ReactElement {
 
   if (connected) {
     return (
-      <div className="pf-card p-5">
-        <div className="flex items-center gap-2">
-          <CheckCircle2 size={18} className="text-success-600" />
-          <span className="pf-small font-medium text-ink-1">
-            Connected to {cfg.connection.orgName} ({cfg.connection.environment})
-          </span>
+      <div className="space-y-4">
+        <div className="pf-card p-5">
+          <div className="flex items-start gap-3">
+            <div className="rounded-lg bg-success-50 p-2 text-success-600">
+              <CheckCircle2 size={20} />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h2 className="mb-1">Connected to Salesforce</h2>
+              <p className="pf-small text-ink-2">
+                <span className="font-medium text-ink-1">{cfg.connection.orgName}</span> (
+                {cfg.connection.environment})
+                {!cfg.connection.real && <span className="text-ink-3"> · simulated</span>}
+              </p>
+              <p className="pf-small text-ink-3 mt-1">{cfg.connection.instanceUrl}</p>
+            </div>
+          </div>
         </div>
-        <p className="pf-small text-ink-3 mt-1">Continue to choose what to sync.</p>
+        <StepNav onNext={onNext} nextLabel="Continue" />
       </div>
     );
   }
