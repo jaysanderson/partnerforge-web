@@ -319,6 +319,85 @@ export const adminConfigApi = {
       queryFn: () =>
         apiGet<Out['adminConfig']['salesforceConfig']>('/admin-config/salesforce'),
     }),
+  // ── Salesforce integration wizard ──────────────────────────────────────
+  salesforceIntegration: () =>
+    useQuery({
+      queryKey: ['adminConfig.salesforceIntegration'],
+      queryFn: () =>
+        apiGet<Out['adminConfig']['salesforceIntegration']>(
+          '/admin-config/salesforce/integration',
+        ),
+    }),
+  salesforceOAuthStart: () =>
+    useMutation({
+      mutationFn: (input: In['adminConfig']['salesforceOAuthStart']) =>
+        apiPost<Out['adminConfig']['salesforceOAuthStart']>(
+          '/admin-config/salesforce/oauth/start',
+          input,
+        ),
+    }),
+  salesforceOAuthComplete: () => {
+    const qc = useQueryClient();
+    return useMutation({
+      mutationFn: (input: In['adminConfig']['salesforceOAuthComplete']) =>
+        apiPost<Out['adminConfig']['salesforceOAuthComplete']>(
+          '/admin-config/salesforce/oauth/complete',
+          input,
+        ),
+      onSuccess: () => {
+        qc.invalidateQueries({ queryKey: ['adminConfig.salesforceIntegration'] });
+        qc.invalidateQueries({ queryKey: ['adminConfig.salesforceConfig'] });
+      },
+    });
+  },
+  salesforceDisconnect: () => {
+    const qc = useQueryClient();
+    return useMutation({
+      mutationFn: () =>
+        apiPost<Out['adminConfig']['salesforceDisconnect']>('/admin-config/salesforce/disconnect'),
+      onSuccess: () =>
+        qc.invalidateQueries({ queryKey: ['adminConfig.salesforceIntegration'] }),
+    });
+  },
+  salesforceDescribe: (object: 'account' | 'contact' | 'opportunity') =>
+    useQuery({
+      queryKey: ['adminConfig.salesforceDescribe', object],
+      queryFn: () =>
+        apiGet<Out['adminConfig']['salesforceDescribe']>('/admin-config/salesforce/describe', {
+          object,
+        }),
+    }),
+  patchSalesforceIntegration: () => {
+    const qc = useQueryClient();
+    return useMutation({
+      mutationFn: (input: In['adminConfig']['patchSalesforceIntegration']) =>
+        apiPatch<Out['adminConfig']['patchSalesforceIntegration']>(
+          '/admin-config/salesforce/integration',
+          input,
+        ),
+      onSuccess: () =>
+        qc.invalidateQueries({ queryKey: ['adminConfig.salesforceIntegration'] }),
+    });
+  },
+  salesforcePreview: () =>
+    useQuery({
+      queryKey: ['adminConfig.salesforcePreview'],
+      queryFn: () =>
+        apiGet<Out['adminConfig']['salesforcePreview']>('/admin-config/salesforce/preview'),
+    }),
+  activateSalesforceIntegration: () => {
+    const qc = useQueryClient();
+    return useMutation({
+      mutationFn: () =>
+        apiPost<Out['adminConfig']['activateSalesforceIntegration']>(
+          '/admin-config/salesforce/activate',
+        ),
+      onSuccess: () => {
+        qc.invalidateQueries({ queryKey: ['adminConfig.salesforceIntegration'] });
+        qc.invalidateQueries({ queryKey: ['system.cacheStats'] });
+      },
+    });
+  },
   setUseMockInLive: () => {
     const qc = useQueryClient();
     return useMutation({

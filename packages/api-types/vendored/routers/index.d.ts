@@ -1819,6 +1819,98 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             };
             meta: object;
         }>;
+        salesforceIntegration: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: import("./adminConfig.js").SfIntegration;
+            meta: object;
+        }>;
+        salesforceOAuthStart: import("@trpc/server").TRPCMutationProcedure<{
+            input: {
+                environment: "production" | "sandbox";
+                redirectUri: string;
+            };
+            output: {
+                authorizeUrl: string;
+                simulated: boolean;
+            };
+            meta: object;
+        }>;
+        salesforceOAuthComplete: import("@trpc/server").TRPCMutationProcedure<{
+            input: {
+                environment: "production" | "sandbox";
+                redirectUri: string;
+                code?: string | undefined;
+            };
+            output: import("./adminConfig.js").SfIntegration;
+            meta: object;
+        }>;
+        salesforceDisconnect: import("@trpc/server").TRPCMutationProcedure<{
+            input: void;
+            output: import("./adminConfig.js").SfIntegration;
+            meta: object;
+        }>;
+        salesforceDescribe: import("@trpc/server").TRPCQueryProcedure<{
+            input: {
+                object: "account" | "contact" | "opportunity";
+            };
+            output: {
+                object: "account" | "contact" | "opportunity";
+                fields: import("@partnerforge/salesforce").SfDescribeField[];
+            };
+            meta: object;
+        }>;
+        patchSalesforceIntegration: import("@trpc/server").TRPCMutationProcedure<{
+            input: {
+                sync?: {
+                    direction?: "inbound" | "bidirectional" | undefined;
+                    frequency?: "hourly" | "every_4h" | "daily" | "manual" | undefined;
+                    conflictPolicy?: "sf_wins" | "pf_wins" | "review" | undefined;
+                } | undefined;
+                objects?: {
+                    accounts?: {
+                        filter: string;
+                        enabled: boolean;
+                    } | undefined;
+                    contacts?: {
+                        enabled: boolean;
+                    } | undefined;
+                    opportunities?: {
+                        filter: string;
+                        enabled: boolean;
+                    } | undefined;
+                } | undefined;
+                fieldMappings?: {
+                    account?: {
+                        sfField: string;
+                        pfField: string;
+                    }[] | undefined;
+                    contact?: {
+                        sfField: string;
+                        pfField: string;
+                    }[] | undefined;
+                    opportunity?: {
+                        sfField: string;
+                        pfField: string;
+                    }[] | undefined;
+                } | undefined;
+            };
+            output: import("./adminConfig.js").SfIntegration;
+            meta: object;
+        }>;
+        salesforcePreview: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                accounts: number;
+                opportunities: number;
+                contacts: number;
+            };
+            meta: object;
+        }>;
+        activateSalesforceIntegration: import("@trpc/server").TRPCMutationProcedure<{
+            input: void;
+            output: import("./adminConfig.js").SfIntegration;
+            meta: object;
+        }>;
         oppFieldOverrides: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: import("./adminConfig.js").OppFieldOverride[];

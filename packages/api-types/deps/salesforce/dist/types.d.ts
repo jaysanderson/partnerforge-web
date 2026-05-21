@@ -138,4 +138,16 @@ export interface SfFieldMeta {
     visibleToPartner: boolean;
     editableByPartner: boolean;
 }
+/** Syncable Salesforce objects PartnerForge mirrors. */
+export type SfObjectName = 'account' | 'contact' | 'opportunity';
+/**
+ * Salesforce field descriptor (the `describe` shape) — drives the
+ * integration wizard's field-mapping step. `name` is the SF API name
+ * (PascalCase / `__c` for custom), `type` the SF soap type.
+ */
+export interface SfDescribeField {
+    name: string;
+    label: string;
+    type: string;
+}
 //# sourceMappingURL=types.d.ts.map

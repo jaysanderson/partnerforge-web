@@ -1,81 +1,79 @@
 /**
- * Salesforce → Field mappings (read-only view).
+ * Salesforce → Field mappings (read-only mirror).
  *
- * Surfaces the opportunity field overrides set in Portal settings, so
- * staff can see at a glance which SF fields are exposed to partners and
- * under what labels. Editing happens in Portal settings (AdminConfig).
+ * Shows the Salesforce-field → PartnerForge-field mappings configured in the
+ * Connection wizard's "Map fields" step. Editing happens in the wizard
+ * (Connection page); this is the at-a-glance reference.
  */
 import type { ReactElement } from 'react';
-import { Eye, EyeOff, ExternalLink } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useApi } from '../../api/hooks';
 
+const SECTIONS: { key: 'account' | 'contact' | 'opportunity'; label: string }[] = [
+  { key: 'account', label: 'Accounts → Partners' },
+  { key: 'contact', label: 'Contacts' },
+  { key: 'opportunity', label: 'Opportunities → Deals' },
+];
+
 export function SfFieldMappings(): ReactElement {
-  const overrides = useApi.adminConfig.oppFieldOverrides();
-  const rows = overrides.data ?? [];
+  const q = useApi.adminConfig.salesforceIntegration();
+  const maps = q.data?.fieldMappings;
 
   return (
     <div className="space-y-6">
       <div>
-        <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-text-secondary">
-          Configure → Salesforce
-        </div>
-        <h1 className="font-heading text-h1 font-semibold">Field mappings</h1>
-        <p className="mt-1 max-w-2xl text-body text-text-secondary">
-          Per-field overrides that change which Salesforce Opportunity fields
-          partners see in the portal, and under what label. Edits happen in{' '}
-          <Link to="/portal-settings" className="text-progress-blue hover:underline">
-            Portal settings
-          </Link>{' '}
-          — this page is the read-only summary.
+        <p className="pf-micro text-ink-3">CONFIGURE / SALESFORCE</p>
+        <h1>Field mappings</h1>
+        <p className="pf-small text-ink-2">
+          How Salesforce fields map onto PartnerForge. Set these in the{' '}
+          <Link to="/sf/connection" className="text-brand-600 underline">
+            Connection wizard
+          </Link>
+          .
         </p>
       </div>
 
-      <section className="pf-card-hover rounded-[var(--radius-lg)] border border-border bg-surface p-5 shadow-[var(--shadow-card)]">
-        {rows.length === 0 ? (
-          <p className="text-small text-text-secondary">
-            No overrides configured — partners see the default field labels +
-            visibility from Salesforce metadata.
+      {!maps || SECTIONS.every((s) => (maps[s.key] ?? []).length === 0) ? (
+        <div className="pf-card p-5">
+          <p className="pf-small text-ink-2">
+            No field mappings yet. Connect Salesforce and complete the “Map fields” step to
+            populate this.
           </p>
-        ) : (
-          <table className="w-full text-body">
-            <thead>
-              <tr className="bg-surface-alt text-left text-caption uppercase text-text-secondary">
-                <th className="px-3 py-2">SF API name</th>
-                <th className="px-3 py-2">Partner label override</th>
-                <th className="px-3 py-2">Visible</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows.map((r) => (
-                <tr key={r.apiName} className="border-t border-border">
-                  <td className="px-3 py-2 font-mono text-small">{r.apiName}</td>
-                  <td className="px-3 py-2">{r.partnerLabel ?? '—'}</td>
-                  <td className="px-3 py-2">
-                    {r.visibleToPartner === false ? (
-                      <span className="inline-flex items-center gap-1 text-danger">
-                        <EyeOff size={14} /> hidden
-                      </span>
-                    ) : (
-                      <span className="inline-flex items-center gap-1 text-success">
-                        <Eye size={14} /> visible
-                      </span>
-                    )}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-        <div className="mt-3 flex items-center justify-between">
-          <Link
-            to="/portal-settings"
-            className="inline-flex items-center gap-1 text-small text-progress-blue hover:underline"
-          >
-            Edit in Portal settings <ExternalLink size={12} />
-          </Link>
         </div>
-      </section>
+      ) : (
+        SECTIONS.map((s) => {
+          const rows = maps[s.key] ?? [];
+          if (!rows.length) return null;
+          return (
+            <div key={s.key} className="pf-card p-5">
+              <h2 className="mb-3">{s.label}</h2>
+              <div className="overflow-hidden rounded-lg border border-border">
+                <table className="w-full">
+                  <thead className="bg-subtle">
+                    <tr className="pf-micro text-ink-3">
+                      <th className="px-3 py-1.5 text-left">Salesforce field</th>
+                      <th className="px-3 py-1.5 text-left" />
+                      <th className="px-3 py-1.5 text-left">PartnerForge field</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {rows.map((m) => (
+                      <tr key={`${m.sfField}-${m.pfField}`} className="border-t border-border">
+                        <td className="px-3 py-1.5 pf-small font-mono text-ink-1">{m.sfField}</td>
+                        <td className="px-3 py-1.5 text-ink-3">
+                          <ArrowRight size={14} />
+                        </td>
+                        <td className="px-3 py-1.5 pf-small font-mono text-ink-1">{m.pfField}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          );
+        })
+      )}
     </div>
   );
 }
