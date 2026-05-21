@@ -57,6 +57,7 @@ export const dealsApi = {
                 stage: input.stage,
                 region: input.region,
                 businessUnit: input.businessUnit,
+                product: input.product,
               }
             : undefined,
         ),

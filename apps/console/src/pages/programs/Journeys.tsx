@@ -38,7 +38,7 @@ export function Journeys(): ReactElement {
     () => new Set((scopedPartners.data ?? []).map((p) => p.id)),
     [scopedPartners.data],
   );
-  const narrowing = !!scope.businessUnit || !!scope.region;
+  const narrowing = !!scope.businessUnit || !!scope.region || !!scope.product;
   const stages = useMemo(() => {
     const raw = journeys.data ?? [];
     if (!narrowing) return raw;

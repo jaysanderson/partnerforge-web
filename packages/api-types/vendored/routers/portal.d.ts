@@ -41,7 +41,7 @@ export declare const portalRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
-                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
+                businessUnit: "DX" | "INFRA" | "ADP" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -292,9 +292,9 @@ export declare const portalRouter: import("@trpc/server").TRPCBuiltRouter<{
     options: import("@trpc/server").TRPCQueryProcedure<{
         input: void;
         output: {
-            products: readonly ["Sitefinity", "OpenEdge", "DataDirect", "MarkLogic", "Chef", "WhatsUp Gold", "MOVEit", "Kemp", "Agentic RAG", "Flowmon"];
+            products: readonly ["Sitefinity", "ShareFile", "MOVEit", "WhatsUp Gold", "Flowmon", "Kemp", "Chef", "OpenEdge", "Agentic RAG", "DataDirect", "MarkLogic"];
             industries: readonly ["Healthcare", "Financial Services", "Cybersecurity", "Manufacturing", "Retail", "Education", "Government", "Technology", "Telecommunications", "Professional Services", "Energy"];
-            regions: readonly ["North America", "EMEA", "APAC", "LATAM", "ANZ"];
+            regions: readonly ["NA", "EMEA", "APJ", "CALA"];
         };
         meta: object;
     }>;
