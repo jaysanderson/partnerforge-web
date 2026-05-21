@@ -362,7 +362,7 @@ export declare const partners: import("drizzle-orm/sqlite-core").SQLiteTableWith
             tableName: "partners";
             dataType: "string";
             columnType: "SQLiteText";
-            data: "DX" | "Data Platform" | "Chef" | "AI";
+            data: "DX" | "INFRA" | "ADP";
             driverParam: string;
             notNull: false;
             hasDefault: false;
@@ -375,7 +375,7 @@ export declare const partners: import("drizzle-orm/sqlite-core").SQLiteTableWith
             generated: undefined;
         }, {}, {
             length: number | undefined;
-            $type: "DX" | "Data Platform" | "Chef" | "AI";
+            $type: "DX" | "INFRA" | "ADP";
         }>;
         status: import("drizzle-orm/sqlite-core").SQLiteColumn<{
             name: "status";

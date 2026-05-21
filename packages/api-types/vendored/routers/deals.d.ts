@@ -17,6 +17,7 @@ export declare const dealsRouter: import("@trpc/server").TRPCBuiltRouter<{
         input: {
             partnerId?: string | undefined;
             stage?: string | undefined;
+            product?: string | undefined;
             region?: string | undefined;
             businessUnit?: string | undefined;
         } | undefined;

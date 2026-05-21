@@ -1,5 +1,5 @@
 import type { ReactElement } from 'react';
-import { Building2, Globe, Lock } from 'lucide-react';
+import { Building2, Globe, Lock, Package } from 'lucide-react';
 import { REGIONS, useScope } from '../scope';
 
 /**
@@ -9,8 +9,17 @@ import { REGIONS, useScope } from '../scope';
  * their assigned BUs and a lock hint; an admin gets "All BUs".
  */
 export function ScopeBar(): ReactElement {
-  const { businessUnit, region, allowedBusinessUnits, restricted, setBusinessUnit, setRegion } =
-    useScope();
+  const {
+    businessUnit,
+    region,
+    product,
+    allowedBusinessUnits,
+    availableProducts,
+    restricted,
+    setBusinessUnit,
+    setRegion,
+    setProduct,
+  } = useScope();
 
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-lg border border-border bg-subtle/60 px-3 py-2">
@@ -45,6 +54,23 @@ export function ScopeBar(): ReactElement {
           {REGIONS.map((r) => (
             <option key={r} value={r}>
               {r}
+            </option>
+          ))}
+        </select>
+      </label>
+
+      <label className="flex items-center gap-1.5">
+        <Package size={14} className="text-ink-3" />
+        <select
+          aria-label="Product"
+          value={product ?? ''}
+          onChange={(e) => setProduct(e.target.value || null)}
+          className="rounded-md border border-border bg-surface px-2 py-1 pf-small text-ink-1"
+        >
+          <option value="">All products</option>
+          {availableProducts.map((p) => (
+            <option key={p} value={p}>
+              {p}
             </option>
           ))}
         </select>

@@ -5,12 +5,12 @@
  */
 export declare const LABELSETS: {
     readonly industry: readonly ["Healthcare", "Financial Services", "Cybersecurity", "Manufacturing", "Retail", "Education", "Government", "Technology", "Telecommunications", "Professional Services", "Energy"];
-    readonly product: readonly ["Sitefinity", "OpenEdge", "DataDirect", "MarkLogic", "Chef", "WhatsUp Gold", "MOVEit", "Kemp", "Agentic RAG", "Flowmon"];
+    readonly product: readonly ["Sitefinity", "ShareFile", "MOVEit", "WhatsUp Gold", "Flowmon", "Kemp", "Chef", "OpenEdge", "Agentic RAG", "DataDirect", "MarkLogic"];
     readonly deal_stage: readonly ["Registered", "Qualified", "Proposal", "Negotiation", "Closed Won", "Closed Lost"];
     readonly partner_tier: readonly ["Registered", "Silver", "Gold", "Platinum", "Strategic"];
     readonly partner_type: readonly ["Reseller", "SI", "ISV", "Referral", "Technology", "Distribution", "Consulting"];
     readonly content_type: readonly ["Battle Card", "Case Study", "Pricing Sheet", "Product Overview", "Training Module", "Webinar", "Template", "Sales Playbook", "ROI Tool", "Data Sheet", "Solution Brief", "Demo Script"];
-    readonly region: readonly ["North America", "EMEA", "APAC", "LATAM", "ANZ"];
+    readonly region: readonly ["NA", "EMEA", "APJ", "CALA"];
     readonly content_stage: readonly ["Awareness", "Consideration", "Decision", "Implementation", "Expansion"];
 };
 export type Labelset = keyof typeof LABELSETS;
@@ -27,14 +27,23 @@ export type ContentStage = (typeof LABELSETS.content_stage)[number];
  * top-level "who are you?" axis the Console scopes by (DX person sees DX
  * partners, etc.). Stored as a single value per partner on `SfAccount`.
  */
-export declare const BUSINESS_UNITS: readonly ["DX", "Data Platform", "Chef", "AI"];
+export declare const BUSINESS_UNITS: readonly ["DX", "INFRA", "ADP"];
 export type BusinessUnit = (typeof BUSINESS_UNITS)[number];
 /**
  * Which BU owns each product. Used to seed a partner's `businessUnit` from
- * its `productCoverage`, and as the mapping we'll mirror onto the Salesforce
- * custom field once the live org is connected.
+ * its `productCoverage`, to drive the Console's cascading Product picker,
+ * and as the mapping we'll mirror onto the Salesforce custom field once the
+ * live org is connected.
+ *
+ *  - DX (Digital Experience): Sitefinity, ShareFile, MOVEit
+ *  - INFRA (Infrastructure Management): WhatsUp Gold, Flowmon, Kemp, Chef
+ *  - ADP (App Dev & Data Platform): OpenEdge, Agentic RAG, DataDirect, MarkLogic
  */
 export declare const PRODUCT_TO_BU: Record<Product, BusinessUnit>;
+/** Products belonging to each BU — drives the cascading Product dropdown. */
+export declare const BU_PRODUCTS: Record<BusinessUnit, Product[]>;
+/** Products for a BU (empty array for an unknown BU). */
+export declare function productsForBU(bu: string): Product[];
 /** Resolve a partner's BU from its product coverage (first product wins). */
 export declare function businessUnitForProducts(products: readonly string[]): BusinessUnit;
 /** Open pipeline stages (everything that is not closed). */

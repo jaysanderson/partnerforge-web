@@ -112,6 +112,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             input: {
                 status?: string | undefined;
                 type?: string | undefined;
+                product?: string | undefined;
                 region?: string | undefined;
                 tier?: string | undefined;
                 businessUnit?: string | undefined;
@@ -131,7 +132,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
-                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
+                businessUnit: "DX" | "INFRA" | "ADP" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -160,7 +161,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
-                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
+                businessUnit: "DX" | "INFRA" | "ADP" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -225,7 +226,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
-                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
+                businessUnit: "DX" | "INFRA" | "ADP" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -254,7 +255,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             input: {
                 type: "Reseller" | "SI" | "ISV" | "Referral" | "Technology" | "Distribution" | "Consulting";
                 name: string;
-                region: "North America" | "EMEA" | "APAC" | "LATAM" | "ANZ";
+                region: "NA" | "EMEA" | "APJ" | "CALA";
                 tier: "Registered" | "Silver" | "Gold" | "Platinum" | "Strategic";
                 domain?: string | undefined;
                 primaryContactName?: string | undefined;
@@ -276,7 +277,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
-                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
+                businessUnit: "DX" | "INFRA" | "ADP" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -291,7 +292,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 updatedAt: string;
                 type: "Reseller" | "SI" | "ISV" | "Referral" | "Technology" | "Distribution" | "Consulting";
                 name: string;
-                region: "North America" | "EMEA" | "APAC" | "LATAM" | "ANZ";
+                region: "NA" | "EMEA" | "APJ" | "CALA";
                 tier: "Registered" | "Silver" | "Gold" | "Platinum" | "Strategic";
                 domain?: string | undefined;
                 primaryContactName?: string | undefined;
@@ -306,7 +307,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 id: string;
                 type?: "Reseller" | "SI" | "ISV" | "Referral" | "Technology" | "Distribution" | "Consulting" | undefined;
                 name?: string | undefined;
-                region?: "North America" | "EMEA" | "APAC" | "LATAM" | "ANZ" | undefined;
+                region?: "NA" | "EMEA" | "APJ" | "CALA" | undefined;
                 domain?: string | undefined;
                 tier?: "Registered" | "Silver" | "Gold" | "Platinum" | "Strategic" | undefined;
                 primaryContactName?: string | undefined;
@@ -328,7 +329,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
-                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
+                businessUnit: "DX" | "INFRA" | "ADP" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -400,6 +401,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             input: {
                 partnerId?: string | undefined;
                 stage?: string | undefined;
+                product?: string | undefined;
                 region?: string | undefined;
                 businessUnit?: string | undefined;
             } | undefined;
@@ -990,7 +992,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                     domain: string | null;
                     logoUrl: string | null;
                     tier: string;
-                    businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
+                    businessUnit: "DX" | "INFRA" | "ADP" | null;
                     primaryContactName: string | null;
                     primaryContactEmail: string | null;
                     engagementScore: number;
@@ -1237,9 +1239,9 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
         options: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
-                products: readonly ["Sitefinity", "OpenEdge", "DataDirect", "MarkLogic", "Chef", "WhatsUp Gold", "MOVEit", "Kemp", "Agentic RAG", "Flowmon"];
+                products: readonly ["Sitefinity", "ShareFile", "MOVEit", "WhatsUp Gold", "Flowmon", "Kemp", "Chef", "OpenEdge", "Agentic RAG", "DataDirect", "MarkLogic"];
                 industries: readonly ["Healthcare", "Financial Services", "Cybersecurity", "Manufacturing", "Retail", "Education", "Government", "Technology", "Telecommunications", "Professional Services", "Energy"];
-                regions: readonly ["North America", "EMEA", "APAC", "LATAM", "ANZ"];
+                regions: readonly ["NA", "EMEA", "APJ", "CALA"];
             };
             meta: object;
         }>;

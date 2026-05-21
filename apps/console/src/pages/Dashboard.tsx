@@ -106,6 +106,9 @@ export function Dashboard() {
     () => new Set((partners.data ?? []).map((p) => p.name)),
     [partners.data],
   );
+  // Any active scope axis (BU / region / product) means the aggregate cards
+  // should narrow to the scoped partner set.
+  const scopeActive = !!(scope.businessUnit || scope.region || scope.product);
   // Pipeline-by-stage derived from the scoped deals (replaces the unscoped
   // ai.pipelineSummary aggregate so the bar honours the picker too).
   const stageData = useMemo(() => {
@@ -324,7 +327,7 @@ export function Dashboard() {
           ) : (
             <ul className="space-y-2">
               {[...(scorecard.data ?? [])]
-                .filter((p) => !scope.businessUnit || scopedPartnerNames.has(p.partner))
+                .filter((p) => !scopeActive || scopedPartnerNames.has(p.partner))
                 .sort((a, b) => b.openPipeline - a.openPipeline)
                 .slice(0, 5)
                 .map((p) => (
@@ -374,7 +377,7 @@ export function Dashboard() {
           ) : (
             <ul className="space-y-2.5">
               {[...(goals.data ?? [])]
-                .filter((g) => !scope.businessUnit || scopedPartnerNames.has(g.partnerName))
+                .filter((g) => !scopeActive || scopedPartnerNames.has(g.partnerName))
                 .sort((a, b) => (a.progressPct ?? 0) - (b.progressPct ?? 0))
                 .slice(0, 5)
                 .map((g) => {
