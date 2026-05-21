@@ -11,6 +11,15 @@ import type { Context } from './context.js';
  */
 export declare function resolveModeFromDb(db: DbConnection, env: Env): AppMode;
 /**
+ * Resolve the persistent `sf.useMockInLive` override. Honoured by
+ * `getSalesforce()` when mode is `live` so Console-driven UX demos can
+ * pose as Live without a real Salesforce org provisioned.
+ *
+ * Falls back to the `SF_USE_MOCK_IN_LIVE` env var (boot-time default)
+ * when no config row exists.
+ */
+export declare function resolveUseMockInLive(db: DbConnection): boolean;
+/**
  * Effective runtime mode. Admin config override (system.mode) wins, then
  * APP_MODE env, then `demo`. Demo = mock connectors; Live = real connectors
  * that fail loudly when unconfigured.

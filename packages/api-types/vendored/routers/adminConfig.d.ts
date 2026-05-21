@@ -13,6 +13,7 @@ import type { Context } from '../context.js';
 export declare const CONFIG_KEYS: {
     readonly oppFieldOverrides: "ui.opportunityFieldOverrides";
     readonly sharepointAssets: "content.sharepointAssets";
+    readonly useMockInLive: "sf.useMockInLive";
 };
 export interface OppFieldOverride {
     apiName: string;
@@ -55,6 +56,74 @@ export declare const adminConfigRouter: import("@trpc/server").TRPCBuiltRouter<{
         };
         output: {
             mode: "demo" | "live";
+        };
+        meta: object;
+    }>;
+    /**
+     * Redacted snapshot of the current Salesforce configuration. Lets the
+     * Console show what's wired without ever exposing credential values.
+     * Admin-only (internal procedure) — knowing which env vars are set is
+     * still sensitive operational metadata.
+     */
+    salesforceConfig: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: {
+            mode: import("@partnerforge/shared").AppMode;
+            useMockInLive: boolean;
+            envPresent: {
+                baseUrl: boolean;
+                username: boolean;
+                password: boolean;
+            };
+            connector: "mock" | "live-stub" | "live-real";
+        };
+        meta: object;
+    }>;
+    /**
+     * Persist the `sf.useMockInLive` override. Beats the
+     * `SF_USE_MOCK_IN_LIVE` env default at runtime, no restart needed. The
+     * cron + every tRPC request re-read this row on each invocation through
+     * `resolveUseMockInLive(db)`.
+     */
+    setUseMockInLive: import("@trpc/server").TRPCMutationProcedure<{
+        input: {
+            value: boolean;
+        };
+        output: {
+            useMockInLive: boolean;
+        };
+        meta: object;
+    }>;
+    /**
+     * Probe the currently-resolved Salesforce adapter. In `mock` /
+     * `live-stub` configurations this returns immediately (the stub would
+     * throw on any call) — the Console uses it as a smoke test that the
+     * connector wiring is wired correctly. When the real Live connector
+     * lands, this will do a 5s-timeout `getAccount('prt_northwind')`
+     * round-trip and report the latency.
+     */
+    testSalesforceConnection: import("@trpc/server").TRPCMutationProcedure<{
+        input: void;
+        output: {
+            ok: true;
+            kind: "mock";
+            latencyMs: number;
+            errorMessage?: undefined;
+        } | {
+            ok: false;
+            kind: "live-stub";
+            errorMessage: string;
+            latencyMs?: undefined;
+        } | {
+            ok: true;
+            kind: "live-real";
+            latencyMs: number;
+            errorMessage?: undefined;
+        } | {
+            ok: false;
+            kind: "live-real";
+            latencyMs: number;
+            errorMessage: string;
         };
         meta: object;
     }>;

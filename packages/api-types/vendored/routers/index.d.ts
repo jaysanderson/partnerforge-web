@@ -1753,6 +1753,54 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             };
             meta: object;
         }>;
+        salesforceConfig: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                mode: import("@partnerforge/shared").AppMode;
+                useMockInLive: boolean;
+                envPresent: {
+                    baseUrl: boolean;
+                    username: boolean;
+                    password: boolean;
+                };
+                connector: "mock" | "live-stub" | "live-real";
+            };
+            meta: object;
+        }>;
+        setUseMockInLive: import("@trpc/server").TRPCMutationProcedure<{
+            input: {
+                value: boolean;
+            };
+            output: {
+                useMockInLive: boolean;
+            };
+            meta: object;
+        }>;
+        testSalesforceConnection: import("@trpc/server").TRPCMutationProcedure<{
+            input: void;
+            output: {
+                ok: true;
+                kind: "mock";
+                latencyMs: number;
+                errorMessage?: undefined;
+            } | {
+                ok: false;
+                kind: "live-stub";
+                errorMessage: string;
+                latencyMs?: undefined;
+            } | {
+                ok: true;
+                kind: "live-real";
+                latencyMs: number;
+                errorMessage?: undefined;
+            } | {
+                ok: false;
+                kind: "live-real";
+                latencyMs: number;
+                errorMessage: string;
+            };
+            meta: object;
+        }>;
         oppFieldOverrides: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: import("./adminConfig.js").OppFieldOverride[];
