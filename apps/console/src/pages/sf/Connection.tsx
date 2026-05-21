@@ -319,7 +319,8 @@ function StepConnect({
         onSuccess: (res) => {
           if (res.simulated) {
             // Show a believable Salesforce consent screen before "connecting".
-            navigate(`/sf/oauth/authorize?environment=${environment}`);
+            // Carry `state` so the (server-side) completion can match it.
+            navigate(`/sf/oauth/authorize?environment=${environment}&state=${encodeURIComponent(res.state)}`);
           } else {
             // Real Connected App → hand off to Salesforce.
             window.location.href = res.authorizeUrl;

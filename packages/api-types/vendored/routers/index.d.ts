@@ -1853,14 +1853,14 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             output: {
                 authorizeUrl: string;
                 simulated: boolean;
+                state: string;
             };
             meta: object;
         }>;
         salesforceOAuthComplete: import("@trpc/server").TRPCMutationProcedure<{
             input: {
-                environment: "production" | "sandbox";
-                redirectUri: string;
                 code?: string | undefined;
+                state?: string | undefined;
             };
             output: import("./adminConfig.js").SfIntegration;
             meta: object;

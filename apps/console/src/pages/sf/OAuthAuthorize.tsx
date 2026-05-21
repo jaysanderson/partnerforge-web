@@ -18,12 +18,14 @@ export function SfOAuthAuthorize(): ReactElement {
   const [params] = useSearchParams();
   const navigate = useNavigate();
   const environment = (params.get('environment') as 'production' | 'sandbox') ?? 'sandbox';
+  const state = params.get('state') ?? '';
   const host = environment === 'sandbox' ? 'test.salesforce.com' : 'login.salesforce.com';
 
   const allow = () =>
-    navigate(`/sf/oauth/callback?simulated=1&environment=${environment}&code=sim_code`, {
-      replace: true,
-    });
+    navigate(
+      `/sf/oauth/callback?simulated=1&code=sim_code&state=${encodeURIComponent(state)}`,
+      { replace: true },
+    );
   const deny = () => navigate('/sf/connection', { replace: true });
 
   return (
