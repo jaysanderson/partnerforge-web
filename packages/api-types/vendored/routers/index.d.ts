@@ -1824,6 +1824,27 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             output: import("./adminConfig.js").SfIntegration;
             meta: object;
         }>;
+        salesforceConnectedApp: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                configured: boolean;
+                source: "env" | "app" | "none";
+                loginUrl: string;
+                clientIdLast4: string;
+            };
+            meta: object;
+        }>;
+        setSalesforceConnectedApp: import("@trpc/server").TRPCMutationProcedure<{
+            input: {
+                clientId: string;
+                clientSecret: string;
+                loginUrl?: string | undefined;
+            };
+            output: {
+                configured: boolean;
+            };
+            meta: object;
+        }>;
         salesforceOAuthStart: import("@trpc/server").TRPCMutationProcedure<{
             input: {
                 environment: "production" | "sandbox";

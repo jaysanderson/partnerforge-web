@@ -27,6 +27,7 @@ declare const schema: z.ZodObject<{
     SALESFORCE_CLIENT_ID: z.ZodDefault<z.ZodString>;
     SALESFORCE_CLIENT_SECRET: z.ZodDefault<z.ZodString>;
     SALESFORCE_REDIRECT_URI: z.ZodDefault<z.ZodString>;
+    SALESFORCE_LOGIN_URL: z.ZodDefault<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     NODE_ENV: "development" | "production" | "test";
     APP_MODE: "demo" | "live";
@@ -55,6 +56,7 @@ declare const schema: z.ZodObject<{
     SALESFORCE_CLIENT_ID: string;
     SALESFORCE_CLIENT_SECRET: string;
     SALESFORCE_REDIRECT_URI: string;
+    SALESFORCE_LOGIN_URL: string;
 }, {
     JWT_SECRET: string;
     NODE_ENV?: "development" | "production" | "test" | undefined;
@@ -83,6 +85,7 @@ declare const schema: z.ZodObject<{
     SALESFORCE_CLIENT_ID?: string | undefined;
     SALESFORCE_CLIENT_SECRET?: string | undefined;
     SALESFORCE_REDIRECT_URI?: string | undefined;
+    SALESFORCE_LOGIN_URL?: string | undefined;
 }>;
 export type Env = z.infer<typeof schema> & {
     corsOrigins: string[];

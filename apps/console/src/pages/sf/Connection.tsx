@@ -306,7 +306,10 @@ function StepConnect({
   const toast = useToast();
   const navigate = useNavigate();
   const start = useApi.adminConfig.salesforceOAuthStart();
+  const appQ = useApi.adminConfig.salesforceConnectedApp();
+  const [editingApp, setEditingApp] = useState(false);
   const connected = cfg.status === 'connected';
+  const appConfigured = appQ.data?.configured ?? false;
 
   const connect = (environment: 'production' | 'sandbox') => {
     const redirectUri = `${window.location.origin}/console/sf/oauth/callback`;
@@ -351,32 +354,154 @@ function StepConnect({
     );
   }
 
+  // No Connected App yet (or editing) → collect the org's app credentials so
+  // we can do a REAL OAuth handshake. Without these we'd only have the demo.
+  if (!appConfigured || editingApp) {
+    return <ConnectedAppForm onSaved={() => setEditingApp(false)} loginUrl={appQ.data?.loginUrl} />;
+  }
+
   return (
     <div className="pf-card p-5 space-y-4">
-      <div>
-        <h2 className="mb-1">Connect your Salesforce org</h2>
-        <p className="pf-small text-ink-2">
-          You'll be redirected to Salesforce to authorize PartnerForge. We never see or
-          store your password — only a secure token, kept on the server.
-        </p>
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <h2 className="mb-1">Connect your Salesforce org</h2>
+          <p className="pf-small text-ink-2">
+            You'll be redirected to Salesforce to authorize PartnerForge. We never see or
+            store your password — only a secure token, kept on the server.
+          </p>
+        </div>
       </div>
+      <p className="pf-micro text-ink-3">
+        Using your Connected App
+        {appQ.data?.clientIdLast4 ? ` (••••${appQ.data.clientIdLast4})` : ''} ·{' '}
+        <button type="button" className="text-brand-600 underline" onClick={() => setEditingApp(true)}>
+          edit
+        </button>
+      </p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <EnvCard
           title="Production"
-          desc="login.salesforce.com"
+          desc={appQ.data?.loginUrl || 'login.salesforce.com'}
           icon={<Cloud size={20} />}
           onClick={() => connect('production')}
           disabled={start.isPending}
         />
         <EnvCard
           title="Sandbox"
-          desc="test.salesforce.com"
+          desc={appQ.data?.loginUrl || 'test.salesforce.com'}
           icon={<Database size={20} />}
           onClick={() => connect('sandbox')}
           disabled={start.isPending}
         />
       </div>
     </div>
+  );
+}
+
+/** Collect the org's Connected App credentials so OAuth can hit a real org. */
+function ConnectedAppForm({
+  onSaved,
+  loginUrl,
+}: {
+  onSaved: () => void;
+  loginUrl?: string;
+}): ReactElement {
+  const toast = useToast();
+  const save = useApi.adminConfig.setSalesforceConnectedApp();
+  const [clientId, setClientId] = useState('');
+  const [clientSecret, setClientSecret] = useState('');
+  const [domain, setDomain] = useState(loginUrl ?? '');
+  const callbackUrl = `${window.location.origin}/console/sf/oauth/callback`;
+  const [copied, setCopied] = useState(false);
+
+  const submit = () => {
+    save.mutate(
+      { clientId: clientId.trim(), clientSecret: clientSecret.trim(), loginUrl: domain.trim() },
+      {
+        onSuccess: () => {
+          toast.show({ kind: 'success', title: 'Connected App saved' });
+          onSaved();
+        },
+        onError: (e: Error) => toast.show({ kind: 'error', title: 'Could not save', body: e.message }),
+      },
+    );
+  };
+
+  return (
+    <div className="pf-card p-5 space-y-4">
+      <div>
+        <h2 className="mb-1">Add your Salesforce Connected App</h2>
+        <p className="pf-small text-ink-2">
+          To connect a real org, create a Connected App in Salesforce
+          (Setup → App Manager → New Connected App), enable OAuth, and paste its credentials
+          here. We store the secret on the server only.
+        </p>
+      </div>
+
+      <div className="rounded-lg bg-subtle p-3">
+        <p className="pf-micro text-ink-3 mb-1">Use this as the Connected App's Callback URL:</p>
+        <div className="flex items-center gap-2">
+          <code className="flex-1 truncate rounded bg-surface px-2 py-1 pf-small">{callbackUrl}</code>
+          <button
+            type="button"
+            onClick={() => {
+              void navigator.clipboard?.writeText(callbackUrl);
+              setCopied(true);
+              setTimeout(() => setCopied(false), 1500);
+            }}
+            className="rounded-md border border-border bg-surface px-2 py-1 pf-small hover:bg-subtle"
+          >
+            {copied ? 'Copied' : 'Copy'}
+          </button>
+        </div>
+      </div>
+
+      <Labeled label="Consumer Key (Client ID)">
+        <input
+          value={clientId}
+          onChange={(e) => setClientId(e.target.value)}
+          placeholder="3MVG9..."
+          className="w-full rounded-md border border-border bg-surface px-2 py-1.5 font-mono text-[0.8125rem]"
+        />
+      </Labeled>
+      <Labeled label="Consumer Secret (Client Secret)">
+        <input
+          type="password"
+          value={clientSecret}
+          onChange={(e) => setClientSecret(e.target.value)}
+          placeholder="••••••••••••"
+          className="w-full rounded-md border border-border bg-surface px-2 py-1.5 font-mono text-[0.8125rem]"
+        />
+      </Labeled>
+      <Labeled label="My Domain login URL (optional — defaults to test/login.salesforce.com)">
+        <input
+          value={domain}
+          onChange={(e) => setDomain(e.target.value)}
+          placeholder="https://yourorg--sandbox.my.salesforce.com"
+          className="w-full rounded-md border border-border bg-surface px-2 py-1.5 font-mono text-[0.8125rem]"
+        />
+      </Labeled>
+
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={submit}
+          disabled={save.isPending || !clientId.trim() || !clientSecret.trim()}
+          className="rounded-md bg-brand-600 px-4 py-2 pf-small font-medium text-white hover:bg-brand-700 disabled:opacity-50"
+        >
+          {save.isPending ? 'Saving…' : 'Save & continue'}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function Labeled({ label, children }: { label: string; children: ReactElement }): ReactElement {
+  return (
+    <label className="block">
+      <span className="pf-small font-medium text-ink-1">{label}</span>
+      <div className="mt-1">{children}</div>
+    </label>
   );
 }
 

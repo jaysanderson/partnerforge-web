@@ -328,6 +328,26 @@ export const adminConfigApi = {
           '/admin-config/salesforce/integration',
         ),
     }),
+  salesforceConnectedApp: () =>
+    useQuery({
+      queryKey: ['adminConfig.salesforceConnectedApp'],
+      queryFn: () =>
+        apiGet<Out['adminConfig']['salesforceConnectedApp']>(
+          '/admin-config/salesforce/connected-app',
+        ),
+    }),
+  setSalesforceConnectedApp: () => {
+    const qc = useQueryClient();
+    return useMutation({
+      mutationFn: (input: In['adminConfig']['setSalesforceConnectedApp']) =>
+        apiPut<Out['adminConfig']['setSalesforceConnectedApp']>(
+          '/admin-config/salesforce/connected-app',
+          input,
+        ),
+      onSuccess: () =>
+        qc.invalidateQueries({ queryKey: ['adminConfig.salesforceConnectedApp'] }),
+    });
+  },
   salesforceOAuthStart: () =>
     useMutation({
       mutationFn: (input: In['adminConfig']['salesforceOAuthStart']) =>
