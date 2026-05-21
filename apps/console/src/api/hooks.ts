@@ -398,6 +398,14 @@ export const adminConfigApi = {
       },
     });
   },
+  resetToDemoData: () => {
+    const qc = useQueryClient();
+    return useMutation({
+      mutationFn: () =>
+        apiPost<Out['adminConfig']['resetToDemoData']>('/admin-config/salesforce/reset-demo'),
+      onSuccess: () => qc.invalidateQueries(),
+    });
+  },
   setUseMockInLive: () => {
     const qc = useQueryClient();
     return useMutation({

@@ -1,6 +1,7 @@
 export * from './types.js';
 export * from './adapter.js';
 export * from './oauth.js';
+export * from './live.js';
 import type { AppMode } from '@partnerforge/shared';
 import { type SalesforceAdapter } from './adapter.js';
 export interface GetSalesforceOpts {
@@ -24,8 +25,8 @@ export interface GetSalesforceOpts {
  * either in a customer deployment — both silently hide "SF is down".
  */
 export declare function getSalesforce(mode?: AppMode, opts?: GetSalesforceOpts): SalesforceAdapter;
-/** True iff the live connector is the real (non-stub) implementation.
- *  Today it's always a stub; this returns false until `liveAdapter()`
- *  is replaced with a real Progress SF connector. */
+/** True iff a real Salesforce Connected App is configured (Client ID +
+ *  Secret present). When true, the OAuth flow hits real Salesforce and a
+ *  live connection resolves to `LiveSalesforceAdapter` (see api `sfFor`). */
 export declare function liveAdapterIsReal(): boolean;
 //# sourceMappingURL=index.d.ts.map

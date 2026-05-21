@@ -279,10 +279,27 @@ export declare const adminConfigRouter: import("@trpc/server").TRPCBuiltRouter<{
         };
         meta: object;
     }>;
-    /** Activate — mark connected + kick the initial sync (fire-and-forget). */
+    /**
+     * Activate — finish setup + kick the initial sync. For a REAL connection
+     * (a live org, not the simulated demo provider), this is the "off to the
+     * races" switch: purge the demo data, flip the platform to Live, and pull
+     * the real org via the live connector.
+     */
     activateSalesforceIntegration: import("@trpc/server").TRPCMutationProcedure<{
         input: void;
         output: SfIntegration;
+        meta: object;
+    }>;
+    /**
+     * Reset to demo data — purge everything Salesforce-mirrored, re-seed the
+     * demo dataset, disconnect, and flip back to Demo mode. The one-click
+     * "back to the sandbox demo" escape hatch after going live.
+     */
+    resetToDemoData: import("@trpc/server").TRPCMutationProcedure<{
+        input: void;
+        output: {
+            ok: boolean;
+        };
         meta: object;
     }>;
     oppFieldOverrides: import("@trpc/server").TRPCQueryProcedure<{

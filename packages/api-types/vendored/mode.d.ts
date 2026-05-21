@@ -25,6 +25,17 @@ export declare function resolveUseMockInLive(db: DbConnection): boolean;
  * that fail loudly when unconfigured.
  */
 export declare function resolveMode(ctx: Context): AppMode;
+/**
+ * Resolve the Salesforce adapter for a raw db/env pair.
+ *
+ * Order of precedence:
+ *  1. A real, activated OAuth connection (a live org) → `LiveSalesforceAdapter`
+ *     pointed at that org, regardless of demo/live toggle. This is the
+ *     "connected → off to the races" path: the moment a real org is wired,
+ *     reads/sync hit it.
+ *  2. Otherwise the mode-aware mock / live-stub (demo, or live-with-mock).
+ */
+export declare function resolveSalesforce(db: DbConnection, env: Env): SalesforceAdapter;
 /** Mode-aware Salesforce adapter for this request. */
 export declare function sfFor(ctx: Context): SalesforceAdapter;
 /** Mode-aware SharePoint adapter, backed by admin config in demo mode. */
