@@ -307,8 +307,12 @@ function StepConnect({
   const navigate = useNavigate();
   const start = useApi.adminConfig.salesforceOAuthStart();
   const appQ = useApi.adminConfig.salesforceConnectedApp();
+  const disconnect = useApi.adminConfig.salesforceDisconnect();
   const [editingApp, setEditingApp] = useState(false);
-  const connected = cfg.status === 'connected';
+  // A genuine, real-org connection — not the leftover simulated demo one.
+  const realConnected = cfg.status === 'connected' && cfg.connection.real;
+  // Connected to the simulated demo provider (no real org behind it).
+  const simConnected = cfg.status === 'connected' && !cfg.connection.real;
   const appConfigured = appQ.data?.configured ?? false;
 
   const connect = (environment: 'production' | 'sandbox') => {
@@ -331,7 +335,8 @@ function StepConnect({
     );
   };
 
-  if (connected) {
+  // A real org is connected → confirmation card + Continue, plus Disconnect.
+  if (realConnected) {
     return (
       <div className="space-y-4">
         <div className="pf-card p-5">
@@ -344,10 +349,22 @@ function StepConnect({
               <p className="pf-small text-ink-2">
                 <span className="font-medium text-ink-1">{cfg.connection.orgName}</span> (
                 {cfg.connection.environment})
-                {!cfg.connection.real && <span className="text-ink-3"> · simulated</span>}
               </p>
               <p className="pf-small text-ink-3 mt-1">{cfg.connection.instanceUrl}</p>
             </div>
+            <button
+              type="button"
+              onClick={() =>
+                disconnect.mutate(undefined, {
+                  onSuccess: () =>
+                    toast.show({ kind: 'success', title: 'Disconnected from Salesforce' }),
+                })
+              }
+              disabled={disconnect.isPending}
+              className="rounded-md border border-danger-600/40 bg-surface px-3 py-1.5 pf-small font-medium text-danger-600 hover:bg-danger-50 disabled:opacity-50"
+            >
+              Disconnect
+            </button>
           </div>
         </div>
         <StepNav onNext={onNext} nextLabel="Continue" />
@@ -355,45 +372,72 @@ function StepConnect({
     );
   }
 
+  // A simulated demo connection (or none) sits behind the credentials form
+  // below — surface a banner so the user knows they're on the demo and can
+  // either add their real Connected App or carry on with the demo.
+  const demoBanner = simConnected ? (
+    <div className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-warning-600/30 bg-warning-50 px-4 py-3">
+      <p className="pf-small text-ink-2">
+        You're on a <span className="font-medium text-ink-1">simulated demo connection</span> — add
+        your Connected App below to connect a real org.
+      </p>
+      <button
+        type="button"
+        onClick={onNext}
+        className="pf-small font-medium text-brand-600 underline whitespace-nowrap"
+      >
+        Continue with demo →
+      </button>
+    </div>
+  ) : null;
+
   // No Connected App yet (or editing) → collect the org's app credentials so
   // we can do a REAL OAuth handshake. Without these we'd only have the demo.
   if (!appConfigured || editingApp) {
-    return <ConnectedAppForm onSaved={() => setEditingApp(false)} loginUrl={appQ.data?.loginUrl} />;
+    return (
+      <div className="space-y-4">
+        {demoBanner}
+        <ConnectedAppForm onSaved={() => setEditingApp(false)} loginUrl={appQ.data?.loginUrl} />
+      </div>
+    );
   }
 
   return (
-    <div className="pf-card p-5 space-y-4">
-      <div className="flex items-start justify-between gap-2">
-        <div>
-          <h2 className="mb-1">Connect your Salesforce org</h2>
-          <p className="pf-small text-ink-2">
-            You'll be redirected to Salesforce to authorize PartnerForge. We never see or
-            store your password — only a secure token, kept on the server.
-          </p>
+    <div className="space-y-4">
+      {demoBanner}
+      <div className="pf-card p-5 space-y-4">
+        <div className="flex items-start justify-between gap-2">
+          <div>
+            <h2 className="mb-1">Connect your Salesforce org</h2>
+            <p className="pf-small text-ink-2">
+              You'll be redirected to Salesforce to authorize PartnerForge. We never see or
+              store your password — only a secure token, kept on the server.
+            </p>
+          </div>
         </div>
-      </div>
-      <p className="pf-micro text-ink-3">
-        Using your Connected App
-        {appQ.data?.clientIdLast4 ? ` (••••${appQ.data.clientIdLast4})` : ''} ·{' '}
-        <button type="button" className="text-brand-600 underline" onClick={() => setEditingApp(true)}>
-          edit
-        </button>
-      </p>
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <EnvCard
-          title="Production"
-          desc={appQ.data?.loginUrl || 'login.salesforce.com'}
-          icon={<Cloud size={20} />}
-          onClick={() => connect('production')}
-          disabled={start.isPending}
-        />
-        <EnvCard
-          title="Sandbox"
-          desc={appQ.data?.loginUrl || 'test.salesforce.com'}
-          icon={<Database size={20} />}
-          onClick={() => connect('sandbox')}
-          disabled={start.isPending}
-        />
+        <p className="pf-micro text-ink-3">
+          Using your Connected App
+          {appQ.data?.clientIdLast4 ? ` (••••${appQ.data.clientIdLast4})` : ''} ·{' '}
+          <button type="button" className="text-brand-600 underline" onClick={() => setEditingApp(true)}>
+            edit
+          </button>
+        </p>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+          <EnvCard
+            title="Production"
+            desc={appQ.data?.loginUrl || 'login.salesforce.com'}
+            icon={<Cloud size={20} />}
+            onClick={() => connect('production')}
+            disabled={start.isPending}
+          />
+          <EnvCard
+            title="Sandbox"
+            desc={appQ.data?.loginUrl || 'test.salesforce.com'}
+            icon={<Database size={20} />}
+            onClick={() => connect('sandbox')}
+            disabled={start.isPending}
+          />
+        </div>
       </div>
     </div>
   );
