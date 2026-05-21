@@ -51,7 +51,14 @@ export const dealsApi = {
       queryFn: () =>
         apiGet<Out['deals']['list']>(
           '/deals',
-          input ? { partner_id: input.partnerId, stage: input.stage } : undefined,
+          input
+            ? {
+                partner_id: input.partnerId,
+                stage: input.stage,
+                region: input.region,
+                businessUnit: input.businessUnit,
+              }
+            : undefined,
         ),
     }),
   conflicts: () =>

@@ -19,20 +19,28 @@ export declare const authRouter: import("@trpc/server").TRPCBuiltRouter<{
     };
     transformer: false;
 }, import("@trpc/server").TRPCDecorateCreateRouterOptions<{
+    /**
+     * Current principal, plus the internal user's BU scope so the Console can
+     * pre-lock its scope picker. `businessUnits` is null/empty for unrestricted
+     * users (admins or anyone without an assignment). Read live from the DB.
+     */
     me: import("@trpc/server").TRPCQueryProcedure<{
         input: void;
         output: {
+            businessUnits: string[] | null;
             kind: "internal";
             userId: string;
             email: string;
             role: import("@partnerforge/shared").InternalRole;
         } | {
+            businessUnits: string[] | null;
             kind: "partner";
             contactId: string;
             partnerId: string;
             email: string;
             role: import("@partnerforge/shared").PartnerRole;
         } | {
+            businessUnits: string[] | null;
             kind: "service";
             keyId: string;
             name: string;
@@ -51,6 +59,7 @@ export declare const authRouter: import("@trpc/server").TRPCBuiltRouter<{
                 name: string;
                 email: string;
                 role: "admin" | "partner_manager" | "sales_engineer" | "read_only";
+                businessUnits: string[] | null;
             };
         };
         meta: object;

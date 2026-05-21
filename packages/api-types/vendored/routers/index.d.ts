@@ -29,17 +29,20 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
         me: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: {
+                businessUnits: string[] | null;
                 kind: "internal";
                 userId: string;
                 email: string;
                 role: import("@partnerforge/shared").InternalRole;
             } | {
+                businessUnits: string[] | null;
                 kind: "partner";
                 contactId: string;
                 partnerId: string;
                 email: string;
                 role: import("@partnerforge/shared").PartnerRole;
             } | {
+                businessUnits: string[] | null;
                 kind: "service";
                 keyId: string;
                 name: string;
@@ -58,6 +61,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                     name: string;
                     email: string;
                     role: "admin" | "partner_manager" | "sales_engineer" | "read_only";
+                    businessUnits: string[] | null;
                 };
             };
             meta: object;
@@ -110,6 +114,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 type?: string | undefined;
                 region?: string | undefined;
                 tier?: string | undefined;
+                businessUnit?: string | undefined;
             } | undefined;
             output: {
                 status: import("@partnerforge/shared").PartnerStatus;
@@ -126,6 +131,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
+                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -154,6 +160,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
+                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -218,6 +225,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
+                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -268,6 +276,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
+                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -319,6 +328,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
+                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;
@@ -390,6 +400,8 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             input: {
                 partnerId?: string | undefined;
                 stage?: string | undefined;
+                region?: string | undefined;
+                businessUnit?: string | undefined;
             } | undefined;
             output: {
                 status: import("@partnerforge/shared").DealStatus;
@@ -758,6 +770,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 createdAt: string;
                 updatedAt: string;
                 lastLogin: string | null;
+                businessUnits: string[] | null;
                 avatarUrl: string | null;
             }[];
             meta: object;
@@ -774,6 +787,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 createdAt: string;
                 updatedAt: string;
                 lastLogin: string | null;
+                businessUnits: string[] | null;
                 avatarUrl: string | null;
             };
             meta: object;
@@ -808,6 +822,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                 createdAt: string;
                 updatedAt: string;
                 lastLogin: string | null;
+                businessUnits: string[] | null;
                 avatarUrl: string | null;
             } | undefined;
             meta: object;
@@ -975,6 +990,7 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
                     domain: string | null;
                     logoUrl: string | null;
                     tier: string;
+                    businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
                     primaryContactName: string | null;
                     primaryContactEmail: string | null;
                     engagementScore: number;

@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import { ToastProvider } from '@partnerforge/ui';
 import './index.css';
 import { AuthProvider } from './auth';
+import { ScopeProvider } from './scope';
 import { App } from './App';
 
 // Served under /console in production; '/' in dev. Strip trailing slash.
@@ -15,11 +16,13 @@ function Root() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <ToastProvider>
-          <BrowserRouter basename={ROUTER_BASENAME}>
-            <App />
-          </BrowserRouter>
-        </ToastProvider>
+        <ScopeProvider>
+          <ToastProvider>
+            <BrowserRouter basename={ROUTER_BASENAME}>
+              <App />
+            </BrowserRouter>
+          </ToastProvider>
+        </ScopeProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

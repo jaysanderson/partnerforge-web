@@ -122,6 +122,25 @@ export declare const users: import("drizzle-orm/sqlite-core").SQLiteTableWithCol
         }, {}, {
             length: number | undefined;
         }>;
+        businessUnits: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "business_units";
+            tableName: "users";
+            dataType: "json";
+            columnType: "SQLiteTextJson";
+            data: string[];
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: undefined;
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            $type: string[];
+        }>;
         avatarUrl: import("drizzle-orm/sqlite-core").SQLiteColumn<{
             name: "avatar_url";
             tableName: "users";
@@ -337,6 +356,26 @@ export declare const partners: import("drizzle-orm/sqlite-core").SQLiteTableWith
             generated: undefined;
         }, {}, {
             length: number | undefined;
+        }>;
+        businessUnit: import("drizzle-orm/sqlite-core").SQLiteColumn<{
+            name: "business_unit";
+            tableName: "partners";
+            dataType: "string";
+            columnType: "SQLiteText";
+            data: "DX" | "Data Platform" | "Chef" | "AI";
+            driverParam: string;
+            notNull: false;
+            hasDefault: false;
+            isPrimaryKey: false;
+            isAutoincrement: false;
+            hasRuntimeDefault: false;
+            enumValues: [string, ...string[]];
+            baseColumn: never;
+            identity: undefined;
+            generated: undefined;
+        }, {}, {
+            length: number | undefined;
+            $type: "DX" | "Data Platform" | "Chef" | "AI";
         }>;
         status: import("drizzle-orm/sqlite-core").SQLiteColumn<{
             name: "status";

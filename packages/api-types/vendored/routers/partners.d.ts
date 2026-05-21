@@ -33,6 +33,7 @@ export declare const partnersRouter: import("@trpc/server").TRPCBuiltRouter<{
             type?: string | undefined;
             region?: string | undefined;
             tier?: string | undefined;
+            businessUnit?: string | undefined;
         } | undefined;
         output: {
             status: import("@partnerforge/shared").PartnerStatus;
@@ -49,6 +50,7 @@ export declare const partnersRouter: import("@trpc/server").TRPCBuiltRouter<{
             domain: string | null;
             logoUrl: string | null;
             tier: string;
+            businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
             primaryContactName: string | null;
             primaryContactEmail: string | null;
             engagementScore: number;
@@ -77,6 +79,7 @@ export declare const partnersRouter: import("@trpc/server").TRPCBuiltRouter<{
             domain: string | null;
             logoUrl: string | null;
             tier: string;
+            businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
             primaryContactName: string | null;
             primaryContactEmail: string | null;
             engagementScore: number;
@@ -142,6 +145,7 @@ export declare const partnersRouter: import("@trpc/server").TRPCBuiltRouter<{
             domain: string | null;
             logoUrl: string | null;
             tier: string;
+            businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
             primaryContactName: string | null;
             primaryContactEmail: string | null;
             engagementScore: number;
@@ -193,6 +197,7 @@ export declare const partnersRouter: import("@trpc/server").TRPCBuiltRouter<{
             domain: string | null;
             logoUrl: string | null;
             tier: string;
+            businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
             primaryContactName: string | null;
             primaryContactEmail: string | null;
             engagementScore: number;
@@ -244,6 +249,7 @@ export declare const partnersRouter: import("@trpc/server").TRPCBuiltRouter<{
             domain: string | null;
             logoUrl: string | null;
             tier: string;
+            businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
             primaryContactName: string | null;
             primaryContactEmail: string | null;
             engagementScore: number;

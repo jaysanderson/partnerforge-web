@@ -6,9 +6,12 @@
  * action; clicking a partner navigates to their detail page.
  */
 import type { ReactElement } from 'react';
+import { useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { GitBranch } from 'lucide-react';
 import { useApi } from '../../api/hooks';
+import { ScopeBar } from '../../components/ScopeBar';
+import { scopeParams, useScope } from '../../scope';
 
 const STAGE_LABEL: Record<string, string> = {
   onboarding: 'Onboarding',
@@ -25,8 +28,25 @@ const STAGE_TONE: Record<string, string> = {
 };
 
 export function Journeys(): ReactElement {
+  const scope = useScope();
   const journeys = useApi.journeys.list();
-  const stages = journeys.data ?? [];
+  // journeys.list is BU-enforced server-side for restricted users; for the
+  // admin picker we narrow the funnel client-side against the scoped partner
+  // set (the journeys payload carries no BU column of its own).
+  const scopedPartners = useApi.partners.list(scopeParams(scope));
+  const allowedIds = useMemo(
+    () => new Set((scopedPartners.data ?? []).map((p) => p.id)),
+    [scopedPartners.data],
+  );
+  const narrowing = !!scope.businessUnit || !!scope.region;
+  const stages = useMemo(() => {
+    const raw = journeys.data ?? [];
+    if (!narrowing) return raw;
+    return raw.map((s) => {
+      const partners = s.partners.filter((p) => allowedIds.has(p.id));
+      return { ...s, partners, count: partners.length };
+    });
+  }, [journeys.data, narrowing, allowedIds]);
   const total = stages.reduce((s, x) => s + x.count, 0);
   return (
     <div className="space-y-6">
@@ -42,6 +62,8 @@ export function Journeys(): ReactElement {
           as their own editor in the next milestone.
         </p>
       </div>
+
+      <ScopeBar />
 
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {stages.map((s) => {

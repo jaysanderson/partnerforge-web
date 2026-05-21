@@ -3,7 +3,7 @@
  * mirror the SF objects PartnerForge projects to partners. Field names lean
  * SF-ish on purpose so the real connector is a thin mapping later.
  */
-import type { PartnerTier, PartnerType, Region } from '@partnerforge/shared';
+import type { BusinessUnit, PartnerTier, PartnerType, Region } from '@partnerforge/shared';
 export type OpportunityStage = 'Registered' | 'Qualified' | 'Proposal' | 'Negotiation' | 'Closed Won' | 'Closed Lost';
 export type OpportunityStatus = 'open' | 'won' | 'lost';
 export type AssetStatus = 'active' | 'expiring' | 'expired';
@@ -16,6 +16,13 @@ export interface SfAccount {
     tier: PartnerTier;
     type: PartnerType;
     region: Region;
+    /**
+     * Business unit this partner belongs to (DX / Data Platform / Chef / AI).
+     * The Console's top-level scope axis — a DX-scoped user only sees DX
+     * partners. Derived from `productCoverage` in the mock; will map to an
+     * SF custom field on the live org.
+     */
+    businessUnit: BusinessUnit;
     /** Languages the partner operates in (ISO codes). */
     languages: string[];
     /** Product families the partner is authorised to sell. */
