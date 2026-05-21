@@ -291,6 +291,47 @@ export const adminConfigApi = {
       queryKey: ['adminConfig.mode'],
       queryFn: () => apiGet<Out['adminConfig']['mode']>('/admin-config/mode'),
     }),
+  setMode: () => {
+    const qc = useQueryClient();
+    return useMutation({
+      mutationFn: (input: In['adminConfig']['setMode']) =>
+        apiPost<Out['adminConfig']['setMode']>('/admin-config/mode', input),
+      // After a mode flip every adapter-backed read (sf cache, ai, intel)
+      // is conceptually stale. Bigger hammer than strictly needed, but the
+      // alternative is enumerating every queryKey that depends on mode.
+      onSuccess: () => {
+        qc.invalidateQueries({ queryKey: ['adminConfig.mode'] });
+        qc.invalidateQueries({ queryKey: ['adminConfig.salesforceConfig'] });
+      },
+    });
+  },
+  salesforceConfig: () =>
+    useQuery({
+      queryKey: ['adminConfig.salesforceConfig'],
+      queryFn: () =>
+        apiGet<Out['adminConfig']['salesforceConfig']>('/admin-config/salesforce'),
+    }),
+  setUseMockInLive: () => {
+    const qc = useQueryClient();
+    return useMutation({
+      mutationFn: (input: In['adminConfig']['setUseMockInLive']) =>
+        apiPut<Out['adminConfig']['setUseMockInLive']>(
+          '/admin-config/use-mock-in-live',
+          input,
+        ),
+      onSuccess: () => {
+        qc.invalidateQueries({ queryKey: ['adminConfig.mode'] });
+        qc.invalidateQueries({ queryKey: ['adminConfig.salesforceConfig'] });
+      },
+    });
+  },
+  testSalesforceConnection: () =>
+    useMutation({
+      mutationFn: () =>
+        apiPost<Out['adminConfig']['testSalesforceConnection']>(
+          '/admin-config/test-salesforce',
+        ),
+    }),
   oppFieldOverrides: () =>
     useQuery({
       queryKey: ['adminConfig.oppFieldOverrides'],
@@ -374,6 +415,7 @@ export function useApiUtils() {
     audit: { list: { invalidate: inv(['audit.list']) } },
     adminConfig: {
       mode: { invalidate: inv(['adminConfig.mode']) },
+      salesforceConfig: { invalidate: inv(['adminConfig.salesforceConfig']) },
       oppFieldOverrides: { invalidate: inv(['adminConfig.oppFieldOverrides']) },
       sharepointAssets: { invalidate: inv(['adminConfig.sharepointAssets']) },
     },

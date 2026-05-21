@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Routes, Route, useLocation, useNavigate } from 'react-router-dom';
+import { Link, Routes, Route, useLocation, useNavigate } from 'react-router-dom';
 import {
   Award,
   BarChart3,
@@ -45,6 +45,7 @@ import { AdminConfig } from './pages/AdminConfig';
 import { ApiKeys } from './pages/ApiKeys';
 import { Audit } from './pages/Audit';
 import { Operations } from './pages/Operations';
+import { SfConnection } from './pages/sf/Connection';
 import { SfSyncStatus } from './pages/sf/SyncStatus';
 import { SfRunSync } from './pages/sf/RunSync';
 import { SfFieldMappings } from './pages/sf/FieldMappings';
@@ -116,6 +117,7 @@ const NAV: NavSection[] = [
         label: 'Salesforce',
         icon: Plug,
         items: [
+          { key: '/sf/connection', label: 'Connection', icon: Plug },
           { key: '/sf/sync', label: 'Sync status', icon: ClipboardList },
           { key: '/sf/run', label: 'Run sync', icon: Wrench },
           { key: '/sf/mappings', label: 'Field mappings', icon: FileText },
@@ -232,22 +234,25 @@ export function App() {
           <>
             <div className="flex items-center gap-3 text-small">
               {/* Semantic env chip — amber for Demo (real semantic colour,
-                  not a grey dot), neutral for Live. Reviewer flagged the
-                  old grey-with-dot as missing semantic meaning. */}
-              <span
-                className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-caption font-semibold uppercase tracking-wide ${
+                  not a grey dot), neutral for Live. Clickable: a single
+                  click takes a staff user to the mode switch on Portal
+                  Settings. Previously this was informational-only and
+                  users had to shell into the Fly machine to flip mode. */}
+              <Link
+                to="/portal-settings"
+                className={`inline-flex items-center gap-1.5 rounded-md px-2 py-0.5 text-caption font-semibold uppercase tracking-wide transition-opacity hover:opacity-80 ${
                   mode === 'live'
                     ? 'bg-success/15 text-success'
                     : 'bg-warning/15 text-warning'
                 }`}
                 title={
                   mode === 'live'
-                    ? 'Live mode — real Salesforce / SharePoint connectors'
-                    : 'Demo mode — mock Salesforce / SharePoint data'
+                    ? 'Live mode — click to change'
+                    : 'Demo mode — click to change'
                 }
               >
                 {mode === 'live' ? 'Live' : 'Demo'}
-              </span>
+              </Link>
             </div>
             {/* Centered ⌘K search pill — was left-aligned, now claims the
                 centre of the chrome the way Linear / Stripe / Notion do.
@@ -440,6 +445,7 @@ export function App() {
             }
           />
           {/* Salesforce sub-menu — real pages. */}
+          <Route path="/sf/connection" element={<SfConnection />} />
           <Route path="/sf/sync" element={<SfSyncStatus />} />
           <Route path="/sf/run" element={<SfRunSync />} />
           <Route path="/sf/mappings" element={<SfFieldMappings />} />
