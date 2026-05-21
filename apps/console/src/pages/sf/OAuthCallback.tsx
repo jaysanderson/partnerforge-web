@@ -20,11 +20,17 @@ export function SfOAuthCallback(): ReactElement {
   useEffect(() => {
     if (ran.current) return;
     ran.current = true;
-    const environment = (params.get('environment') as 'production' | 'sandbox') ?? 'sandbox';
+    // Salesforce echoes only `code` + `state`. The server looks up the
+    // in-flight handshake (PKCE verifier + environment) by `state`.
     const code = params.get('code') ?? undefined;
-    const redirectUri = `${window.location.origin}/console/sf/oauth/callback`;
+    const state = params.get('state') ?? undefined;
+    const sfError = params.get('error_description') ?? params.get('error');
+    if (sfError) {
+      setError(sfError);
+      return;
+    }
     complete.mutate(
-      { environment, code, redirectUri },
+      { code, state },
       {
         onSuccess: (cfg) => {
           toast.show({

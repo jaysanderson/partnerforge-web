@@ -20,6 +20,9 @@ export declare const CONFIG_KEYS: {
     /** Connected App creds (clientId/clientSecret/loginUrl). Secret never
      *  returned to the browser. */
     readonly connectedApp: "sf.connectedApp";
+    /** Server-only: in-flight OAuth handshake (state + PKCE verifier +
+     *  environment + redirectUri). Created on start, consumed on complete. */
+    readonly oauthPending: "sf.oauthPending";
 };
 export interface OppFieldOverride {
     apiName: string;
@@ -226,16 +229,17 @@ export declare const adminConfigRouter: import("@trpc/server").TRPCBuiltRouter<{
         output: {
             authorizeUrl: string;
             simulated: boolean;
+            state: string;
         };
         meta: object;
     }>;
-    /** Step 1b — complete OAuth. Exchanges the code (or simulates), persists the
-     *  connection summary + tokens (tokens under the server-only sf.oauth key). */
+    /** Step 1b — complete OAuth. Looks up the in-flight handshake by `state`,
+     *  exchanges the code with PKCE, and persists the connection + tokens
+     *  (tokens under the server-only sf.oauth key, never returned). */
     salesforceOAuthComplete: import("@trpc/server").TRPCMutationProcedure<{
         input: {
-            environment: "production" | "sandbox";
-            redirectUri: string;
             code?: string | undefined;
+            state?: string | undefined;
         };
         output: SfIntegration;
         meta: object;
