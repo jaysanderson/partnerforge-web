@@ -46,6 +46,7 @@ import { ApiKeys } from './pages/ApiKeys';
 import { Audit } from './pages/Audit';
 import { Operations } from './pages/Operations';
 import { SfConnection } from './pages/sf/Connection';
+import { SfOAuthCallback } from './pages/sf/OAuthCallback';
 import { SfSyncStatus } from './pages/sf/SyncStatus';
 import { SfRunSync } from './pages/sf/RunSync';
 import { SfFieldMappings } from './pages/sf/FieldMappings';
@@ -446,6 +447,7 @@ export function App() {
           />
           {/* Salesforce sub-menu — real pages. */}
           <Route path="/sf/connection" element={<SfConnection />} />
+          <Route path="/sf/oauth/callback" element={<SfOAuthCallback />} />
           <Route path="/sf/sync" element={<SfSyncStatus />} />
           <Route path="/sf/run" element={<SfRunSync />} />
           <Route path="/sf/mappings" element={<SfFieldMappings />} />

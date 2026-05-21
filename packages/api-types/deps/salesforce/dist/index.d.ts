@@ -1,5 +1,6 @@
 export * from './types.js';
 export * from './adapter.js';
+export * from './oauth.js';
 import type { AppMode } from '@partnerforge/shared';
 import { type SalesforceAdapter } from './adapter.js';
 export interface GetSalesforceOpts {

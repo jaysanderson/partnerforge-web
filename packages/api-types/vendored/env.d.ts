@@ -24,6 +24,9 @@ declare const schema: z.ZodObject<{
     ARAG_VIDEO_KB_ID: z.ZodDefault<z.ZodString>;
     ARAG_VIDEO_KB_KEY: z.ZodDefault<z.ZodString>;
     PARTNERFORGE_LLM_MODEL: z.ZodDefault<z.ZodString>;
+    SALESFORCE_CLIENT_ID: z.ZodDefault<z.ZodString>;
+    SALESFORCE_CLIENT_SECRET: z.ZodDefault<z.ZodString>;
+    SALESFORCE_REDIRECT_URI: z.ZodDefault<z.ZodString>;
 }, "strip", z.ZodTypeAny, {
     NODE_ENV: "development" | "production" | "test";
     APP_MODE: "demo" | "live";
@@ -49,6 +52,9 @@ declare const schema: z.ZodObject<{
     ARAG_VIDEO_KB_ID: string;
     ARAG_VIDEO_KB_KEY: string;
     PARTNERFORGE_LLM_MODEL: string;
+    SALESFORCE_CLIENT_ID: string;
+    SALESFORCE_CLIENT_SECRET: string;
+    SALESFORCE_REDIRECT_URI: string;
 }, {
     JWT_SECRET: string;
     NODE_ENV?: "development" | "production" | "test" | undefined;
@@ -74,6 +80,9 @@ declare const schema: z.ZodObject<{
     ARAG_VIDEO_KB_ID?: string | undefined;
     ARAG_VIDEO_KB_KEY?: string | undefined;
     PARTNERFORGE_LLM_MODEL?: string | undefined;
+    SALESFORCE_CLIENT_ID?: string | undefined;
+    SALESFORCE_CLIENT_SECRET?: string | undefined;
+    SALESFORCE_REDIRECT_URI?: string | undefined;
 }>;
 export type Env = z.infer<typeof schema> & {
     corsOrigins: string[];

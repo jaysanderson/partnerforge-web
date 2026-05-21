@@ -14,6 +14,9 @@ export declare const CONFIG_KEYS: {
     readonly oppFieldOverrides: "ui.opportunityFieldOverrides";
     readonly sharepointAssets: "content.sharepointAssets";
     readonly useMockInLive: "sf.useMockInLive";
+    readonly integration: "sf.integration";
+    /** Server-only: OAuth tokens. NEVER returned to the browser. */
+    readonly oauth: "sf.oauth";
 };
 export interface OppFieldOverride {
     apiName: string;
@@ -21,6 +24,56 @@ export interface OppFieldOverride {
     visibleToPartner?: boolean;
 }
 export type { SharePointAsset };
+/** The Salesforce integration config (the wizard's persisted state). Tokens
+ *  live separately under `sf.oauth` and are never part of this shape. */
+export interface SfIntegration {
+    status: 'not_connected' | 'connected' | 'paused';
+    connection: {
+        environment: 'production' | 'sandbox' | null;
+        instanceUrl: string | null;
+        orgName: string | null;
+        connectedAt: string | null;
+        connectedBy: string | null;
+        /** Set when the wizard is finished (Activate). null = OAuth done but
+         *  setup still in progress → the hub keeps showing the wizard. */
+        activatedAt: string | null;
+        /** Whether a real Connected App is wired (vs the simulated provider). */
+        real: boolean;
+    };
+    objects: {
+        accounts: {
+            enabled: boolean;
+            filter: string;
+        };
+        contacts: {
+            enabled: boolean;
+        };
+        opportunities: {
+            enabled: boolean;
+            filter: string;
+        };
+    };
+    fieldMappings: {
+        account: {
+            sfField: string;
+            pfField: string;
+        }[];
+        contact: {
+            sfField: string;
+            pfField: string;
+        }[];
+        opportunity: {
+            sfField: string;
+            pfField: string;
+        }[];
+    };
+    sync: {
+        direction: 'inbound' | 'bidirectional';
+        frequency: 'hourly' | 'every_4h' | 'daily' | 'manual';
+        conflictPolicy: 'sf_wins' | 'pf_wins' | 'review';
+    };
+}
+export declare const DEFAULT_INTEGRATION: SfIntegration;
 export declare function readConfig<T>(ctx: Context, key: string, fallback: T): T;
 export declare const adminConfigRouter: import("@trpc/server").TRPCBuiltRouter<{
     ctx: Context;
@@ -125,6 +178,111 @@ export declare const adminConfigRouter: import("@trpc/server").TRPCBuiltRouter<{
             latencyMs: number;
             errorMessage: string;
         };
+        meta: object;
+    }>;
+    /** The full integration config (redacted — tokens live under sf.oauth and
+     *  are never returned). Drives the "Connect to Salesforce" wizard + hub. */
+    salesforceIntegration: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: SfIntegration;
+        meta: object;
+    }>;
+    /** Step 1a — begin OAuth. Returns the Salesforce authorize URL (real) or a
+     *  simulated in-app callback URL. `redirectUri` is the web callback;
+     *  ignored in favour of the registered server callback when a real
+     *  Connected App is configured. */
+    salesforceOAuthStart: import("@trpc/server").TRPCMutationProcedure<{
+        input: {
+            environment: "production" | "sandbox";
+            redirectUri: string;
+        };
+        output: {
+            authorizeUrl: string;
+            simulated: boolean;
+        };
+        meta: object;
+    }>;
+    /** Step 1b — complete OAuth. Exchanges the code (or simulates), persists the
+     *  connection summary + tokens (tokens under the server-only sf.oauth key). */
+    salesforceOAuthComplete: import("@trpc/server").TRPCMutationProcedure<{
+        input: {
+            environment: "production" | "sandbox";
+            redirectUri: string;
+            code?: string | undefined;
+        };
+        output: SfIntegration;
+        meta: object;
+    }>;
+    /** Disconnect — clears the connection + tokens, resets to not_connected. */
+    salesforceDisconnect: import("@trpc/server").TRPCMutationProcedure<{
+        input: void;
+        output: SfIntegration;
+        meta: object;
+    }>;
+    /** Step 3 — SF field metadata for the mapping UI. */
+    salesforceDescribe: import("@trpc/server").TRPCQueryProcedure<{
+        input: {
+            object: "account" | "contact" | "opportunity";
+        };
+        output: {
+            object: "account" | "contact" | "opportunity";
+            fields: import("@partnerforge/salesforce").SfDescribeField[];
+        };
+        meta: object;
+    }>;
+    /** Steps 2-4 — merge a partial config (objects / fieldMappings / sync). */
+    patchSalesforceIntegration: import("@trpc/server").TRPCMutationProcedure<{
+        input: {
+            sync?: {
+                direction?: "inbound" | "bidirectional" | undefined;
+                frequency?: "hourly" | "every_4h" | "daily" | "manual" | undefined;
+                conflictPolicy?: "sf_wins" | "pf_wins" | "review" | undefined;
+            } | undefined;
+            objects?: {
+                accounts?: {
+                    filter: string;
+                    enabled: boolean;
+                } | undefined;
+                contacts?: {
+                    enabled: boolean;
+                } | undefined;
+                opportunities?: {
+                    filter: string;
+                    enabled: boolean;
+                } | undefined;
+            } | undefined;
+            fieldMappings?: {
+                account?: {
+                    sfField: string;
+                    pfField: string;
+                }[] | undefined;
+                contact?: {
+                    sfField: string;
+                    pfField: string;
+                }[] | undefined;
+                opportunity?: {
+                    sfField: string;
+                    pfField: string;
+                }[] | undefined;
+            } | undefined;
+        };
+        output: SfIntegration;
+        meta: object;
+    }>;
+    /** Step 5 — dry-run preview: how many records the enabled objects import. */
+    salesforcePreview: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: {
+            accounts: number;
+            opportunities: number;
+            contacts: number;
+        };
+        meta: object;
+    }>;
+    /** Activate — mark connected + kick the initial sync (fire-and-forget). */
+    activateSalesforceIntegration: import("@trpc/server").TRPCMutationProcedure<{
+        input: void;
+        output: SfIntegration;
         meta: object;
     }>;
     oppFieldOverrides: import("@trpc/server").TRPCQueryProcedure<{

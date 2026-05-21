@@ -1,4 +1,4 @@
-import type { SfAccount, SfAsset, SfContact, SfFieldMeta, SfLead, SfOpportunity, SfPicklistMetadata, SfPriceEntry, SfProduct, SfQuote } from './types.js';
+import type { SfAccount, SfAsset, SfContact, SfDescribeField, SfFieldMeta, SfLead, SfObjectName, SfOpportunity, SfPicklistMetadata, SfPriceEntry, SfProduct, SfQuote } from './types.js';
 export interface CreateOpportunityInput {
     accountId: string;
     name: string;
@@ -62,6 +62,9 @@ export interface SalesforceAdapter {
     priceBook(tier: SfAccount['tier']): Promise<SfPriceEntry[]>;
     picklists(): Promise<SfPicklistMetadata>;
     opportunityFields(): Promise<SfFieldMeta[]>;
+    /** SF `describe` field metadata for an object — drives the integration
+     *  wizard's field-mapping step. */
+    describeObject(object: SfObjectName): Promise<SfDescribeField[]>;
     /** Cross-account dedupe input for account-creation governance (R98–R101). */
     findAccounts(query: {
         name?: string;
@@ -104,6 +107,7 @@ export declare class MockSalesforceAdapter implements SalesforceAdapter {
     priceBook(tier: SfAccount['tier']): Promise<SfPriceEntry[]>;
     picklists(): Promise<SfPicklistMetadata>;
     opportunityFields(): Promise<SfFieldMeta[]>;
+    describeObject(object: SfObjectName): Promise<SfDescribeField[]>;
     findAccounts(query: {
         name?: string;
         domain?: string;
