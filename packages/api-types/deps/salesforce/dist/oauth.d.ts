@@ -39,6 +39,11 @@ export interface SfOAuthProvider {
         code?: string;
         redirectUri: string;
     }): Promise<SfConnectionResult>;
+    /** Exchange a refresh token for a fresh access token (real connector). */
+    refresh?(params: {
+        environment: SfEnvironment;
+        refreshToken: string;
+    }): Promise<SfOAuthTokens>;
 }
 export declare function getSalesforceOAuth(): SfOAuthProvider;
 //# sourceMappingURL=oauth.d.ts.map

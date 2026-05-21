@@ -1911,6 +1911,13 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             output: import("./adminConfig.js").SfIntegration;
             meta: object;
         }>;
+        resetToDemoData: import("@trpc/server").TRPCMutationProcedure<{
+            input: void;
+            output: {
+                ok: boolean;
+            };
+            meta: object;
+        }>;
         oppFieldOverrides: import("@trpc/server").TRPCQueryProcedure<{
             input: void;
             output: import("./adminConfig.js").OppFieldOverride[];

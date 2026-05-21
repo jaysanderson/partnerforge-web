@@ -85,6 +85,7 @@ function ConnectedSummary({ cfg }: { cfg: NonNullable<Integration> }): ReactElem
   const cacheStats = useApi.system.cacheStats();
   const syncNow = useApi.system.syncRunAll();
   const disconnect = useApi.adminConfig.salesforceDisconnect();
+  const resetDemo = useApi.adminConfig.resetToDemoData();
 
   const oldestSync = cacheStats.data?.partners.oldestSync ?? null;
   const lastSync = oldestSync
@@ -173,6 +174,29 @@ function ConnectedSummary({ cfg }: { cfg: NonNullable<Integration> }): ReactElem
           Re-run the setup wizard by disconnecting and reconnecting, or adjust field
           visibility under Field mappings.
         </p>
+      </div>
+
+      {/* Escape hatch back to the sandbox demo dataset. */}
+      <div className="pf-card p-5">
+        <h2 className="mb-1">Demo data</h2>
+        <p className="pf-small text-ink-2 mb-3">
+          {cfg.connection.real
+            ? 'A real org is connected, so the demo partners and deals were removed. Reset to restore the sandbox demo dataset (this disconnects Salesforce).'
+            : 'Reset restores the seeded demo partners, deals, and content.'}
+        </p>
+        <button
+          type="button"
+          onClick={() =>
+            resetDemo.mutate(undefined, {
+              onSuccess: () => toast.show({ kind: 'success', title: 'Reset to demo data' }),
+              onError: (e: Error) => toast.show({ kind: 'error', title: 'Reset failed', body: e.message }),
+            })
+          }
+          disabled={resetDemo.isPending}
+          className="rounded-md border border-border bg-surface px-4 py-2 pf-small font-medium text-ink-1 hover:bg-subtle disabled:opacity-50"
+        >
+          {resetDemo.isPending ? 'Resetting…' : 'Reset to demo data'}
+        </button>
       </div>
     </div>
   );
