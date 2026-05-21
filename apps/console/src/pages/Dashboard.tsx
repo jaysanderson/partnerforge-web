@@ -44,6 +44,8 @@ import {
 import type { PartnerTier } from '@partnerforge/shared';
 import { useApi } from '../api/hooks';
 import { money } from '../lib/format';
+import { ScopeBar } from '../components/ScopeBar';
+import { scopeParams, useScope } from '../scope';
 
 // ── helpers ────────────────────────────────────────────────────────────
 
@@ -88,13 +90,34 @@ function tierFromString(t: string | null | undefined): PartnerTier {
 // ── page ───────────────────────────────────────────────────────────────
 
 export function Dashboard() {
-  const partners = useApi.partners.list();
-  const deals = useApi.deals.list();
-  const pipeline = useApi.ai.pipelineSummary();
+  const scope = useScope();
+  const partners = useApi.partners.list(scopeParams(scope));
+  const deals = useApi.deals.list(scopeParams(scope));
   const scorecard = useApi.reports.partnerScorecard();
   const programHealth = useApi.reports.programHealth();
   const goals = useApi.goals.list();
   const submissions = useApi.approvals.pending();
+
+  // The scoped partner + deal lists already honour the picker (and the
+  // server-enforced BU floor). The aggregate cards below (pipeline-by-stage,
+  // top partners, goals) are narrowed CLIENT-SIDE to that scoped set so the
+  // whole dashboard reacts to the "who are you?" picker, not just the KPIs.
+  const scopedPartnerNames = useMemo(
+    () => new Set((partners.data ?? []).map((p) => p.name)),
+    [partners.data],
+  );
+  // Pipeline-by-stage derived from the scoped deals (replaces the unscoped
+  // ai.pipelineSummary aggregate so the bar honours the picker too).
+  const stageData = useMemo(() => {
+    const m = new Map<string, { count: number; value: number }>();
+    for (const d of deals.data ?? []) {
+      const e = m.get(d.stage) ?? { count: 0, value: 0 };
+      e.count += 1;
+      e.value += d.value ?? 0;
+      m.set(d.stage, e);
+    }
+    return [...m.entries()].map(([stage, v]) => ({ stage, ...v }));
+  }, [deals.data]);
 
   const stats = useMemo(() => {
     const ps = partners.data ?? [];
@@ -116,8 +139,8 @@ export function Dashboard() {
     };
   }, [partners.data, deals.data, programHealth.data, submissions.data]);
 
-  const maxStage = Math.max(1, ...(pipeline.data?.stages.map((s) => s.value) ?? [1]));
-  const totalStageValue = (pipeline.data?.stages ?? []).reduce((s, x) => s + x.value, 0);
+  const maxStage = Math.max(1, ...(stageData.map((s) => s.value).length ? stageData.map((s) => s.value) : [1]));
+  const totalStageValue = stageData.reduce((s, x) => s + x.value, 0);
 
   // Partner-id → name lookup so the Deal Activity rows show partner names
   // rather than raw `prt_*` ids (the deals.list endpoint doesn't join).
@@ -164,6 +187,8 @@ export function Dashboard() {
           </div>
         </div>
       </HeroBand>
+
+      <ScopeBar />
 
       {/* KPI row */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -228,9 +253,9 @@ export function Dashboard() {
               Open in Deals <ArrowRight size={12} />
             </Link>
           </div>
-          {pipeline.isLoading ? (
+          {deals.isLoading ? (
             <Skeleton variant="row" count={6} />
-          ) : (pipeline.data?.stages ?? []).length === 0 || totalStageValue === 0 ? (
+          ) : stageData.length === 0 || totalStageValue === 0 ? (
             <EmptyState
               variant="zero-data"
               icon={TrendingUp}
@@ -240,7 +265,7 @@ export function Dashboard() {
             />
           ) : (
             <div className="space-y-2.5">
-              {(pipeline.data?.stages ?? []).map((s) => {
+              {stageData.map((s) => {
                 const pct = (s.value / maxStage) * 100;
                 const sharePct = totalStageValue ? (s.value / totalStageValue) * 100 : 0;
                 return (
@@ -299,6 +324,7 @@ export function Dashboard() {
           ) : (
             <ul className="space-y-2">
               {[...(scorecard.data ?? [])]
+                .filter((p) => !scope.businessUnit || scopedPartnerNames.has(p.partner))
                 .sort((a, b) => b.openPipeline - a.openPipeline)
                 .slice(0, 5)
                 .map((p) => (
@@ -348,6 +374,7 @@ export function Dashboard() {
           ) : (
             <ul className="space-y-2.5">
               {[...(goals.data ?? [])]
+                .filter((g) => !scope.businessUnit || scopedPartnerNames.has(g.partnerName))
                 .sort((a, b) => (a.progressPct ?? 0) - (b.progressPct ?? 0))
                 .slice(0, 5)
                 .map((g) => {

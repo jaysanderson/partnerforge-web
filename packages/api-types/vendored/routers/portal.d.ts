@@ -41,6 +41,7 @@ export declare const portalRouter: import("@trpc/server").TRPCBuiltRouter<{
                 domain: string | null;
                 logoUrl: string | null;
                 tier: string;
+                businessUnit: "DX" | "Data Platform" | "Chef" | "AI" | null;
                 primaryContactName: string | null;
                 primaryContactEmail: string | null;
                 engagementScore: number;

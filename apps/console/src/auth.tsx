@@ -6,6 +6,11 @@ export interface ConsoleUser {
   name: string;
   email: string;
   role: string;
+  /**
+   * Business units this user is scoped to. null / empty = unrestricted
+   * (admins, unassigned). Drives the scope picker's locked options.
+   */
+  businessUnits?: string[] | null;
 }
 
 interface AuthCtx {

@@ -2,6 +2,10 @@
  * Pre-built reports. All aggregations run over live operational data.
  * Uses `permissionOrScope` so non-browser integrators with `reports:read`
  * can pull aggregates via the REST surface (e.g. a BI tool, Power Automate).
+ *
+ * Every partner/deal aggregation is BU-scoped (services/scope.ts) so a
+ * restricted user's totals reflect only their business unit — these are part
+ * of the access layer, not just the lists.
  */
 export declare const reportsRouter: import("@trpc/server").TRPCBuiltRouter<{
     ctx: import("../context.js").Context;

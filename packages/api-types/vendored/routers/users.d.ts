@@ -23,6 +23,7 @@ export declare const usersRouter: import("@trpc/server").TRPCBuiltRouter<{
             createdAt: string;
             updatedAt: string;
             lastLogin: string | null;
+            businessUnits: string[] | null;
             avatarUrl: string | null;
         }[];
         meta: object;
@@ -39,6 +40,7 @@ export declare const usersRouter: import("@trpc/server").TRPCBuiltRouter<{
             createdAt: string;
             updatedAt: string;
             lastLogin: string | null;
+            businessUnits: string[] | null;
             avatarUrl: string | null;
         };
         meta: object;
@@ -73,6 +75,7 @@ export declare const usersRouter: import("@trpc/server").TRPCBuiltRouter<{
             createdAt: string;
             updatedAt: string;
             lastLogin: string | null;
+            businessUnits: string[] | null;
             avatarUrl: string | null;
         } | undefined;
         meta: object;

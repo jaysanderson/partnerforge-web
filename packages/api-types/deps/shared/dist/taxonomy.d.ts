@@ -22,6 +22,21 @@ export type Industry = (typeof LABELSETS.industry)[number];
 export type Product = (typeof LABELSETS.product)[number];
 export type ContentType = (typeof LABELSETS.content_type)[number];
 export type ContentStage = (typeof LABELSETS.content_stage)[number];
+/**
+ * Progress business units. A BU bundles one or more products; it's the
+ * top-level "who are you?" axis the Console scopes by (DX person sees DX
+ * partners, etc.). Stored as a single value per partner on `SfAccount`.
+ */
+export declare const BUSINESS_UNITS: readonly ["DX", "Data Platform", "Chef", "AI"];
+export type BusinessUnit = (typeof BUSINESS_UNITS)[number];
+/**
+ * Which BU owns each product. Used to seed a partner's `businessUnit` from
+ * its `productCoverage`, and as the mapping we'll mirror onto the Salesforce
+ * custom field once the live org is connected.
+ */
+export declare const PRODUCT_TO_BU: Record<Product, BusinessUnit>;
+/** Resolve a partner's BU from its product coverage (first product wins). */
+export declare function businessUnitForProducts(products: readonly string[]): BusinessUnit;
 /** Open pipeline stages (everything that is not closed). */
 export declare const OPEN_DEAL_STAGES: ReadonlyArray<DealStage>;
 /** Tier ordering for content-access gating (higher index = more access). */

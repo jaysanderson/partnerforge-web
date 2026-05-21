@@ -11,6 +11,8 @@ import {
 import { useApi, useApiUtils } from '../api/hooks';
 import type { DealRow as Row } from '../api-types';
 import { money, shortDate, daysSince } from '../lib/format';
+import { ScopeBar } from '../components/ScopeBar';
+import { scopeParams, useScope } from '../scope';
 
 const STAGES = ['Registered', 'Qualified', 'Proposal', 'Negotiation', 'Closed Won'] as const;
 
@@ -24,7 +26,8 @@ export function Deals() {
   const [view, setView] = useState<'kanban' | 'table'>('kanban');
   const utils = useApiUtils();
   const toast = useToast();
-  const deals = useApi.deals.list();
+  const scope = useScope();
+  const deals = useApi.deals.list(scopeParams(scope));
   const conflicts = useApi.deals.conflicts();
   const update = useApi.deals.update();
 
@@ -155,6 +158,8 @@ export function Deals() {
           ))}
         </div>
       </div>
+
+      <ScopeBar />
 
       {view === 'table' ? (
         <DataTable

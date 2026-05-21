@@ -14,11 +14,14 @@ import type { PartnerTier } from '@partnerforge/shared';
 import { useApi } from '../api/hooks';
 import type { PartnerRow as Row } from '../api-types';
 import { money, shortDate } from '../lib/format';
+import { ScopeBar } from '../components/ScopeBar';
+import { scopeParams, useScope } from '../scope';
 
 export function Partners() {
   const navigate = useNavigate();
-  const partners = useApi.partners.list();
-  const deals = useApi.deals.list();
+  const scope = useScope();
+  const partners = useApi.partners.list(scopeParams(scope));
+  const deals = useApi.deals.list(scopeParams(scope));
   const { facets, bulkActions } = useFacetsAndBulk();
   const [semantic, setSemantic] = useState('');
   // Gate semantic search behind a 2-char threshold (was: trpc useQuery enabled flag).
@@ -90,6 +93,7 @@ export function Partners() {
           />
         </div>
       </div>
+      <ScopeBar />
       <DataTable
         columns={columns}
         rows={rows}
