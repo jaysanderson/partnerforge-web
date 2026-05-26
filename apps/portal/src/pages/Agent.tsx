@@ -2,15 +2,20 @@ import { useRef, useState } from 'react';
 import { Sparkles } from 'lucide-react';
 import { useI18n } from '../i18n';
 import { getToken } from '../api/client';
+import { useApi } from '../api/hooks';
 
 interface Msg {
   role: 'user' | 'arag';
   text: string;
 }
-const CHIPS = [
-  'What products fit a healthcare customer?',
-  'Help me position against ServiceNow',
-  'What training should I complete next?',
+
+// Defaults the chip row renders before/while the API hook is loading and as
+// a graceful fallback if the backend fails to generate. The live values
+// come from useApi.portal.agentSuggestions() — LLM-generated, 24h-cached.
+const FALLBACK_CHIPS = [
+  'Which Progress products fit a healthcare customer?',
+  'How does ARAG compare to ServiceNow Now Assist?',
+  'What training should I complete next as an SE?',
 ];
 
 export function Agent() {
@@ -19,6 +24,9 @@ export function Agent() {
   const [input, setInput] = useState('');
   const [busy, setBusy] = useState(false);
   const scroller = useRef<HTMLDivElement>(null);
+  const suggestionsQ = useApi.portal.agentSuggestions();
+  const chips =
+    suggestionsQ.data?.items?.length === 3 ? suggestionsQ.data.items : FALLBACK_CHIPS;
 
   const send = async (q: string) => {
     if (!q.trim() || busy) return;
@@ -115,14 +123,14 @@ export function Agent() {
       </div>
 
       <div className="mt-3 flex flex-wrap gap-1.5">
-        {CHIPS.map((c) => (
+        {chips.map((c) => (
           <button
             key={c}
             type="button"
             onClick={() => send(c)}
             className="rounded-full border border-border px-3 py-1 text-caption text-text-secondary hover:border-ai-accent hover:text-ai-accent"
           >
-            {t(c)}
+            {c}
           </button>
         ))}
       </div>

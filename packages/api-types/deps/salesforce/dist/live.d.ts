@@ -24,7 +24,20 @@ export declare class LiveSalesforceAdapter implements SalesforceAdapter {
     constructor(cfg: LiveSalesforceConfig);
     private req;
     private query;
-    private selectFields;
+    private knownFieldsCache;
+    /** Lowercased set of field API names that actually exist on the object. */
+    private knownFields;
+    /**
+     * Build a de-duplicated SELECT column list for an object: `Id`, any extra
+     * standard columns the caller needs (AccountId, Name, …), plus the mapped
+     * SF fields — but only those the org actually has. Dropping unknown fields
+     * (e.g. demo-default `Product__c`/`Tier__c` on a vanilla org) keeps SOQL
+     * valid instead of throwing INVALID_FIELD, and the de-dupe avoids
+     * "duplicate field selected".
+     */
+    private buildSelect;
+    /** True when the object has a field with this API name (describe-backed). */
+    private hasField;
     /** Pull a PF field's value out of an SF record using the configured map. */
     private val;
     private str;

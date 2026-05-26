@@ -1245,6 +1245,15 @@ export declare const appRouter: import("@trpc/server").TRPCBuiltRouter<{
             };
             meta: object;
         }>;
+        agentSuggestions: import("@trpc/server").TRPCQueryProcedure<{
+            input: void;
+            output: {
+                items: string[];
+                generatedAt: string;
+                fromCache: boolean;
+            };
+            meta: object;
+        }>;
     }>>;
     reports: import("@trpc/server").TRPCBuiltRouter<{
         ctx: import("../context.js").Context;
