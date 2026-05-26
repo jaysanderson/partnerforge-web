@@ -60,6 +60,19 @@ const portalApi = {
         apiGet<Out['portal']['searchContent']>('/portal/search', input),
       enabled: !!input.query,
     }),
+  // Suggested-question chips for the AI Assistant. Backend regenerates at
+  // most every 24h; keep the client copy hot for the same window so the
+  // chips don't re-fetch on every nav back to /assistant.
+  agentSuggestions: () =>
+    useQuery({
+      queryKey: ['portal.agentSuggestions'],
+      queryFn: () =>
+        apiGet<Out['portal']['agentSuggestions']>('/portal/agent/suggestions'),
+      staleTime: 24 * 60 * 60 * 1000,
+      gcTime: 24 * 60 * 60 * 1000,
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    }),
   // ── Video Library (TubeRAG) ──────────────────────────────────────────
   videoGet: (input: In['portal']['videoGet']) =>
     useQuery({

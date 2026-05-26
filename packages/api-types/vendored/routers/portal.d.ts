@@ -298,5 +298,21 @@ export declare const portalRouter: import("@trpc/server").TRPCBuiltRouter<{
         };
         meta: object;
     }>;
+    /**
+     * Suggested-question chips for the partner AI Assistant. LLM-generated,
+     * cached aggressively in `config` under `ui.portal.agentSuggestions` —
+     * 24h TTL. On expiry the next caller regenerates; concurrent regeneration
+     * just produces a fresh write, which is cheap. Always returns three
+     * strings (defaults if generation ever fails).
+     */
+    agentSuggestions: import("@trpc/server").TRPCQueryProcedure<{
+        input: void;
+        output: {
+            items: string[];
+            generatedAt: string;
+            fromCache: boolean;
+        };
+        meta: object;
+    }>;
 }>>;
 //# sourceMappingURL=portal.d.ts.map
